@@ -1,4 +1,5 @@
 using ClinicApp.Models;
+using ClinicApp.Business;
 
 class Menu
 {
@@ -7,16 +8,16 @@ class Menu
     public static void Main()
     {
         bool privateZone = false;
+        PrivateAreaAccess authentication = new PrivateAreaAccess();
         
         do
         {
             Console.WriteLine("=== Menú Principal CliniCare ===");
             Console.WriteLine(" ");
-            Console.WriteLine(" ");
 
             if(privateZone)
             {
-                Console.WriteLine(" === ZONA PRIVADO ===");
+                Console.WriteLine(" === ZONA PRIVADA ===");
                 Console.WriteLine(" ");
                 Console.WriteLine("1. Insertar Pacientes");
                 Console.WriteLine("   1.1 Visualizar pacientes");
@@ -26,23 +27,30 @@ class Menu
                 Console.WriteLine("   3.1 Visualizar historial médico");
                 Console.WriteLine("4. Busqueda de paciente por Dni");
                 Console.WriteLine("5. Ir a zona pública");
-                Console.WriteLine("e Salir");
+                Console.WriteLine("e. Salir");
                 Console.WriteLine(" ");
             }
             else
             {
                 Console.WriteLine("=== ZONA PUBLICA ===");
+                Console.WriteLine(" ");
                 Console.WriteLine("1. Pedir cita");
                 Console.WriteLine("2. Visualizar historial médico");
                 Console.WriteLine("3. Ir a zona privada");  
-                Console.WriteLine("e Salir");
+                Console.WriteLine("e. Salir");
                 Console.WriteLine(" ");
             }
+      
+            string? choice = Console.ReadLine(); // Sirve para leer el número pulsado
+            Console.WriteLine("");
 
             
-            string? choice = Console.ReadLine(); // Para introducir el número
+            if (choice == "e")
+            {
+                Console.WriteLine("¡Hasta la próxima!");
+                break; 
+            }
       
-
             if(privateZone){
                 
                 switch (choice)
@@ -79,12 +87,8 @@ class Menu
                         privateZone = false;
                         break;
 
-                    case "e":
-                        Console.WriteLine("¡Hasta la próxima!");
-                        break;
-
                     default:
-                        Console.WriteLine("Opción no válida.");
+                        Console.WriteLine("OPCIÓN NO VÁLIDA");
                         break;
                 }
             }
@@ -101,15 +105,40 @@ class Menu
                         break;
 
                     case "3":
-                        privateZone = true;
-                        break;
+                        Console.WriteLine("Para acceder a la zona privada introduzca usuario y contraseña");
+                        Console.WriteLine(" ");
 
-                    case "e":
-                        Console.WriteLine("¡Hasta la próxima!");
+                        Console.Write("Usuario: ");
+                        string? userName = Console.ReadLine();
+
+                        Console.Write("Contraseña: ");
+                        string? password = Console.ReadLine();
+                        Console.Write("");
+
+                        if(userName != null && password != null)
+                        {
+                            bool authenticated = authentication.Authentication(userName, password);
+
+                            if(authenticated)
+                            {
+                                privateZone = true;
+                                Console.WriteLine("");
+                                Console.WriteLine("BIENVENIDO A LA ZONA PRIVADA DE CLINICARE");
+                            }
+                            else
+                            {
+                                Console.WriteLine(" ");
+                                Console.WriteLine("ACCESO DENEGADO");
+                            }                       
+                        }
+                        else
+                        {
+                            Console.WriteLine("El username y password no pueden ser nulos");
+                        }
                         break;
                         
                     default:
-                        Console.WriteLine("Opción no válida.");
+                        Console.WriteLine("OPCIÓN NO VALIDA");
                         break;
                 
                 }               
@@ -117,6 +146,7 @@ class Menu
             Console.WriteLine("");
             Console.WriteLine("Presione enter para continuar...");
             Console.ReadLine();
-        } while(choice != "e"); 
-    } 
+            
+        } while(choice != "e");    
+    }
 }
