@@ -12,9 +12,6 @@ class Menu
         
         do
         {
-            Console.WriteLine("=== Menú Principal CliniCare ===");
-            Console.WriteLine(" ");
-
             if(privateZone)
             {
                 Console.WriteLine(" === ZONA PRIVADA ===");
@@ -41,7 +38,8 @@ class Menu
                 Console.WriteLine(" ");
             }
       
-            string? choice = Console.ReadLine(); // Sirve para leer el número pulsado
+            choice = Console.ReadLine();
+
             Console.WriteLine("");
 
             
@@ -56,11 +54,11 @@ class Menu
                 switch (choice)
                 {
                     case "1":
-                        //Patient.CreatePatient();
+                        Patient.CreatePatient();
                         break;
 
-                    case "1.2":
-                        //Patient.ViewPatients();
+                    case "1.1":
+                        Patient.ViewPatients();
                         break;
 
                     case "2":
@@ -129,12 +127,8 @@ class Menu
                             {
                                 Console.WriteLine(" ");
                                 Console.WriteLine("ACCESO DENEGADO");
-                            }                       
-                        }
-                        else
-                        {
-                            Console.WriteLine("El username y password no pueden ser nulos");
-                        }
+                            }
+                        }                     
                         break;
                         
                     default:
@@ -144,7 +138,7 @@ class Menu
                 }               
             }
             Console.WriteLine("");
-            Console.WriteLine("Presione enter para continuar...");
+            Console.WriteLine(">>Presione enter para continuar");
             Console.ReadLine();
             
         } while(choice != "e");    
