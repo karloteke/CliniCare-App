@@ -1,5 +1,4 @@
 using ClinicApp.Models;
-
 namespace ClinicApp.Business;
 
 public class PrivateAreaAccess
@@ -10,7 +9,7 @@ public class PrivateAreaAccess
         {
             return true;
         }
-        return false;
+            return false;
     }
 }
 
