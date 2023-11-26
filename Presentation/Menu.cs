@@ -62,11 +62,11 @@ class Menu
                         break;
 
                     case "2":
-                        //Patient.CreateAppointment();
+                        Appointment.CreateAppointment();
                         break;   
 
                     case "2.1":
-                        //Patient.ViewAppointment();
+                        Appointment.ViewAppointment();
                         break;
 
                     case "3":
