@@ -12,6 +12,11 @@ public class Patient
 
     private static int NextId = 1;
     private static readonly List<Patient> patients = new  List<Patient>();
+
+    public static Patient? GetPatientById(int patientId) //función dentro de la clase Patient que busca un paciente en la lista patients según su ID
+    {
+        return patients.FirstOrDefault(patient => patient.Id == patientId);//busca el primer elemento en la lista patients por id y si existe devuelve el paciente
+    }
     public Patient(string? name, string? lastname, string? address, string? dni, string? phone)
     {
         Id = NextId;
@@ -56,7 +61,7 @@ public class Patient
         {
             if (patients.Count == 0)
             {
-                Console.WriteLine("NO EXISTE NINGÚN PACIENTE PARA MOSTRAR");
+                Console.WriteLine("NO EXISTE NINGÚN PACIENTE EN LA LISTA");
             }
             else
             {
@@ -68,6 +73,7 @@ public class Patient
                     Console.WriteLine($"Nombre: {patient.Name}");
                     Console.WriteLine($"Apellido: {patient.LastName}");
                     Console.WriteLine($"Dirección: {patient.Address}");
+                    Console.WriteLine($"Dni: {patient.Dni}");
                     Console.WriteLine($"Teléfono: {patient.Phone}");
                     Console.WriteLine("");
 
