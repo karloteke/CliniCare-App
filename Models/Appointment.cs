@@ -1,5 +1,3 @@
-
-
 namespace ClinicApp.Models;
 
 public class Appointment
@@ -68,28 +66,36 @@ public class Appointment
 
         Console.WriteLine ("");
         Console.WriteLine ("Introduce el ID del paciente al que quieres asignarle la cita");
+
         int PatientId;
 
-        if(int.TryParse(Console.ReadLine(),out PatientId))
+        if(!int.TryParse(Console.ReadLine(),out PatientId))
         {
+            Console.WriteLine("ID de paciente no válido. Debe ser un número entero.");
+            return;
+        }
             var patient = Patient.GetPatientById(PatientId);
 
-            if(patient != null)
+        if(patient != null)
+        {
+            if (area != null && medicalName != null && date != null && time != null)
             {
-                if (area != null && medicalName != null && date != null && time != null )
+                var newAppointment = new Appointment(area, medicalName, date, time, isUrgent)
                 {
-                    var newAppointment = new Appointment(area, medicalName, date, time, isUrgent)
-                    {
-                        Patient = patient
-                    };
-                    appointments.Add(newAppointment);
+                    Patient = patient
+                };
+                appointments.Add(newAppointment);
 
-                    Console.WriteLine("");
-                    Console.WriteLine($"CITA REGISTRADA CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
-                }
+                Console.WriteLine("");
+                Console.WriteLine($"CITA REGISTRADA CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
             }
         }
+        else
+        {
+            Console.WriteLine($"No se encontró al paciente con ID {PatientId}");
+        }
     }
+    
     public static void ViewAppointment()
     {
         foreach (var appointment in appointments)

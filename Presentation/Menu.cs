@@ -70,15 +70,15 @@ class Menu
                         break;
 
                     case "3":
-                        //Patient.CreateMedicalRecords();
+                        MedicalRecord.CreateMedicalRecords();
                         break;   
 
                     case "3.1":
-                        //Patient.ViewMedicalRecords();
+                        MedicalRecord.ViewMedicalRecords();
                         break;
 
                     case "4":
-                        //Patient.SearchByDni();
+                        Patient.SearchByDni();
                         break;
 
                     case "5":
