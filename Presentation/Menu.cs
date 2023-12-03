@@ -1,10 +1,20 @@
-using ClinicApp.Models;
+//using ClinicApp.Models;
 using ClinicApp.Business;
 
 class Menu
 {
     private static string? choice = "";
+    
+    // Instanciar el servicio de pacientes
+    private static PatientService patientService = new PatientService(); 
 
+    //Instancio el servicio de citas
+    private static AppointmentService appointmentService = new AppointmentService(); 
+
+    // Instancio el servicio historial médico
+    private static MedicalRecordService medicalRecordService = new MedicalRecordService(); 
+
+    
     public static void Main()
     {
         bool privateZone = false;
@@ -54,31 +64,31 @@ class Menu
                 switch (choice)
                 {
                     case "1":
-                        Patient.CreatePatient();
+                        patientService.CreatePatient();
                         break;
 
                     case "1.1":
-                        Patient.ViewPatients();
+                        patientService.ViewPatients();
                         break;
 
                     case "2":
-                        Appointment.CreateAppointment();
+                        appointmentService.CreateAppointment();
                         break;   
 
                     case "2.1":
-                        Appointment.ViewAppointment();
+                        appointmentService.ViewAppointment();
                         break;
 
                     case "3":
-                        MedicalRecord.CreateMedicalRecords();
+                        medicalRecordService.CreateMedicalRecord();
                         break;   
 
                     case "3.1":
-                        MedicalRecord.ViewMedicalRecords();
+                        medicalRecordService.ViewMedicalRecord();
                         break;
 
                     case "4":
-                        Patient.SearchByDni();
+                        patientService.SearchByDni();
                         break;
 
                     case "5":
