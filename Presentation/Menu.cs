@@ -78,7 +78,7 @@ class Menu
                         break;
 
                     case "4":
-                        //Patient.SearchByDni();
+                        Patient.SearchByDni();
                         break;
 
                     case "5":

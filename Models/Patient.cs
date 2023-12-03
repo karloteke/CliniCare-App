@@ -1,9 +1,8 @@
-
 namespace ClinicApp.Models;
 
 public class Patient
 {
-    public int Id { get; set; }
+    public int Id { get; }
     public string? Name { get; set; }
     public string? LastName { get; set; }
     public string? Address { get; set; }
@@ -13,10 +12,18 @@ public class Patient
     private static int NextId = 1;
     private static readonly List<Patient> patients = new  List<Patient>();
 
-    public static Patient? GetPatientById(int patientId) //función dentro de la clase Patient que busca un paciente en la lista patients según su ID
+    //Buscar paciente por Id
+    public static Patient? GetPatientById(int patientId)
     {
-        return patients.FirstOrDefault(patient => patient.Id == patientId);//busca el primer elemento en la lista patients por id y si existe devuelve el paciente
+        return patients.FirstOrDefault(patient => patient.Id == patientId);
     }
+
+    //Búsqueda paciente por Dni
+    public static Patient? GetPatientByDni(string? dniToSearch)
+    {
+        return patients.FirstOrDefault(patient => patient.Dni == dniToSearch);
+    }
+
     public Patient(string? name, string? lastname, string? address, string? dni, string? phone)
     {
         Id = NextId;
@@ -82,7 +89,31 @@ public class Patient
         }
     }
 
+    public static void SearchByDni(){
+        
+        Console.WriteLine("Ingrese el DNI del paciente a buscar:");
+        string? dniToSearch = Console.ReadLine();
+        Console.WriteLine("");
+        
+        Patient? foundPatient = GetPatientByDni(dniToSearch);
+        if (foundPatient != null)
+        {
+            Console.WriteLine("--- DATOS DE PACIENTE ENCONTRADO ---");
+            Console.WriteLine("");
+            Console.WriteLine($"Id: {foundPatient.Id}");
+            Console.WriteLine($"Nombre: {foundPatient.Name}");
+            Console.WriteLine($"Apellido: {foundPatient.LastName}");
+            Console.WriteLine($"Dirección: {foundPatient.Address}");
+            Console.WriteLine($"Dni: {foundPatient.Dni}");
+            Console.WriteLine($"Teléfono: {foundPatient.Phone}");
+        }
+        else
+        {
+            Console.WriteLine("Paciente no encontrado.");
+        }
+    }
 }
+
     
 
 
