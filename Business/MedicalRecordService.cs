@@ -5,10 +5,10 @@ namespace ClinicApp.Business
 {
     public class MedicalRecordService : IMedicalRecordService
     {
-        
+
         // Crea una instancia específica para la lista del historial médico.
-        List<MedicalRecord> medicalRecords = MedicalRecord.GetMedicalRecords();
-        public void CreateMedicalRecord()
+        List<MedicalRecord> medicalRecords = MedicalRecord.GetMedicalRecord();
+          public void CreateMedicalRecord()
         {
             DateTime date = DateTime.Now;
             Console.WriteLine($"Fecha y hora: {date}");
@@ -16,7 +16,6 @@ namespace ClinicApp.Business
             Console.WriteLine("Nombre del médico:");
             string? doctorName = Console.ReadLine();
 
-            
             Console.WriteLine("Tratamiento:");
             string? treatment = Console.ReadLine();
 
@@ -30,7 +29,7 @@ namespace ClinicApp.Business
                 Console.WriteLine("Valor no válido.Ingrese número decimal.");
                 return;
             }
-        
+
             Console.WriteLine("Notas:");
             string? notes = Console.ReadLine();
 
@@ -55,7 +54,7 @@ namespace ClinicApp.Business
                     {
                         Patient = patient
                     };
-                    medicalRecords.Add(newMedicalRecord);
+                    MedicalRecord.AddMedicalRecord(newMedicalRecord);
 
                     Console.WriteLine("");
                     Console.WriteLine($"HISTORIAL MÉDICO REGISTRADO CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
@@ -84,7 +83,3 @@ namespace ClinicApp.Business
         }
     }
 }
-
-
-
-    

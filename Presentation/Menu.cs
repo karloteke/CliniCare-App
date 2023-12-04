@@ -1,10 +1,11 @@
-//using ClinicApp.Models;
+using ClinicApp.Models;
 using ClinicApp.Business;
 
 class Menu
 {
     private static string? choice = "";
     
+
     // Instanciar el servicio de pacientes
     private static PatientService patientService = new PatientService(); 
 
@@ -14,7 +15,9 @@ class Menu
     // Instancio el servicio historial médico
     private static MedicalRecordService medicalRecordService = new MedicalRecordService(); 
 
-    
+    //Instancio las citas de pacientes(Zona Pública)
+    private static AppointmentPatientService appointmentPatientService = new AppointmentPatientService(); 
+
     public static void Main()
     {
         bool privateZone = false;
@@ -42,7 +45,7 @@ class Menu
                 Console.WriteLine("=== ZONA PUBLICA ===");
                 Console.WriteLine(" ");
                 Console.WriteLine("1. Pedir cita");
-                Console.WriteLine("2. Visualizar historial médico");
+                Console.WriteLine("2. Visualizar citas");
                 Console.WriteLine("3. Ir a zona privada");  
                 Console.WriteLine("e. Salir");
                 Console.WriteLine(" ");
@@ -105,11 +108,11 @@ class Menu
                 switch (choice)
                 {
                     case "1":
-                        //Patient.CreateAppointment();
+                        appointmentPatientService.CreateAppointmentPatient();
                         break;
                     
                     case "2":
-                        //Patient.ViewMedicalRecords();
+                        appointmentPatientService.ViewAppointmentPatient();
                         break;
 
                     case "3":
