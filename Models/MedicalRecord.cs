@@ -25,16 +25,15 @@ public class MedicalRecord
         NextId++;
     }
 
-      
-        public static void AddMedicalRecord(MedicalRecord newMedicalRecord)
-        {
-            medicalRecords.Add(newMedicalRecord);
-        }
+    public static void AddMedicalRecord(MedicalRecord newMedicalRecord)
+    {
+        medicalRecords.Add(newMedicalRecord);
+    }
 
-        public static List<MedicalRecord> GetMedicalRecords()
-        {
-            return medicalRecords;
-        }
+    public static List<MedicalRecord> GetMedicalRecord()
+    {
+        return medicalRecords;
+    }
 }
-    
-   
+
+

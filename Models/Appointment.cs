@@ -25,17 +25,16 @@ public class Appointment
         NextId++;
     }
 
-    
-        public static void AddAppointment(Appointment newAppointment)
-        {
-            appointments.Add(newAppointment);
-        }
-
-        public static List<Appointment> GetAppointments()
-        {
-            return appointments;
-        }
+    public static void AddAppointment(Appointment newAppointment)
+    {
+        appointments.Add(newAppointment);
     }
+
+    public static List<Appointment> GetAppointments()
+    {
+        return appointments;
+    }
+}
 
 
 

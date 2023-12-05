@@ -12,6 +12,18 @@ public class Patient
     private static int NextId = 1;
     private static readonly List<Patient> patients = new  List<Patient>();
 
+    //Buscar paciente por Id
+    public static Patient? GetPatientById(int patientId)
+    {
+        return patients.FirstOrDefault(patient => patient.Id == patientId);
+    }
+
+    //Búsqueda paciente por Dni
+    public static Patient? GetPatientByDni(string? dniToSearch)
+    {
+        return patients.FirstOrDefault(patient => patient.Dni == dniToSearch);
+    }
+
     public Patient(string? name, string? lastname, string? address, string? dni, string? phone)
     {
         Id = NextId;
@@ -23,25 +35,26 @@ public class Patient
         NextId++;
     }
 
-     public static void AddPatient(Patient newPatient)
-        {
-            patients.Add(newPatient);
-        }
-
-        public static List<Patient> GetPatients()
-        {
-            return patients;
-        }
-
-        //Busca pacientes por su Id
-        public static Patient? GetPatientById(int patientId)
-        {
-            return patients.FirstOrDefault(patient => patient.Id == patientId);
-        }
-
-        //Busca pacientes por su DNI
-        public static Patient? GetPatientByDni(string? dniToSearch)
-        {
-            return patients.FirstOrDefault(patient => patient.Dni == dniToSearch);
-        }
+    
+    public static void AddPatient(Patient newPatient)
+    {
+        patients.Add(newPatient);
     }
+
+    public static List<Patient> GetPatients()
+    {
+        return patients;
+    }
+    
+
+}
+
+
+
+
+    
+
+
+
+
+
