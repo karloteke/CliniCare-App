@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Models\ClinicApp.Models.csproj" />
-    <ProjectReference Include="..\Data\ClinicApp.Data.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

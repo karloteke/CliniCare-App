@@ -1,13 +1,16 @@
 using ClinicApp.Models;
 using ClinicApp.Business;
+using ClinicApp.Data;
 
 class Menu
 {
     private static string? choice = "";
-    
 
-    // Instanciar el servicio de pacientes
-    private static PatientService patientService = new PatientService(); 
+    // Instancia el repositorio de pacientes(Zona privada)
+    private static IPatientRepository patientRepository = new PatientRepository();
+
+    // Instancia el servicio de pacientes utilizando el repositorio
+    private static IPatientService patientService = new PatientService(patientRepository);
 
     //Instancio el servicio de citas
     private static AppointmentService appointmentService = new AppointmentService(); 

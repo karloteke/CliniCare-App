@@ -90,7 +90,7 @@ namespace ClinicApp.Business
                 Console.WriteLine($"Nombre médico: {appointment.MedicalName}");
                 Console.WriteLine($"Hora: {appointment.Time}");
                 Console.WriteLine($"Día: {appointment.Date}");
-                Console.WriteLine($"¿Es ugente?: {(appointment.IsUrgent ? "si" : "no")}");
+                Console.WriteLine($"¿Es urgente?: {(appointment.IsUrgent ? "si" : "no")}");
                 Console.WriteLine(""); 
             }
         }

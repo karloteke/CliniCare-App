@@ -8,8 +8,6 @@ namespace ClinicApp.Business
         // Crea una instancia específica para la lista de citas.
         List<AppointmentPatient> appointmentsPatient = AppointmentPatient.GetAppointments();
 
-        // Lista específica de pacientes
-        private List<Patient> servicePatients = new List<Patient>(); 
         public void CreateAppointmentPatient()
         {
             Console.WriteLine("Nombre");
@@ -20,12 +18,8 @@ namespace ClinicApp.Business
             string? lastname = Console.ReadLine();
             Console.WriteLine("");
 
-            var patient = servicePatients.FirstOrDefault(p => p.Name == name && p.LastName == lastname);
-                if (patient == null)
-                {
-                
-                    servicePatients.Add(patient);
-                }
+          // Crear un nuevo paciente con los datos proporcionados
+            var patient = new Patient(name, lastname, null, null, null);
  
             Console.WriteLine("Especialidad (Oftalmología, traumatología, ginecología o neurología)");
             string? area = Console.ReadLine();
@@ -85,11 +79,12 @@ namespace ClinicApp.Business
                 Console.WriteLine("---DATOS CITA---");
                 Console.WriteLine("");
                 Console.WriteLine($"Id: {appointmentPatient.Id}");
+                Console.WriteLine($"Paciente: {appointmentPatient.Patient?.Name} {appointmentPatient.Patient?.LastName}");
                 Console.WriteLine($"Fecha y hora de registro: {appointmentPatient.Date}");
                 Console.WriteLine($"Especialidad: {appointmentPatient.Area}");
                 Console.WriteLine($"Fecha de la cita: {appointmentPatient.Day}");
                 Console.WriteLine($"Hora de la cita: {appointmentPatient.Time}");
-                Console.WriteLine($"¿Es ugente?: {(appointmentPatient.IsUrgent ? "si" : "no")}");
+                Console.WriteLine($"¿Es urgente?: {(appointmentPatient.IsUrgent ? "si" : "no")}");
                 Console.WriteLine(""); 
             }
         }

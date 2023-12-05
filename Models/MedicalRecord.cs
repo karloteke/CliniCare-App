@@ -16,13 +16,12 @@ public class MedicalRecord
 
     public MedicalRecord(DateTime date, string doctorName, string treatment, decimal treatmentCost, string notes)
     {
-        Id = NextId;
+        Id = NextId++;
         Date = date;
         DoctorName = doctorName;
         Treatment = treatment;
         TreatmentCost = treatmentCost;
         Notes = notes;
-        NextId++;
     }
 
     public static void AddMedicalRecord(MedicalRecord newMedicalRecord)

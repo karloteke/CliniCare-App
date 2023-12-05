@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\Models\ClinicApp.Models.csproj" />
     <ProjectReference Include="..\Business\ClinicApp.Business.csproj" />
   </ItemGroup>
 

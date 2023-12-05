@@ -26,27 +26,13 @@ public class Patient
 
     public Patient(string? name, string? lastname, string? address, string? dni, string? phone)
     {
-        Id = NextId;
+        Id = NextId++;
         Name = name;
         LastName = lastname;
         Address =  address;
         Dni = dni;
         Phone = phone;
-        NextId++;
     }
-
-    
-    public static void AddPatient(Patient newPatient)
-    {
-        patients.Add(newPatient);
-    }
-
-    public static List<Patient> GetPatients()
-    {
-        return patients;
-    }
-    
-
 }
 
 

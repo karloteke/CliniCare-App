@@ -16,13 +16,12 @@ public class Appointment
 
     public Appointment ( string area, string medicalName, string date, string time, bool isUrgent)
     {
-        Id = NextId;
+        Id = NextId++;
         Area = area;
         MedicalName = medicalName;
         Date = date;
         Time = time;
         IsUrgent = isUrgent;
-        NextId++;
     }
 
     public static void AddAppointment(Appointment newAppointment)
