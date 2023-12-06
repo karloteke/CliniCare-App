@@ -1,23 +1,36 @@
 using ClinicApp.Models;
 using ClinicApp.Business;
+using ClinicApp.Data;
 
 class Menu
 {
     private static string? choice = "";
+
+    // Instancia el repositorio de pacientes(Zona privada)
+    private static IPatientRepository patientRepository = new PatientRepository();
+
+    // Instancia el servicio de pacientes utilizando el repositorio
+    private static IPatientService patientService = new PatientService(patientRepository);
+
+    // Instancia el repositorio de citas
+    private static IAppointmentRepository appointmentRepository = new AppointmentRepository(patientRepository);
+
+    //Instancio el servicio de citas utilizando repositorio
+    private static IAppointmentService appointmentService = new AppointmentService(appointmentRepository); 
+
+    // Instancia el repositorio de historial médico
+    private static IMedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository(patientRepository); 
+
+    // Instancio el servicio historial médico utilizando repositorio
+    private static IMedicalRecordService medicalRecordService = new MedicalRecordService(medicalRecordRepository);
+
+   // Instancia el repositorio de citas
+    private static IAppointmentPatientRepository appointmentPatientRepository = new AppointmentPatientRepository(patientRepository);
+
+    //Instancio el servicio de citas utilizando repositorio
+    private static IAppointmentPatientService appointmentPatientService = new AppointmentPatientService(appointmentPatientRepository); 
+
     
-
-    // Instanciar el servicio de pacientes
-    private static PatientService patientService = new PatientService(); 
-
-    //Instancio el servicio de citas
-    private static AppointmentService appointmentService = new AppointmentService(); 
-
-    // Instancio el servicio historial médico
-    private static MedicalRecordService medicalRecordService = new MedicalRecordService(); 
-
-    //Instancio las citas de pacientes(Zona Pública)
-    private static AppointmentPatientService appointmentPatientService = new AppointmentPatientService(); 
-
     public static void Main()
     {
         bool privateZone = false;

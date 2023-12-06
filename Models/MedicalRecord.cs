@@ -1,4 +1,3 @@
-
 namespace ClinicApp.Models;
 public class MedicalRecord
 {
@@ -10,29 +9,18 @@ public class MedicalRecord
     public string? Notes { get; set; } 
     public Patient? Patient { get; set; }
 
-    private static int NextId = 1;
-    private static readonly List <MedicalRecord> medicalRecords = new List<MedicalRecord>();
-
-
+    private static int NextIdMR = 1;
+    public List <MedicalRecord> medicalRecords = new List<MedicalRecord>();
+     // Constructor sin parámetros para la deserialización
+        public MedicalRecord() { }
     public MedicalRecord(DateTime date, string doctorName, string treatment, decimal treatmentCost, string notes)
     {
-        Id = NextId;
+        Id = NextIdMR++;
         Date = date;
         DoctorName = doctorName;
         Treatment = treatment;
         TreatmentCost = treatmentCost;
         Notes = notes;
-        NextId++;
-    }
-
-    public static void AddMedicalRecord(MedicalRecord newMedicalRecord)
-    {
-        medicalRecords.Add(newMedicalRecord);
-    }
-
-    public static List<MedicalRecord> GetMedicalRecord()
-    {
-        return medicalRecords;
     }
 }
 

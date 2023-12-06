@@ -1,10 +1,17 @@
 using ClinicApp.Models;
-using System;
+using ClinicApp.Data;
+
 
 namespace ClinicApp.Business
 {
     public class PatientService : IPatientService
     {
+        private readonly IPatientRepository _repository;
+
+        public PatientService(IPatientRepository repository)
+        {
+            _repository = repository;
+        }
         public void CreatePatient()
         {
             Console.WriteLine("Nombre");
@@ -28,14 +35,26 @@ namespace ClinicApp.Business
             Console.WriteLine("");
 
             var newPatient = new Patient(name, lastname, address, dni, phone);
-            Patient.AddPatient(newPatient);
+            var existPatient = _repository.GetPatientByDni(dni);
+            
+            if(existPatient == null)
+            {
+                
+                _repository.AddPatient(newPatient);
+                _repository.UpdatePatient(newPatient);
+                _repository.SaveChanges();
 
-            Console.WriteLine($"PACIENTE REGISTRADO CORRECTAMENTE");
+                Console.WriteLine("PACIENTE REGISTRADO CORRECTAMENTE");
+            }      
+            else
+            {
+                Console.WriteLine ("PACIENTE NO REGISTRADO,YA EXISTE ESE DNI");
+            }
         }
 
         public void ViewPatients()
         {
-            var patients = Patient.GetPatients();
+            var patients = _repository.GetPatients();
 
             if (patients.Count == 0)
             {
@@ -64,7 +83,7 @@ namespace ClinicApp.Business
             string? dniToSearch = Console.ReadLine();
             Console.WriteLine("");
 
-            Patient? foundPatient = Patient.GetPatientByDni(dniToSearch);
+            Patient foundPatient = _repository.GetPatientByDni(dniToSearch);
             if (foundPatient != null)
             {
                 Console.WriteLine("--- DATOS DE PACIENTE ENCONTRADO ---");
@@ -81,6 +100,5 @@ namespace ClinicApp.Business
                 Console.WriteLine("Paciente no encontrado.");
             }
         }
-
     }
 }

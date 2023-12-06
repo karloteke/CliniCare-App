@@ -1,0 +1,18 @@
+[
+  {
+    "Id": 2,
+    "Name": "Jesus",
+    "LastName": "Cortes",
+    "Address": "C/Olivo,13",
+    "Dni": "12345678J",
+    "Phone": "666777888"
+  },
+  {
+    "Id": 3,
+    "Name": "Maria",
+    "LastName": "Lopez",
+    "Address": "C/Bimba,33",
+    "Dni": "78999098B",
+    "Phone": "654463553"
+  }
+]

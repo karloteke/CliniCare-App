@@ -1,0 +1,34 @@
+[
+  {
+    "Id": 1,
+    "Date": "2023-12-06T18:44:47.5474383+01:00",
+    "DoctorName": "Ramon",
+    "Treatment": "Orfidal",
+    "TreatmentCost": 5.20,
+    "Notes": "Tomar por las noches",
+    "Patient": {
+      "Id": 2,
+      "Name": "Jesus",
+      "LastName": "Cortes",
+      "Address": "C/Olivo,13",
+      "Dni": "12345678J",
+      "Phone": "666777888"
+    }
+  },
+  {
+    "Id": 2,
+    "Date": "2023-12-06T18:49:13.5371958+01:00",
+    "DoctorName": "Jumar",
+    "Treatment": "Ibuprofeno",
+    "TreatmentCost": 3.24,
+    "Notes": "Tomar cada 8h",
+    "Patient": {
+      "Id": 2,
+      "Name": "Jesus",
+      "LastName": "Cortes",
+      "Address": "C/Olivo,13",
+      "Dni": "12345678J",
+      "Phone": "666777888"
+    }
+  }
+]

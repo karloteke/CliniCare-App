@@ -1,0 +1,18 @@
+[
+  {
+    "Id": 1,
+    "Date": "2023-12-06T18:36:46.5981542+01:00",
+    "Area": "Traumatologia",
+    "Day": "12/12/2023",
+    "Time": "12:20",
+    "IsUrgent": true,
+    "Patient": {
+      "Id": 1,
+      "Name": "Carlota",
+      "LastName": "Cetina",
+      "Address": "C/Dato,12",
+      "Dni": "73000461W",
+      "Phone": "654465115"
+    }
+  }
+]
