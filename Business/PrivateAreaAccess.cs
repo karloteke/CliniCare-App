@@ -1,16 +1,16 @@
 using ClinicApp.Models;
-namespace ClinicApp.Business;
-
-public class PrivateAreaAccess
+namespace ClinicApp.Business
 {
-    public bool Authentication(string userName, string password)
+    public class PrivateAreaAccess
     {
-        if (userName == "admin" && password == "admin")
+        public bool Authentication(string userName, string password)
         {
-            return true;
+            if (userName == "admin" && password == "admin")
+            {
+                return true;
+            }
+                return false;
         }
-            return false;
     }
 }
-
 

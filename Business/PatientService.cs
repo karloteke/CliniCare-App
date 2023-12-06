@@ -36,9 +36,10 @@ namespace ClinicApp.Business
 
             var newPatient = new Patient(name, lastname, address, dni, phone);
             var existPatient = _repository.GetPatientByDni(dni);
-
+            
             if(existPatient == null)
             {
+                
                 _repository.AddPatient(newPatient);
                 _repository.UpdatePatient(newPatient);
                 _repository.SaveChanges();
@@ -82,7 +83,7 @@ namespace ClinicApp.Business
             string? dniToSearch = Console.ReadLine();
             Console.WriteLine("");
 
-            Patient? foundPatient = _repository.GetPatientByDni(dniToSearch);
+            Patient foundPatient = _repository.GetPatientByDni(dniToSearch);
             if (foundPatient != null)
             {
                 Console.WriteLine("--- DATOS DE PACIENTE ENCONTRADO ---");

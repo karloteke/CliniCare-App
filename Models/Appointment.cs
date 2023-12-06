@@ -11,8 +11,7 @@ public class Appointment
     public Patient? Patient { get; set; }
 
     private static int NextId = 1;
-    private static readonly List<Appointment> appointments = new List<Appointment>();
-
+    public List<Appointment> appointments = new List<Appointment>();
 
     public Appointment ( string area, string medicalName, string date, string time, bool isUrgent)
     {
@@ -22,16 +21,6 @@ public class Appointment
         Date = date;
         Time = time;
         IsUrgent = isUrgent;
-    }
-
-    public static void AddAppointment(Appointment newAppointment)
-    {
-        appointments.Add(newAppointment);
-    }
-
-    public static List<Appointment> GetAppointments()
-    {
-        return appointments;
     }
 }
 

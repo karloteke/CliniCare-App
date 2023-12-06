@@ -1,12 +1,18 @@
 using ClinicApp.Models;
+using ClinicApp.Data;
 using System;
 
 namespace ClinicApp.Business
 {
     public class AppointmentService : IAppointmentService
     {
-         // Crea una instancia específica para la lista de citas.
-        List<Appointment> appointments = Appointment.GetAppointments();
+        private readonly IAppointmentRepository _repository;
+
+         public AppointmentService(IAppointmentRepository repository)
+        {
+            _repository = repository;
+        }
+
         public void CreateAppointment()
         {
             Console.WriteLine("Especialidad");
@@ -17,7 +23,6 @@ namespace ClinicApp.Business
             string? medicalName = Console.ReadLine();
             Console.WriteLine("");
 
-        
             Console.WriteLine("Hora (HH:mm)");
             string? time = Console.ReadLine();
             Console.WriteLine("");
@@ -45,18 +50,21 @@ namespace ClinicApp.Business
                 Console.WriteLine("Respuesta incorrecta");
                 return;
             }
-
+            
             Console.WriteLine ("");
             Console.WriteLine ("Introduce el ID del paciente al que quieres asignarle la cita");
 
             int PatientId;
+            
 
             if(!int.TryParse(Console.ReadLine(),out PatientId))
             {
                 Console.WriteLine("ID de paciente no válido. Debe ser un número entero.");
                 return;
             }
-                var patient = Patient.GetPatientById(PatientId);
+
+            
+            var patient = _repository.GetPatientById(PatientId);
 
             if(patient != null)
             {
@@ -66,10 +74,12 @@ namespace ClinicApp.Business
                     {
                         Patient = patient
                     };
-                    appointments.Add(newAppointment);
+
+                    _repository.AddAppointment(newAppointment);
+                    _repository.SaveChanges();
 
                     Console.WriteLine("");
-                    Console.WriteLine($"CITA REGISTRADA CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
+                    Console.WriteLine($"CITA REGISTRADA CORRECTAMENTE PARA: {newAppointment.Patient?.Name} {newAppointment.Patient?.LastName}");
                 }
             }
             else
@@ -80,6 +90,8 @@ namespace ClinicApp.Business
     
         public void ViewAppointment()
         {
+            var appointments = _repository.GetAppointments();
+
             foreach (var appointment in appointments)
             {
                 Console.WriteLine("---DATOS CITA---");
@@ -92,7 +104,7 @@ namespace ClinicApp.Business
                 Console.WriteLine($"Día: {appointment.Date}");
                 Console.WriteLine($"¿Es urgente?: {(appointment.IsUrgent ? "si" : "no")}");
                 Console.WriteLine(""); 
-            }
+            }    
         }
     }
 }

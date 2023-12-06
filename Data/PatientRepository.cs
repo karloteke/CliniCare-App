@@ -15,7 +15,12 @@ namespace ClinicApp.Data
 
         public void AddPatient(Patient patient)
         {
-            _patients.Add(patient);
+            // Verifica si ya existe el paciente en la lista antes de agregarlo
+            if (!_patients.Any(p => p.Id == patient.Id))
+            {
+                _patients.Add(patient);
+                SaveChanges();
+            }
         }
 
         public List<Patient> GetPatients()

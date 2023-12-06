@@ -10,7 +10,7 @@ public class Patient
     public string? Phone { get; set; }
 
     private static int NextId = 1;
-    private static readonly List<Patient> patients = new  List<Patient>();
+    private  static List<Patient> patients = new  List<Patient>();
 
     //Buscar paciente por Id
     public static Patient? GetPatientById(int patientId)
@@ -34,7 +34,6 @@ public class Patient
         Phone = phone;
     }
 }
-
 
 
 

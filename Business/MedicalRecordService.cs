@@ -1,13 +1,18 @@
 using ClinicApp.Models;
+using ClinicApp.Data;
 using System;
 
 namespace ClinicApp.Business
 {
     public class MedicalRecordService : IMedicalRecordService
     {
+        private readonly IMedicalRecordRepository _repository;
 
-        // Crea una instancia específica para la lista del historial médico.
-        List<MedicalRecord> medicalRecords = MedicalRecord.GetMedicalRecord();
+         public MedicalRecordService(IMedicalRecordRepository repository)
+        {
+            _repository = repository;
+        }
+
           public void CreateMedicalRecord()
         {
             DateTime date = DateTime.Now;
@@ -43,8 +48,9 @@ namespace ClinicApp.Business
                 Console.WriteLine("ID de paciente no válido. Debe ser un número entero.");
                 return;
             }
+            
 
-            var patient = Patient.GetPatientById(PatientId);
+            var patient = _repository.GetPatientById(PatientId);
 
             if (patient != null)
             {
@@ -54,7 +60,9 @@ namespace ClinicApp.Business
                     {
                         Patient = patient
                     };
-                    MedicalRecord.AddMedicalRecord(newMedicalRecord);
+
+                    _repository.AddMedicalRecord(newMedicalRecord);
+                    _repository.SaveChanges();
 
                     Console.WriteLine("");
                     Console.WriteLine($"HISTORIAL MÉDICO REGISTRADO CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
@@ -67,6 +75,9 @@ namespace ClinicApp.Business
         }
 
         public void ViewMedicalRecord(){
+
+            var medicalRecords = _repository.GetMedicalRecords();
+
             foreach (var medicalRecord in medicalRecords)
             {
                 Console.WriteLine("---DATOS HISTORIAL MÉDICO---");
