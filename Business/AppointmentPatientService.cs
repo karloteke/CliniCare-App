@@ -1,12 +1,17 @@
 using ClinicApp.Models;
+using ClinicApp.Data;
 using System;
 
 namespace ClinicApp.Business
 {
     public class AppointmentPatientService : IAppointmentPatientService
     {
-        // Crea una instancia específica para la lista de citas.
-        List<AppointmentPatient> appointmentsPatient = AppointmentPatient.GetAppointments();
+        private readonly IAppointmentPatientRepository _repository;
+
+         public AppointmentPatientService(IAppointmentPatientRepository repository)
+        {
+            _repository = repository;
+        }
 
         public void CreateAppointmentPatient()
         {
@@ -18,8 +23,20 @@ namespace ClinicApp.Business
             string? lastname = Console.ReadLine();
             Console.WriteLine("");
 
-          // Crear un nuevo paciente con los datos proporcionados
-            var patient = new Patient(name, lastname, null, null, null);
+            Console.WriteLine("Dirección");
+            string? address = Console.ReadLine();
+            Console.WriteLine("");
+
+            Console.WriteLine("Dni");
+            string? dni = Console.ReadLine();
+            Console.WriteLine("");
+
+            Console.WriteLine("Teléfono");
+            string? phone = Console.ReadLine();
+            Console.WriteLine("");
+
+            // Crear un nuevo paciente con los datos dados por consola
+            var patient = new Patient(name, lastname, address, dni, phone);
  
             Console.WriteLine("Especialidad (Oftalmología, traumatología, ginecología o neurología)");
             string? area = Console.ReadLine();
@@ -63,7 +80,8 @@ namespace ClinicApp.Business
                     Patient = patient
                 };
 
-                appointmentsPatient.Add(newAppointmentPatient);
+                _repository.AddAppointmentPatient(newAppointmentPatient);
+                _repository.SaveChanges();
 
                 Console.WriteLine("");
                 Console.WriteLine("CITA REGISTRADA CORRECTAMENTE");
@@ -73,12 +91,12 @@ namespace ClinicApp.Business
     
         public void ViewAppointmentPatient()
         {
-            foreach (var appointmentPatient in appointmentsPatient)
+            var appointmentPatients = _repository.GetAppointmentPatients();
+            foreach (var appointmentPatient in appointmentPatients)
             {
                 Console.WriteLine("");
                 Console.WriteLine("---DATOS CITA---");
                 Console.WriteLine("");
-                Console.WriteLine($"Id: {appointmentPatient.Id}");
                 Console.WriteLine($"Paciente: {appointmentPatient.Patient?.Name} {appointmentPatient.Patient?.LastName}");
                 Console.WriteLine($"Fecha y hora de registro: {appointmentPatient.Date}");
                 Console.WriteLine($"Especialidad: {appointmentPatient.Area}");

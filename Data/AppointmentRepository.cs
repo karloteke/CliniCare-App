@@ -8,7 +8,7 @@ namespace ClinicApp.Data
         private List<Appointment> _appointments = new List<Appointment>();
         private List<Patient> _patients = new List<Patient>();
         private readonly string _filePath = "appointments.json";
-         private readonly IPatientRepository _patientRepository;
+        private readonly IPatientRepository _patientRepository;
 
           public AppointmentRepository(IPatientRepository patientRepository)
         {

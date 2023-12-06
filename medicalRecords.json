@@ -1,34 +1,34 @@
 [
   {
     "Id": 1,
-    "Date": "2023-12-06T16:07:05.0655531+01:00",
+    "Date": "2023-12-06T18:44:47.5474383+01:00",
     "DoctorName": "Ramon",
     "Treatment": "Orfidal",
-    "TreatmentCost": 10.22,
+    "TreatmentCost": 5.20,
     "Notes": "Tomar por las noches",
     "Patient": {
       "Id": 2,
       "Name": "Jesus",
-      "LastName": "Gimenez",
-      "Address": "Gran Via,24",
+      "LastName": "Cortes",
+      "Address": "C/Olivo,13",
       "Dni": "12345678J",
-      "Phone": "666999908"
+      "Phone": "666777888"
     }
   },
   {
     "Id": 2,
-    "Date": "2023-12-06T16:07:39.7640317+01:00",
-    "DoctorName": "Lucia",
-    "Treatment": "Gotas",
-    "TreatmentCost": 2.22,
-    "Notes": "Dos veces al dia",
+    "Date": "2023-12-06T18:49:13.5371958+01:00",
+    "DoctorName": "Jumar",
+    "Treatment": "Ibuprofeno",
+    "TreatmentCost": 3.24,
+    "Notes": "Tomar cada 8h",
     "Patient": {
-      "Id": 1,
-      "Name": "Carlota",
-      "LastName": "Cetina",
-      "Address": "C/Dato,12",
-      "Dni": "73000461W",
-      "Phone": "654465114"
+      "Id": 2,
+      "Name": "Jesus",
+      "LastName": "Cortes",
+      "Address": "C/Olivo,13",
+      "Dni": "12345678J",
+      "Phone": "666777888"
     }
   }
 ]

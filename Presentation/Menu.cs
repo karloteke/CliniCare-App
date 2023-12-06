@@ -21,12 +21,15 @@ class Menu
     // Instancia el repositorio de historial médico
     private static IMedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository(patientRepository); 
 
-
     // Instancio el servicio historial médico utilizando repositorio
     private static IMedicalRecordService medicalRecordService = new MedicalRecordService(medicalRecordRepository);
 
-    //Instancio las citas de pacientes(Zona Pública)
-    private static AppointmentPatientService appointmentPatientService = new AppointmentPatientService(); 
+   // Instancia el repositorio de citas
+    private static IAppointmentPatientRepository appointmentPatientRepository = new AppointmentPatientRepository(patientRepository);
+
+    //Instancio el servicio de citas utilizando repositorio
+    private static IAppointmentPatientService appointmentPatientService = new AppointmentPatientService(appointmentPatientRepository); 
+
     
     public static void Main()
     {
