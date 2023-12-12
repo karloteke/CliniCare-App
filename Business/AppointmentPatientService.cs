@@ -27,9 +27,18 @@ namespace ClinicApp.Business
             string? address = Console.ReadLine();
             Console.WriteLine("");
 
-            Console.WriteLine("Dni");
+            Console.WriteLine("Número de DNI con letra");
             string? dni = Console.ReadLine();
             Console.WriteLine("");
+            if (dni?.Length == 9)
+            {
+           
+            }
+            else
+            {
+                Console.WriteLine("DNI inválido. Tiene que tener 9 dígitos.");
+                return;
+            }
 
             Console.WriteLine("Teléfono");
             string? phone = Console.ReadLine();
@@ -38,17 +47,47 @@ namespace ClinicApp.Business
             // Crear un nuevo paciente con los datos dados por consola
             var patient = new Patient(name, lastname, address, dni, phone);
  
-            Console.WriteLine("Especialidad (Oftalmología, traumatología, ginecología o neurología)");
+            Console.WriteLine("Especialidad (Oftalmología/traumatología/ginecología/neurología)");
             string? area = Console.ReadLine();
             Console.WriteLine("");
 
             Console.WriteLine("Fecha (dd/MM/yyyy)");
             string? day = Console.ReadLine();
             Console.WriteLine("");
-
+            if (FechaValida(day))
+            {
+            
+            }
+            else
+            {
+                Console.WriteLine("Fecha inválida. Debe tener el formato dd/MM/yyyy.");
+                return;
+            }
+            
             Console.WriteLine("Hora (HH:mm)");
             string? time = Console.ReadLine();
             Console.WriteLine("");
+             if (HoraValida(time))
+            {
+            
+            }
+            else
+            {
+                Console.WriteLine("Hora inválida. Debe tener el formato HH:mm.");
+                return;
+            }
+
+    
+            //Comprobación entradas fecha y hora
+            static bool HoraValida(string hora)
+            {
+                return DateTime.TryParseExact(hora, "HH:mm", null, System.Globalization.DateTimeStyles.None, out _);
+            }
+
+            static bool FechaValida(string fecha)
+            {
+                return DateTime.TryParseExact(fecha, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out _);
+            }
 
             bool isUrgent;
 
@@ -65,7 +104,7 @@ namespace ClinicApp.Business
             }
             else
             {
-                Console.WriteLine("Respuesta incorrecta");
+                Console.WriteLine("Respuesta incorrecta. Escribe si o no");
                 return;
             }
 
@@ -97,6 +136,7 @@ namespace ClinicApp.Business
                 Console.WriteLine("");
                 Console.WriteLine("---DATOS CITA---");
                 Console.WriteLine("");
+                Console.WriteLine($"Id cita: {appointmentPatient.Patient?.Id}");
                 Console.WriteLine($"Paciente: {appointmentPatient.Patient?.Name} {appointmentPatient.Patient?.LastName}");
                 Console.WriteLine($"Fecha y hora de registro: {appointmentPatient.Date}");
                 Console.WriteLine($"Especialidad: {appointmentPatient.Area}");

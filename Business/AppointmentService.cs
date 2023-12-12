@@ -23,14 +23,43 @@ namespace ClinicApp.Business
             string? medicalName = Console.ReadLine();
             Console.WriteLine("");
 
-            Console.WriteLine("Hora (HH:mm)");
-            string? time = Console.ReadLine();
-            Console.WriteLine("");
-            
-    
             Console.WriteLine("Fecha (dd/MM/yyyy)");
             string? date = Console.ReadLine();
             Console.WriteLine("");
+
+            if (FechaValida(date))
+            {
+            
+            }
+            else
+            {
+                Console.WriteLine("Fecha inválida. Debe tener el formato dd/MM/yyyy.");
+                return;
+            }
+
+            Console.WriteLine("Hora (HH:mm)");
+            string? time = Console.ReadLine();
+            Console.WriteLine("");
+            if (HoraValida(time))
+            {
+            
+            }
+            else
+            {
+                Console.WriteLine("Hora inválida. Debe tener el formato HH:mm.");
+                return;
+            }
+   
+            //Comprobación entradas fecha y hora
+            static bool HoraValida(string hora)
+            {
+                return DateTime.TryParseExact(hora, "HH:mm", null, System.Globalization.DateTimeStyles.None, out _);
+            }
+
+            static bool FechaValida(string fecha)
+            {
+                return DateTime.TryParseExact(fecha, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out _);
+            }
 
             bool isUrgent;
 
@@ -47,7 +76,7 @@ namespace ClinicApp.Business
             }
             else
             {
-                Console.WriteLine("Respuesta incorrecta");
+                Console.WriteLine("Respuesta incorrecta. Escriba si o no");
                 return;
             }
             
@@ -96,8 +125,8 @@ namespace ClinicApp.Business
             {
                 Console.WriteLine("---DATOS CITA---");
                 Console.WriteLine("");
-                Console.WriteLine($"Id: {appointment.Id}");
-                Console.WriteLine($"Paciente: {appointment.Patient?.Name} {appointment.Patient?.LastName}");
+                Console.WriteLine($"Id cita: {appointment.Id}");
+                Console.WriteLine($"id paciente: {appointment.Patient?.Id} Nombre paciente: {appointment.Patient?.Name} {appointment.Patient?.LastName}");
                 Console.WriteLine($"Especialidad: {appointment.Area}");
                 Console.WriteLine($"Nombre médico: {appointment.MedicalName}");
                 Console.WriteLine($"Hora: {appointment.Time}");
