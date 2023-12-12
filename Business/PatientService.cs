@@ -26,9 +26,18 @@ namespace ClinicApp.Business
             string? address = Console.ReadLine();
             Console.WriteLine("");
 
-            Console.WriteLine("DNI");
+            Console.WriteLine("Número de DNI con letra");
             string? dni = Console.ReadLine();
             Console.WriteLine("");
+            if (dni?.Length == 9)
+            {
+           
+            }
+            else
+            {
+                Console.WriteLine("DNI inválido. Tiene que tener 9 dígitos.");
+                return;
+            }
 
             Console.WriteLine("Teléfono");
             string? phone = Console.ReadLine();
@@ -39,7 +48,6 @@ namespace ClinicApp.Business
             
             if(existPatient == null)
             {
-                
                 _repository.AddPatient(newPatient);
                 _repository.UpdatePatient(newPatient);
                 _repository.SaveChanges();

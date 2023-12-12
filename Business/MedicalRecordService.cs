@@ -82,8 +82,8 @@ namespace ClinicApp.Business
             {
                 Console.WriteLine("---DATOS HISTORIAL MÉDICO---");
                 Console.WriteLine("");
-                Console.WriteLine($"Id: {medicalRecord.Id}");
-                Console.WriteLine($"Paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName}");
+                Console.WriteLine($"Id histororial médico: {medicalRecord.Id}");
+                Console.WriteLine($"Id paciente: {medicalRecord.Patient?.Id} Nombre paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName}");
                 Console.WriteLine($"Fecha y hora: {medicalRecord.Date}");
                 Console.WriteLine($"Nombre médico: {medicalRecord.DoctorName}");
                 Console.WriteLine($"Tratamiento: {medicalRecord.Treatment}");
