@@ -6,35 +6,33 @@ class Menu
 {
     private static string? choice = "";
 
-    // Instancia el repositorio de pacientes(Zona privada)
+    // Instancia pacientes
     private static IPatientRepository patientRepository = new PatientRepository();
-
-    // Instancia el servicio de pacientes utilizando el repositorio
     private static IPatientService patientService = new PatientService(patientRepository);
 
-    // Instancia el repositorio de citas
+    // Instancia citas
     private static IAppointmentRepository appointmentRepository = new AppointmentRepository(patientRepository);
-
-    //Instancio el servicio de citas utilizando repositorio
     private static IAppointmentService appointmentService = new AppointmentService(appointmentRepository); 
 
-    // Instancia el repositorio de historial médico
+    // Instancia historial médico
     private static IMedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository(patientRepository); 
-
-    // Instancio el servicio historial médico utilizando repositorio
     private static IMedicalRecordService medicalRecordService = new MedicalRecordService(medicalRecordRepository);
 
-   // Instancia el repositorio de citas
+   // Instancia citas creadas por pacientes
     private static IAppointmentPatientRepository appointmentPatientRepository = new AppointmentPatientRepository(patientRepository);
-
-    //Instancio el servicio de citas utilizando repositorio
     private static IAppointmentPatientService appointmentPatientService = new AppointmentPatientService(appointmentPatientRepository); 
+
+    // Instacia Usuarios
+    private static IUserRepository userRepository = new UserRepository();
+    private static IUserService userService = new UserService(userRepository);
+
+    // Instancia acceso a la zona privada
+    private static PrivateAreaAccess privateAreaAccess = new PrivateAreaAccess(userService);
 
     
     public static void Main()
     {
         bool privateZone = false;
-        PrivateAreaAccess authentication = new PrivateAreaAccess();
         
         do
         {
@@ -59,7 +57,8 @@ class Menu
                 Console.WriteLine(" ");
                 Console.WriteLine("1. Pedir cita");
                 Console.WriteLine("2. Visualizar citas");
-                Console.WriteLine("3. Ir a zona privada");  
+                Console.WriteLine("3. Registro");
+                Console.WriteLine("4. Ir a zona privada");  
                 Console.WriteLine("e. Salir");
                 Console.WriteLine(" ");
             }
@@ -129,6 +128,10 @@ class Menu
                         break;
 
                     case "3":
+                        userService.CreateUser();
+                        break;
+
+                    case "4":
                         Console.WriteLine("Para acceder a la zona privada introduzca usuario y contraseña");
                         Console.WriteLine(" ");
 
@@ -137,31 +140,29 @@ class Menu
 
                         Console.Write("Contraseña: ");
                         string? password = Console.ReadLine();
-                        Console.Write("");
+                        Console.WriteLine("");
 
-                        if(userName != null && password != null)
+
+                        if (userName != null && password != null)
                         {
-                            bool authenticated = authentication.Authentication(userName, password);
+                            bool authenticated = privateAreaAccess.Authentication(userName, password);
 
-                            if(authenticated)
+                            if (authenticated)
                             {
                                 privateZone = true;
-                                Console.WriteLine("");
                                 Console.WriteLine("BIENVENIDO A LA ZONA PRIVADA DE CLINICARE");
                             }
                             else
                             {
-                                Console.WriteLine(" ");
                                 Console.WriteLine("ACCESO DENEGADO");
                             }
-                        }                     
+                        }
                         break;
-                        
+
                     default:
                         Console.WriteLine("OPCIÓN NO VALIDA");
                         break;
-                
-                }               
+                }
             }
             Console.WriteLine("");
             Console.WriteLine(">>Presione enter para continuar");
