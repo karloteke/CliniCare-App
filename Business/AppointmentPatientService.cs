@@ -136,8 +136,8 @@ namespace ClinicApp.Business
                 Console.WriteLine("");
                 Console.WriteLine("---DATOS CITA---");
                 Console.WriteLine("");
-                Console.WriteLine($"Id cita: {appointmentPatient.Patient?.Id}");
-                Console.WriteLine($"Paciente: {appointmentPatient.Patient?.Name} {appointmentPatient.Patient?.LastName}");
+                Console.WriteLine($"Id cita: {appointmentPatient.Id}");
+                Console.WriteLine($"Paciente: {appointmentPatient.Patient?.Name} {appointmentPatient.Patient?.LastName} con id {appointmentPatient.Patient?.Id}");
                 Console.WriteLine($"Fecha y hora de registro: {appointmentPatient.Date}");
                 Console.WriteLine($"Especialidad: {appointmentPatient.Area}");
                 Console.WriteLine($"Fecha de la cita: {appointmentPatient.Day}");
