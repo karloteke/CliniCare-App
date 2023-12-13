@@ -21,23 +21,39 @@ namespace ClinicApp.Business
             Console.WriteLine("Introduce una contraseña");
             string? password = Console.ReadLine();
             Console.WriteLine("");
-
-            if (!password.Any(char.IsUpper) || (!password.Any(char.IsDigit)))
+            
+            if(password != null)
             {
-                Console.WriteLine("Formato de contraseña inválido. Debe contener al menos una mayúscula y un número.");
+                if (!password.Any(char.IsUpper) || (!password.Any(char.IsDigit)))
+                {
+                    Console.WriteLine("Formato de contraseña inválido. Debe contener al menos una mayúscula y un número.");
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Entrada inválida. La contraseña no puede estar vacío.");
                 return;
             }
 
+            
             Console.WriteLine("Introduce un email");
             string? email = Console.ReadLine();
             Console.WriteLine("");
-            
-            if (!email.Contains('@') || !email.Contains(".com"))
+            if(email != null)
             {
-                Console.WriteLine("Formato de email inválido. Debe contener '@' y '.com'.");
+                 if (!email.Contains('@') || !email.Contains(".com"))
+                {
+                    Console.WriteLine("Formato de email inválido. Debe contener '@' y '.com'.");
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Entrada inválida. El email no puede estar vacío.");
                 return;
             }
-
+           
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email) )
             {
                 Console.WriteLine("Entrada inválida. Nombre de usuario, contraseña e email no pueden estar vacíos.");

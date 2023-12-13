@@ -54,26 +54,44 @@ namespace ClinicApp.Business
             Console.WriteLine("Fecha (dd/MM/yyyy)");
             string? day = Console.ReadLine();
             Console.WriteLine("");
-            if (FechaValida(day))
+
+            if(day != null)
             {
+                if (FechaValida(day))
+                {
             
+                }
+                else
+                {
+                    Console.WriteLine("Fecha inválida. Debe tener el formato dd/MM/yyyy.");
+                    return;
+                }   
             }
             else
             {
-                Console.WriteLine("Fecha inválida. Debe tener el formato dd/MM/yyyy.");
+                Console.WriteLine("Entrada inválida. La fecha no puede estar vacía.");
                 return;
             }
             
             Console.WriteLine("Hora (HH:mm)");
             string? time = Console.ReadLine();
             Console.WriteLine("");
-             if (HoraValida(time))
+
+            if(time != null)
             {
+                if (HoraValida(time))
+                {
             
+                }
+                else
+                {
+                    Console.WriteLine("Hora inválida. Debe tener el formato HH:mm.");
+                    return;
+                }   
             }
             else
             {
-                Console.WriteLine("Hora inválida. Debe tener el formato HH:mm.");
+                Console.WriteLine("Entrada inválida. La hora no puede estar vacía.");
                 return;
             }
 

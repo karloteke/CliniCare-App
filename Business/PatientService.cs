@@ -91,21 +91,29 @@ namespace ClinicApp.Business
             string? dniToSearch = Console.ReadLine();
             Console.WriteLine("");
 
-            Patient foundPatient = _repository.GetPatientByDni(dniToSearch);
-            if (foundPatient != null)
-            {
-                Console.WriteLine("--- DATOS DE PACIENTE ENCONTRADO ---");
-                Console.WriteLine("");
-                Console.WriteLine($"Id: {foundPatient.Id}");
-                Console.WriteLine($"Nombre: {foundPatient.Name}");
-                Console.WriteLine($"Apellido: {foundPatient.LastName}");
-                Console.WriteLine($"Dirección: {foundPatient.Address}");
-                Console.WriteLine($"Dni: {foundPatient.Dni}");
-                Console.WriteLine($"Teléfono: {foundPatient.Phone}");
+            if(dniToSearch != null)
+            {          
+                Patient foundPatient = _repository.GetPatientByDni(dniToSearch);
+
+                if (foundPatient != null)
+                {
+                    Console.WriteLine("--- DATOS DE PACIENTE ENCONTRADO ---");
+                    Console.WriteLine("");
+                    Console.WriteLine($"Id: {foundPatient.Id}");
+                    Console.WriteLine($"Nombre: {foundPatient.Name}");
+                    Console.WriteLine($"Apellido: {foundPatient.LastName}");
+                    Console.WriteLine($"Dirección: {foundPatient.Address}");
+                    Console.WriteLine($"Dni: {foundPatient.Dni}");
+                    Console.WriteLine($"Teléfono: {foundPatient.Phone}");
+                }
+                else
+                {
+                    Console.WriteLine("Paciente no encontrado.");
+                }
             }
             else
             {
-                Console.WriteLine("Paciente no encontrado.");
+                Console.WriteLine("Entrada inválida. El DNI no puede estar vacío.");
             }
         }
     }
