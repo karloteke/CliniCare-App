@@ -45,7 +45,6 @@ namespace ClinicApp.Business
                 return;
             }
                
-
             Console.WriteLine("Hora (HH:mm)");
             string? time = Console.ReadLine();
             Console.WriteLine("");

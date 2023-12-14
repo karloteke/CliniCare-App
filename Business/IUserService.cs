@@ -4,6 +4,5 @@ namespace ClinicApp.Business
     {
         void CreateUser();
         bool Authenticate(string username, string password);
-        bool Authenticate(string username, string password, string email);
     }
 }

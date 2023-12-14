@@ -6,7 +6,7 @@ namespace ClinicApp.Data
     {
         void AddAppointmentPatient(AppointmentPatient appointmentPatient);
         List<AppointmentPatient> GetAppointmentPatients();
-        Patient GetPatientById(int patientId);
+        Patient? GetPatientById(int? patientId);
         void UpdateAppointmentPatient(AppointmentPatient appointmentPatient);
         void SaveChanges();
     }

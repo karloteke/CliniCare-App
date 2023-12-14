@@ -6,8 +6,8 @@ namespace ClinicApp.Data
     {
         void AddPatient(Patient patient);
         List<Patient> GetPatients();
-        Patient GetPatientByDni(string dni);
-        Patient GetPatientById (int id);
+        Patient? GetPatientByDni(string? dni);
+        Patient? GetPatientById (int? id);
         void UpdatePatient(Patient patient);
         void SaveChanges();
     }

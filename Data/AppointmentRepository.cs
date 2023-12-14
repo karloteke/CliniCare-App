@@ -26,7 +26,7 @@ namespace ClinicApp.Data
             return _appointments;
         }
 
-        public Patient GetPatientById(int patientId)
+        public Patient? GetPatientById(int? patientId)
         {
             return _patientRepository.GetPatientById(patientId);
         }

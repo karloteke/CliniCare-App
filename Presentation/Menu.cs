@@ -1,6 +1,7 @@
 using ClinicApp.Models;
 using ClinicApp.Business;
 using ClinicApp.Data;
+using Spectre.Console;
 
 class Menu
 {
@@ -57,8 +58,8 @@ class Menu
                 Console.WriteLine(" ");
                 Console.WriteLine("1. Pedir cita");
                 Console.WriteLine("2. Visualizar citas");
-                Console.WriteLine("3. Registro");
-                Console.WriteLine("4. Ir a zona privada");  
+                Console.WriteLine("3. Registro para personal médico");
+                Console.WriteLine("4. Zona privada para personal médico ");  
                 Console.WriteLine("e. Salir");
                 Console.WriteLine(" ");
             }
@@ -132,7 +133,7 @@ class Menu
                         break;
 
                     case "4":
-                        Console.WriteLine("Para acceder a la zona privada introduzca usuario y contraseña");
+                        Console.WriteLine("Introduzca usuario y contraseña para entrar en la zona privada como personal médico");
                         Console.WriteLine(" ");
 
                         Console.Write("Usuario: ");

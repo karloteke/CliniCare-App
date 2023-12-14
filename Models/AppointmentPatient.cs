@@ -12,6 +12,7 @@ namespace ClinicApp.Models
 
         private static int NextId = 1;
         private static readonly List<AppointmentPatient> Appointments = new List<AppointmentPatient>();
+        
 
         public AppointmentPatient(DateTime date, string area, string day, string time, bool isUrgent)
         {
