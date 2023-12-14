@@ -13,39 +13,9 @@ namespace ClinicApp.Business
             _repository = repository;
         }
 
-        public void CreateAppointmentPatient()
+        public void CreateAppointmentPatient(Patient patient)
         {
-            Console.WriteLine("Nombre");
-            string? name = Console.ReadLine();
-            Console.WriteLine("");
-
-            Console.WriteLine("Apellido");
-            string? lastname = Console.ReadLine();
-            Console.WriteLine("");
-
-            Console.WriteLine("Dirección");
-            string? address = Console.ReadLine();
-            Console.WriteLine("");
-
-            Console.WriteLine("Número de DNI con letra");
-            string? dni = Console.ReadLine();
-            Console.WriteLine("");
-            if (dni?.Length == 9)
-            {
-           
-            }
-            else
-            {
-                Console.WriteLine("DNI inválido. Tiene que tener 9 dígitos.");
-                return;
-            }
-
-            Console.WriteLine("Teléfono");
-            string? phone = Console.ReadLine();
-            Console.WriteLine("");
-
-            // Crear un nuevo paciente con los datos dados por consola
-            var patient = new Patient(name, lastname, address, dni, phone);
+            
  
             Console.WriteLine("Especialidad (Oftalmología/traumatología/ginecología/neurología)");
             string? area = Console.ReadLine();
@@ -146,9 +116,9 @@ namespace ClinicApp.Business
         }    
 
     
-        public void ViewAppointmentPatient()
+        public void ViewAppointmentPatient(string patientDni)
         {
-            var appointmentPatients = _repository.GetAppointmentPatients();
+            var appointmentPatients = _repository.GetAppointmentPatientsByDNI(patientDni);
             foreach (var appointmentPatient in appointmentPatients)
             {
                 Console.WriteLine("");
@@ -164,5 +134,6 @@ namespace ClinicApp.Business
                 Console.WriteLine(""); 
             }
         }
+
     }
 }
