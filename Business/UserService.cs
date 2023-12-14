@@ -21,6 +21,22 @@ namespace ClinicApp.Business
             Console.WriteLine("Introduce una contraseña");
             string? password = Console.ReadLine();
             Console.WriteLine("");
+
+            Console.WriteLine("Introduce la clave de acceso para médicos:");
+            string? accessKey = Console.ReadLine();
+            Console.WriteLine("");
+
+            // Validar la clave de acceso específica para médicos
+            if (string.Equals(accessKey, "medico"))
+            {
+              
+            }
+            else
+            {
+                Console.WriteLine("Clave de acceso incorrecta. Registro denegado.");
+                return;
+            }
+
             
             if(password != null)
             {
@@ -60,7 +76,7 @@ namespace ClinicApp.Business
                 return;
             }
 
-            var newUser = new User(userName, password, email);
+            var newUser = new User(userName, password, email, accessKey);
             var existUser = _repository.GetUserByUserName(userName);
 
             if (existUser == null)
@@ -83,11 +99,5 @@ namespace ClinicApp.Business
             return user != null && user.Password == password;
         }
 
-        public bool Authenticate(string username, string password, string email)
-        {
-            // Verifica las credenciales del usuario y devuelve true si son válidas, false en caso contrario
-            User? user = _repository.GetUserByUserName(username);
-            return user != null && user.Password == password && user.Email == email;
-        }
     }
 }

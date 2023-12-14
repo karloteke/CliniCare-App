@@ -28,12 +28,12 @@ namespace ClinicApp.Data
             return _patients;
         }
 
-        public Patient GetPatientByDni(string dni)
+        public Patient? GetPatientByDni(string? dni)
         {
             return _patients.FirstOrDefault(p => p.Dni == dni);
         }
 
-        public Patient GetPatientById(int patientId)
+        public Patient? GetPatientById(int? patientId)
         {
             return _patients.FirstOrDefault(p => p.Id == patientId);
         }

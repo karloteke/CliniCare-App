@@ -93,7 +93,7 @@ namespace ClinicApp.Business
 
             if(dniToSearch != null)
             {          
-                Patient foundPatient = _repository.GetPatientByDni(dniToSearch);
+                Patient? foundPatient = _repository.GetPatientByDni(dniToSearch);
 
                 if (foundPatient != null)
                 {
