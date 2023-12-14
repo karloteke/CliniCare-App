@@ -25,9 +25,9 @@ namespace ClinicApp.Data
         {
             return _appointmentPatients;
         }
-        public Patient? GetPatientById(int? patientId)
+        public List<AppointmentPatient> GetAppointmentPatientsByDNI(string dni)
         {
-            return _patientRepository.GetPatientById(patientId);
+            return _appointmentPatients.Where(ap => ap.Patient?.Dni == dni).ToList();
         }
 
         public void UpdateAppointmentPatient(AppointmentPatient appointmentPatient)

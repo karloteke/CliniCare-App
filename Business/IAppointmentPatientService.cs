@@ -1,8 +1,10 @@
+using ClinicApp.Models;
+
 namespace ClinicApp.Business
 {
     public interface IAppointmentPatientService
     {
-        void CreateAppointmentPatient();
-        void ViewAppointmentPatient();    
+        void CreateAppointmentPatient(Patient patient);
+        void ViewAppointmentPatient(string patientDni);    
     }
 }

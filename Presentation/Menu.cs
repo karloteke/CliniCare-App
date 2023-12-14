@@ -54,6 +54,7 @@ class Menu
             }
             else
             {
+                Console.WriteLine(" ");
                 Console.WriteLine("=== ZONA PUBLICA ===");
                 Console.WriteLine(" ");
                 Console.WriteLine("1. Pedir cita");
@@ -121,11 +122,45 @@ class Menu
                 switch (choice)
                 {
                     case "1":
-                        appointmentPatientService.CreateAppointmentPatient();
+                        Console.WriteLine("Nombre");
+                        string? name = Console.ReadLine();
+                        Console.WriteLine("");
+
+                        Console.WriteLine("Apellido");
+                        string? lastname = Console.ReadLine();
+                        Console.WriteLine("");
+
+                        Console.WriteLine("Dirección");
+                        string? address = Console.ReadLine();
+                        Console.WriteLine("");
+
+                        Console.WriteLine("Número de DNI con letra");
+                        string? dni = Console.ReadLine();
+                        Console.WriteLine("");
+                        if (dni?.Length == 9)
+                        {
+                    
+                        }
+                        else
+                        {
+                            Console.WriteLine("DNI inválido. Tiene que tener 9 dígitos.");
+                            return;
+                        }
+
+                        Console.WriteLine("Teléfono");
+                        string? phone = Console.ReadLine();
+                        Console.WriteLine("");
+
+                        // Crear un nuevo paciente con los datos dados por consola
+                        var newPatient = new Patient(name, lastname, address, dni, phone);
+                        appointmentPatientService.CreateAppointmentPatient(newPatient);
+                        //appointmentPatientService.CreateAppointmentPatient();
                         break;
                     
                     case "2":
-                        appointmentPatientService.ViewAppointmentPatient();
+                        Console.WriteLine("Ingrese el DNI del paciente:");
+                        string? patientDni = Console.ReadLine();
+                        appointmentPatientService.ViewAppointmentPatient(patientDni);
                         break;
 
                     case "3":
@@ -166,7 +201,7 @@ class Menu
                 }
             }
             Console.WriteLine("");
-            Console.WriteLine(">>Presione enter para continuar");
+            //Console.WriteLine(">>Presione enter para continuar");
             Console.ReadLine();
             
         } while(choice != "e");    
