@@ -144,23 +144,33 @@ class Menu
                         else
                         {
                             Console.WriteLine("DNI inválido. Tiene que tener 9 dígitos.");
-                            return;
+                            continue;
                         }
 
                         Console.WriteLine("Teléfono");
                         string? phone = Console.ReadLine();
                         Console.WriteLine("");
 
-                        // Crear un nuevo paciente con los datos dados por consola
-                        var newPatient = new Patient(name, lastname, address, dni, phone);
-                        appointmentPatientService.CreateAppointmentPatient(newPatient);
-                        //appointmentPatientService.CreateAppointmentPatient();
+                        if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(lastname) && !string.IsNullOrWhiteSpace(address) && !string.IsNullOrWhiteSpace(phone))
+                        {
+                            var newPatient = new Patient(name, lastname, address, dni, phone);
+                            appointmentPatientService.CreateAppointmentPatient(newPatient);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Uno o más campos obligatorios están vacíos. No se ha creado el paciente.");
+                            continue;
+                        }
                         break;
                     
                     case "2":
                         Console.WriteLine("Ingrese el DNI del paciente:");
                         string? patientDni = Console.ReadLine();
-                        appointmentPatientService.ViewAppointmentPatient(patientDni);
+
+                        if (!string.IsNullOrEmpty(patientDni))
+                        {
+                            appointmentPatientService.ViewAppointmentPatient(patientDni);    
+                        }
                         break;
 
                     case "3":
@@ -178,20 +188,22 @@ class Menu
                         string? password = Console.ReadLine();
                         Console.WriteLine("");
 
-
-                        if (userName != null && password != null)
+                        if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
                         {
-                            bool authenticated = privateAreaAccess.Authentication(userName, password);
+                            Console.WriteLine("Usuario o contraseña no válidos. Ambos campos son obligatorios.");
+                            continue;  
+                        }
 
-                            if (authenticated)
-                            {
-                                privateZone = true;
-                                Console.WriteLine("BIENVENIDO A LA ZONA PRIVADA DE CLINICARE");
-                            }
-                            else
-                            {
-                                Console.WriteLine("ACCESO DENEGADO");
-                            }
+                    bool authenticated = privateAreaAccess.Authentication(userName, password);
+
+                        if (authenticated)
+                        {
+                            privateZone = true;
+                            Console.WriteLine("BIENVENIDO A LA ZONA PRIVADA DE CLINICARE");
+                        }
+                        else
+                        {
+                            Console.WriteLine("ACCESO DENEGADO");
                         }
                         break;
 

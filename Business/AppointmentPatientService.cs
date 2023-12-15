@@ -15,11 +15,15 @@ namespace ClinicApp.Business
 
         public void CreateAppointmentPatient(Patient patient)
         {
-            
- 
             Console.WriteLine("Especialidad (Oftalmología/traumatología/ginecología/neurología)");
             string? area = Console.ReadLine();
             Console.WriteLine("");
+
+            if (string.IsNullOrEmpty(area))
+            {
+                Console.WriteLine("Entrada inválida. La especialidad no puede estar vacía.");
+                return;
+            }
 
             Console.WriteLine("Fecha (dd/MM/yyyy)");
             string? day = Console.ReadLine();
@@ -100,19 +104,16 @@ namespace ClinicApp.Business
             DateTime date = DateTime.Now;
             Console.WriteLine($"Fecha y hora de registro: {date}");
 
-            if (area != null && day != null && time != null)
+            var newAppointmentPatient = new AppointmentPatient(date, area, day, time, isUrgent)
             {
-                var newAppointmentPatient = new AppointmentPatient(date, area, day, time, isUrgent)
-                {
-                    Patient = patient
-                };
+                Patient = patient
+            };
 
-                _repository.AddAppointmentPatient(newAppointmentPatient);
-                _repository.SaveChanges();
+            _repository.AddAppointmentPatient(newAppointmentPatient);
+            _repository.SaveChanges();
 
-                Console.WriteLine("");
-                Console.WriteLine("CITA REGISTRADA CORRECTAMENTE");
-            }
+            Console.WriteLine("");
+            Console.WriteLine("CITA REGISTRADA CORRECTAMENTE");
         }    
 
     

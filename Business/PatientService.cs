@@ -18,13 +18,31 @@ namespace ClinicApp.Business
             string? name = Console.ReadLine();
             Console.WriteLine("");
 
+            if(string.IsNullOrEmpty(name))
+            {
+                Console.WriteLine("Entrada inválida. El nombre no puede estar vacío.");
+                return;
+            }
+
             Console.WriteLine("Apellido");
             string? lastname = Console.ReadLine();
             Console.WriteLine("");
 
+            if(string.IsNullOrEmpty(lastname))
+            {
+                Console.WriteLine("Entrada inválida. El apeliido no puede estar vacío.");
+                return;
+            }
+
             Console.WriteLine("Dirección");
             string? address = Console.ReadLine();
             Console.WriteLine("");
+
+            if(string.IsNullOrEmpty(address))
+            {
+                Console.WriteLine("Entrada inválida. La dirección no puede estar vacía.");
+                return;
+            }
 
             Console.WriteLine("Número de DNI con letra");
             string? dni = Console.ReadLine();
@@ -39,26 +57,34 @@ namespace ClinicApp.Business
                 return;
             }
 
+            var existPatient = _repository.GetPatientByDni(dni);
+            
+            if(existPatient != null)
+            {
+                Console.WriteLine("YA EXISTE ESE DNI");
+                return; 
+            }
+
             Console.WriteLine("Teléfono");
             string? phone = Console.ReadLine();
             Console.WriteLine("");
 
-            var newPatient = new Patient(name, lastname, address, dni, phone);
-            var existPatient = _repository.GetPatientByDni(dni);
-            
-            if(existPatient == null)
+            if(string.IsNullOrEmpty(phone))
             {
+                Console.WriteLine("Entrada inválida. El teléfono no puede estar vacío.");
+                return;
+            }
+
+
+            var newPatient = new Patient(name, lastname, address, dni, phone);
+     
                 _repository.AddPatient(newPatient);
                 _repository.UpdatePatient(newPatient);
                 _repository.SaveChanges();
 
                 Console.WriteLine("PACIENTE REGISTRADO CORRECTAMENTE");
-            }      
-            else
-            {
-                Console.WriteLine ("PACIENTE NO REGISTRADO,YA EXISTE ESE DNI");
-            }
-        }
+        }      
+    
 
         public void ViewPatients()
         {

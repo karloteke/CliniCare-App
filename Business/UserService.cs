@@ -18,26 +18,23 @@ namespace ClinicApp.Business
             string? userName = Console.ReadLine();
             Console.WriteLine("");
 
+            if(string.IsNullOrEmpty(userName))
+            {
+                Console.WriteLine("Entrada inválida. Nombre de usuario no puede estar vacío.");
+                return;
+            }
+
+            var existUser = _repository.GetUserByUserName(userName);
+            if (existUser != null)
+            {
+                Console.WriteLine("YA EXISTE ESE NOMBRE DE USUARIO");
+                return;
+            }
+
             Console.WriteLine("Introduce una contraseña");
             string? password = Console.ReadLine();
             Console.WriteLine("");
 
-            Console.WriteLine("Introduce la clave de acceso para médicos:");
-            string? accessKey = Console.ReadLine();
-            Console.WriteLine("");
-
-            // Validar la clave de acceso específica para médicos
-            if (string.Equals(accessKey, "medico"))
-            {
-              
-            }
-            else
-            {
-                Console.WriteLine("Clave de acceso incorrecta. Registro denegado.");
-                return;
-            }
-
-            
             if(password != null)
             {
                 if (!password.Any(char.IsUpper) || (!password.Any(char.IsDigit)))
@@ -46,13 +43,22 @@ namespace ClinicApp.Business
                     return;
                 }
             }
+           
+            Console.WriteLine("Introduce la clave de acceso para médicos:");
+            string? accessKey = Console.ReadLine();
+            Console.WriteLine("");
+
+            // Validar la clave de acceso para médicos
+            if (string.Equals(accessKey, "medico"))
+            {
+              
+            }
             else
             {
-                Console.WriteLine("Entrada inválida. La contraseña no puede estar vacío.");
+                Console.WriteLine("Clave de acceso incorrecta o vacia. Registro denegado.");
                 return;
             }
 
-            
             Console.WriteLine("Introduce un email");
             string? email = Console.ReadLine();
             Console.WriteLine("");
@@ -64,32 +70,13 @@ namespace ClinicApp.Business
                     return;
                 }
             }
-            else
-            {
-                Console.WriteLine("Entrada inválida. El email no puede estar vacío.");
-                return;
-            }
-           
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email) )
-            {
-                Console.WriteLine("Entrada inválida. Nombre de usuario, contraseña e email no pueden estar vacíos.");
-                return;
-            }
-
+            
             var newUser = new User(userName, password, email, accessKey);
-            var existUser = _repository.GetUserByUserName(userName);
-
-            if (existUser == null)
-            {
+        
                 _repository.AddUser(newUser);
                 _repository.SaveChanges();
 
                 Console.WriteLine("USUARIO REGISTRADO CORRECTAMENTE");
-            }
-            else
-            {
-                Console.WriteLine("USUARIO NO REGISTRADO, YA EXISTE ESE NOMBRE");
-            }
         }
     
         public bool Authenticate(string username, string password)

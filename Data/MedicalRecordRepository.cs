@@ -6,7 +6,7 @@ namespace ClinicApp.Data
     public class MedicalRecordRepository : IMedicalRecordRepository
     {
         private List<MedicalRecord> _medicalRecords = new List<MedicalRecord>();
-        private List<Patient> _patients = new List<Patient>();
+        //private List<Patient> _patients = new List<Patient>();
         private readonly string _filePath = "medicalRecords.json";
         private readonly IPatientRepository _patientRepository;
 

@@ -21,13 +21,27 @@ namespace ClinicApp.Business
             Console.WriteLine("Nombre del médico:");
             string? doctorName = Console.ReadLine();
 
+             if(string.IsNullOrEmpty(doctorName))
+            {
+                Console.WriteLine("Entrada inválida. El nombre del médico no puede estar vacío.");
+                return;
+            }
+
             Console.WriteLine("Tratamiento:");
             string? treatment = Console.ReadLine();
+
+             if(string.IsNullOrEmpty(treatment))
+            {
+                Console.WriteLine("Entrada inválida. El campo no puede estar vacío.");
+                return;
+            }
 
             Console.WriteLine("Coste del tratamiento (Ingrese un número decimal):");
             string? treatmentCostInput = Console.ReadLine();
 
-            if (decimal.TryParse(treatmentCostInput, out decimal treatmentCost)&& treatmentCost % 1 != 0){        
+            if (decimal.TryParse(treatmentCostInput, out decimal treatmentCost)&& treatmentCost % 1 != 0)
+            {        
+                
             }
             else
             {
@@ -37,6 +51,12 @@ namespace ClinicApp.Business
 
             Console.WriteLine("Notas:");
             string? notes = Console.ReadLine();
+
+             if(string.IsNullOrEmpty(notes))
+            {
+                Console.WriteLine("Entrada inválida. El campo no puede estar vacío.");
+                return;
+            }
 
             Console.WriteLine("");
             Console.WriteLine("Introduce el ID del paciente al que quieres asignarle el informe médico");
@@ -49,24 +69,21 @@ namespace ClinicApp.Business
                 return;
             }
             
-
             var patient = _repository.GetPatientById(PatientId);
 
             if (patient != null)
             {
-                if (doctorName != null && treatment != null && notes != null)
+                
+                var newMedicalRecord = new MedicalRecord(date, doctorName, treatment, treatmentCost, notes)
                 {
-                    var newMedicalRecord = new MedicalRecord(date, doctorName, treatment, treatmentCost, notes)
-                    {
-                        Patient = patient
-                    };
+                    Patient = patient
+                };
 
-                    _repository.AddMedicalRecord(newMedicalRecord);
-                    _repository.SaveChanges();
+                _repository.AddMedicalRecord(newMedicalRecord);
+                _repository.SaveChanges();
 
-                    Console.WriteLine("");
-                    Console.WriteLine($"HISTORIAL MÉDICO REGISTRADO CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
-                }
+                Console.WriteLine("");
+                Console.WriteLine($"HISTORIAL MÉDICO REGISTRADO CORRECTAMENTE PARA: {patient.Name} {patient.LastName}");
             }
             else
             {
