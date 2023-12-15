@@ -19,9 +19,21 @@ namespace ClinicApp.Business
             string? area = Console.ReadLine();
             Console.WriteLine("");
 
+            if(string.IsNullOrEmpty(area))
+            {
+                Console.WriteLine("Entrada inválida. La especialidad no puede estar vacía.");
+                return;
+            }
+
             Console.WriteLine("Nombre del médico");
             string? medicalName = Console.ReadLine();
             Console.WriteLine("");
+
+            if(string.IsNullOrEmpty(medicalName))
+            {
+                Console.WriteLine("Entrada inválida. El nombre del médico no puede estar vacío.");
+                return;
+            }
 
             Console.WriteLine("Fecha (dd/MM/yyyy)");
             string? date = Console.ReadLine();
@@ -103,30 +115,26 @@ namespace ClinicApp.Business
             int PatientId;
             
 
-            if(!int.TryParse(Console.ReadLine(),out PatientId))
+           if(!int.TryParse(Console.ReadLine(),out PatientId))
             {
                 Console.WriteLine("ID de paciente no válido. Debe ser un número entero.");
                 return;
             }
-
             
             var patient = _repository.GetPatientById(PatientId);
 
             if(patient != null)
             {
-                if (area != null && medicalName != null && date != null && time != null)
+                var newAppointment = new Appointment(area, medicalName, date, time, isUrgent)
                 {
-                    var newAppointment = new Appointment(area, medicalName, date, time, isUrgent)
-                    {
-                        Patient = patient
-                    };
+                    Patient = patient
+                };
 
-                    _repository.AddAppointment(newAppointment);
-                    _repository.SaveChanges();
+                _repository.AddAppointment(newAppointment);
+                _repository.SaveChanges();
 
-                    Console.WriteLine("");
-                    Console.WriteLine($"CITA REGISTRADA CORRECTAMENTE PARA: {newAppointment.Patient?.Name} {newAppointment.Patient?.LastName}");
-                }
+                Console.WriteLine("");
+                Console.WriteLine($"CITA REGISTRADA CORRECTAMENTE PARA: {newAppointment.Patient?.Name} {newAppointment.Patient?.LastName}");
             }
             else
             {

@@ -6,8 +6,7 @@ namespace ClinicApp.Data
     public class AppointmentPatientRepository : IAppointmentPatientRepository
     {
         private List<AppointmentPatient> _appointmentPatients = new List<AppointmentPatient>();
-        private List<Patient> _patients = new List<Patient>();
-        private readonly string _filePath = "appointmentPatients.json";
+        private readonly string _filePath = "appointmentPatients.json";  
         private readonly IPatientRepository _patientRepository;
 
           public AppointmentPatientRepository(IPatientRepository patientRepository)
@@ -27,7 +26,9 @@ namespace ClinicApp.Data
         }
         public List<AppointmentPatient> GetAppointmentPatientsByDNI(string dni)
         {
-            return _appointmentPatients.Where(ap => ap.Patient?.Dni == dni).ToList();
+            return _appointmentPatients
+                .Where(ap => ap.Patient?.Dni == dni)
+                .ToList();
         }
 
         public void UpdateAppointmentPatient(AppointmentPatient appointmentPatient)
@@ -49,6 +50,7 @@ namespace ClinicApp.Data
                 string jsonString = File.ReadAllText(_filePath);
                 var appointmentPatients = JsonSerializer.Deserialize<List<AppointmentPatient>>(jsonString);
                 _appointmentPatients = appointmentPatients ?? new List<AppointmentPatient>();
+                
             }
         }
     }
