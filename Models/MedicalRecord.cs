@@ -2,7 +2,7 @@ namespace ClinicApp.Models;
 public class MedicalRecord
 {
     public int Id { get; private set; }
-    public DateTime Date { get; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public string? DoctorName { get; set; }
     public string? Treatment { get; set; } 
     public decimal? TreatmentCost { get; set; }
@@ -15,10 +15,10 @@ public class MedicalRecord
      // Constructor sin parámetros para la deserialización
     public MedicalRecord() { }
 
-    public MedicalRecord(DateTime date, string doctorName, string treatment, decimal treatmentCost, string notes)
+    public MedicalRecord(DateTime createdAt, string doctorName, string treatment, decimal treatmentCost, string notes)
     {
         Id =  NextMedicalRecordId++;
-        Date = date;
+        CreatedAt = createdAt;
         DoctorName = doctorName;
         Treatment = treatment;
         TreatmentCost = treatmentCost;

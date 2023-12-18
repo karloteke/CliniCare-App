@@ -8,7 +8,7 @@ namespace ClinicApp.Business
     {
         private readonly IAppointmentPatientRepository _repository;
 
-         public AppointmentPatientService(IAppointmentPatientRepository repository)
+        public AppointmentPatientService(IAppointmentPatientRepository repository)
         {
             _repository = repository;
         }

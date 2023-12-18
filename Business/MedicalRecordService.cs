@@ -8,12 +8,12 @@ namespace ClinicApp.Business
     {
         private readonly IMedicalRecordRepository _repository;
 
-         public MedicalRecordService(IMedicalRecordRepository repository)
+        public MedicalRecordService(IMedicalRecordRepository repository)
         {
             _repository = repository;
         }
 
-          public void CreateMedicalRecord()
+        public void CreateMedicalRecord()
         {
             DateTime date = DateTime.Now;
             Console.WriteLine($"Fecha y hora: {date}");
@@ -91,22 +91,30 @@ namespace ClinicApp.Business
             }
         }
 
-        public void ViewMedicalRecord(){
-
+        public void ViewMedicalRecord()
+        {
             var medicalRecords = _repository.GetMedicalRecords();
 
-            foreach (var medicalRecord in medicalRecords)
+            if (medicalRecords.Count == 0)
             {
-                Console.WriteLine("---DATOS HISTORIAL MÉDICO---");
-                Console.WriteLine("");
-                Console.WriteLine($"Id histororial médico: {medicalRecord.Id}");
-                Console.WriteLine($"Paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName} con id {medicalRecord.Patient?.Id}");
-                Console.WriteLine($"Fecha y hora: {medicalRecord.Date}");
-                Console.WriteLine($"Nombre médico: {medicalRecord.DoctorName}");
-                Console.WriteLine($"Tratamiento: {medicalRecord.Treatment}");
-                Console.WriteLine($"Coste del tratamiento: {medicalRecord.TreatmentCost}");
-                Console.WriteLine($"Notas: {medicalRecord.Notes}");
-                Console.WriteLine(""); 
+                Console.WriteLine("NO EXISTE NINGÚN HISTORIAL MÉDICO PARA MOSTRAR");
+            }
+            else
+            {
+
+                foreach (var medicalRecord in medicalRecords)
+                {
+                    Console.WriteLine("---DATOS HISTORIAL MÉDICO---");
+                    Console.WriteLine("");
+                    Console.WriteLine($"Id historial médico: {medicalRecord.Id}");
+                    Console.WriteLine($"Paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName} con id {medicalRecord.Patient?.Id}");
+                    Console.WriteLine($"Fecha y hora: {medicalRecord.CreatedAt}");
+                    Console.WriteLine($"Nombre médico: {medicalRecord.DoctorName}");
+                    Console.WriteLine($"Tratamiento: {medicalRecord.Treatment}");
+                    Console.WriteLine($"Coste del tratamiento: {medicalRecord.TreatmentCost}");
+                    Console.WriteLine($"Notas: {medicalRecord.Notes}");
+                    Console.WriteLine(""); 
+                }
             }
         }
     }

@@ -25,10 +25,10 @@ namespace ClinicApp.Business
             }
 
             Console.WriteLine("Apellido");
-            string? lastname = Console.ReadLine();
+            string? lastName = Console.ReadLine();
             Console.WriteLine("");
 
-            if(string.IsNullOrEmpty(lastname))
+            if(string.IsNullOrEmpty(lastName))
             {
                 Console.WriteLine("Entrada inválida. El apeliido no puede estar vacío.");
                 return;
@@ -76,7 +76,7 @@ namespace ClinicApp.Business
             }
 
 
-            var newPatient = new Patient(name, lastname, address, dni, phone);
+            var newPatient = new Patient(name, lastName, address, dni, phone);
      
                 _repository.AddPatient(newPatient);
                 _repository.UpdatePatient(newPatient);

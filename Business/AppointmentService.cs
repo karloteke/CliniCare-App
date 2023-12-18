@@ -146,19 +146,26 @@ namespace ClinicApp.Business
         {
             var appointments = _repository.GetAppointments();
 
-            foreach (var appointment in appointments)
+            if (appointments.Count == 0)
             {
-                Console.WriteLine("---DATOS CITA---");
-                Console.WriteLine("");
-                Console.WriteLine($"Id cita: {appointment.Id}");
-                Console.WriteLine($"Paciente: {appointment.Patient?.Name} {appointment.Patient?.LastName} con id {appointment.Patient?.Id}");
-                Console.WriteLine($"Especialidad: {appointment.Area}");
-                Console.WriteLine($"Nombre médico: {appointment.MedicalName}");
-                Console.WriteLine($"Hora: {appointment.Time}");
-                Console.WriteLine($"Día: {appointment.Date}");
-                Console.WriteLine($"¿Es urgente?: {(appointment.IsUrgent ? "si" : "no")}");
-                Console.WriteLine(""); 
-            }    
+                Console.WriteLine("NO EXISTE NINGUNA CITA PARA MOSTRAR");
+            }
+            else
+            {
+                foreach (var appointment in appointments)
+                {
+                    Console.WriteLine("---DATOS CITA---");
+                    Console.WriteLine("");
+                    Console.WriteLine($"Id cita: {appointment.Id}");
+                    Console.WriteLine($"Paciente: {appointment.Patient?.Name} {appointment.Patient?.LastName} con id {appointment.Patient?.Id}");
+                    Console.WriteLine($"Especialidad: {appointment.Area}");
+                    Console.WriteLine($"Nombre médico: {appointment.MedicalName}");
+                    Console.WriteLine($"Hora: {appointment.Time}");
+                    Console.WriteLine($"Día: {appointment.Date}");
+                    Console.WriteLine($"¿Es urgente?: {(appointment.IsUrgent ? "si" : "no")}");
+                    Console.WriteLine(""); 
+                }    
+            }
         }
     }
 }

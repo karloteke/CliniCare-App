@@ -70,7 +70,7 @@ class Menu
             Console.WriteLine("");
 
             
-            if (choice == "e")
+            if (string.Equals(choice, "e", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("¡Hasta la próxima!");
                 break; 
@@ -125,14 +125,32 @@ class Menu
                         Console.WriteLine("Nombre");
                         string? name = Console.ReadLine();
                         Console.WriteLine("");
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            Console.WriteLine("El nombre no puede estar vacío. Presione Enter para continuar.");
+                            Console.ReadLine();
+                            continue;
+                        }
 
                         Console.WriteLine("Apellido");
-                        string? lastname = Console.ReadLine();
+                        string? lastName = Console.ReadLine();
                         Console.WriteLine("");
+                        if (string.IsNullOrEmpty(lastName))
+                        {
+                            Console.WriteLine("El apellido no puede estar vacío. Presione Enter para continuar.");
+                            Console.ReadLine();
+                            continue;
+                        }
 
                         Console.WriteLine("Dirección");
                         string? address = Console.ReadLine();
                         Console.WriteLine("");
+                        if (string.IsNullOrEmpty(address))
+                        {
+                            Console.WriteLine("La dirección no puede estar vacía. Presione Enter para continuar.");
+                            Console.ReadLine();
+                            continue;
+                        }
 
                         Console.WriteLine("Número de DNI con letra");
                         string? dni = Console.ReadLine();
@@ -150,17 +168,16 @@ class Menu
                         Console.WriteLine("Teléfono");
                         string? phone = Console.ReadLine();
                         Console.WriteLine("");
-
-                        if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(lastname) && !string.IsNullOrWhiteSpace(address) && !string.IsNullOrWhiteSpace(phone))
+                        if (string.IsNullOrEmpty(phone))
                         {
-                            var newPatient = new Patient(name, lastname, address, dni, phone);
-                            appointmentPatientService.CreateAppointmentPatient(newPatient);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Uno o más campos obligatorios están vacíos. No se ha creado el paciente.");
+                            Console.WriteLine("El nombre no puede estar vacío. Presione Enter para continuar.");
+                            Console.ReadLine();
                             continue;
                         }
+
+                            var newPatient = new Patient(name, lastName, address, dni, phone);
+                            appointmentPatientService.CreateAppointmentPatient(newPatient);
+
                         break;
                     
                     case "2":
@@ -170,6 +187,10 @@ class Menu
                         if (!string.IsNullOrEmpty(patientDni))
                         {
                             appointmentPatientService.ViewAppointmentPatient(patientDni);    
+                        }
+                        else
+                        {
+                            Console.WriteLine("EL NÚMERO DE DNI NO PUEDE ESTAR VACIO");
                         }
                         break;
 
@@ -213,7 +234,7 @@ class Menu
                 }
             }
             Console.WriteLine("");
-            //Console.WriteLine(">>Presione enter para continuar");
+            Console.WriteLine(">>Presione enter para continuar");
             Console.ReadLine();
             
         } while(choice != "e");    
