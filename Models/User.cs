@@ -11,7 +11,7 @@ namespace ClinicApp.Models
 
         public static User? GetUserByUserName(string userUserName)
         {
-        return Users.FirstOrDefault(user => user.UserName == userUserName);
+            return Users.FirstOrDefault(user => user.UserName == userUserName);
         }
     
         public User(string? userName, string? password, string? email, string? accesskey)

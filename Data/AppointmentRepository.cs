@@ -10,7 +10,7 @@ namespace ClinicApp.Data
         private readonly string _filePath = "appointments.json";
         private readonly IPatientRepository _patientRepository;
 
-          public AppointmentRepository(IPatientRepository patientRepository)
+        public AppointmentRepository(IPatientRepository patientRepository)
         {
             _patientRepository = patientRepository;
             LoadAppointments();
