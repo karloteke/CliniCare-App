@@ -1,8 +1,8 @@
-using ClinicApp.Models;
-using ClinicApp.Data;
+using CliniCareApp.Models;
+using CliniCareApp.Data;
 
 
-namespace ClinicApp.Business
+namespace CliniCareApp.Business
 {
     public class UserService : IUserService
     {

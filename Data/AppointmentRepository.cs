@@ -1,7 +1,7 @@
 using System.Text.Json;
-using ClinicApp.Models;
+using CliniCareApp.Models;
 
-namespace ClinicApp.Data
+namespace CliniCareApp.Data
 {
     public class AppointmentRepository : IAppointmentRepository
     {

@@ -1,4 +1,4 @@
-namespace ClinicApp.Business
+namespace CliniCareApp.Business
 {
     public interface IUserService
     {

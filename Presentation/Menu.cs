@@ -1,6 +1,6 @@
-using ClinicApp.Models;
-using ClinicApp.Business;
-using ClinicApp.Data;
+using CliniCareApp.Models;
+using CliniCareApp.Business;
+using CliniCareApp.Data;
 using Spectre.Console;
 
 class Menu

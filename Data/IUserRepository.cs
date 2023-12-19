@@ -1,6 +1,6 @@
-using ClinicApp.Models;
+using CliniCareApp.Models;
 
-namespace ClinicApp.Data
+namespace CliniCareApp.Data
 {
     public interface IUserRepository
     {
