@@ -1,6 +1,6 @@
-using ClinicApp.Models;
+using CliniCareApp.Models;
 
-namespace ClinicApp.Business
+namespace CliniCareApp.Business
 {
     public interface IAppointmentPatientService
     {

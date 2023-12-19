@@ -1,4 +1,4 @@
-namespace ClinicApp.Models
+namespace CliniCareApp.Models
 {
     public class User
     {
