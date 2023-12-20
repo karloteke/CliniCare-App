@@ -107,7 +107,7 @@ namespace CliniCareApp.Business
                     Console.WriteLine("---DATOS HISTORIAL MÉDICO---");
                     Console.WriteLine("");
                     Console.WriteLine($"Id historial médico: {medicalRecord.Id}");
-                    Console.WriteLine($"Paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName} con id {medicalRecord.Patient?.Id}");
+                    Console.WriteLine($"Paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName}");
                     Console.WriteLine($"Fecha y hora: {medicalRecord.CreatedAt}");
                     Console.WriteLine($"Nombre médico: {medicalRecord.DoctorName}");
                     Console.WriteLine($"Tratamiento: {medicalRecord.Treatment}");
