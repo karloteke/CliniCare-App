@@ -39,30 +39,44 @@ class Menu
         {
             if(privateZone)
             {
-                Console.WriteLine(" === ZONA PRIVADA ===");
-                Console.WriteLine(" ");
-                Console.WriteLine("1. Insertar Pacientes");
-                Console.WriteLine("   1.1 Visualizar pacientes");
-                Console.WriteLine("2. Insertar citas médicas");
-                Console.WriteLine("   2.1 Visualizar citas médicas");
-                Console.WriteLine("3. Insertar historial médico");
-                Console.WriteLine("   3.1 Visualizar historial médico");
-                Console.WriteLine("4. Busqueda de paciente por Dni");
-                Console.WriteLine("5. Ir a zona pública");
-                Console.WriteLine("e. Salir");
-                Console.WriteLine(" ");
+                AnsiConsole.WriteLine();
+                 AnsiConsole.MarkupLine("[bold invert yellow1]BIENVENIDO A LA ZONA PRIVADA DE CliniCare[/]");
+                AnsiConsole.WriteLine();
+                var table = new Table().BorderColor(Color.Purple);
+                table.AddColumn(new TableColumn("Opción").Centered().Width(20));
+                table.AddColumn(new TableColumn("Descripción").Centered().Width(40)); 
+
+                table.AddRow("1", "Insertar Pacientes");
+                table.AddRow("1.1", "Visualizar pacientes");
+                table.AddEmptyRow();
+                table.AddRow("2", "Insertar citas médicas");
+                table.AddRow("2.1", "Visualizar citas médicas");
+                table.AddEmptyRow();
+                table.AddRow("3", "Insertar historial médico");
+                table.AddRow("3.1", "Visualizar historial médico");
+                table.AddEmptyRow();
+                table.AddRow("4", "Búsqueda de paciente por Dni");
+                table.AddRow("5", "Ir a zona pública");
+                table.AddRow("e", "Salir");
+
+                AnsiConsole.Write(table);
             }
             else
             {
-                Console.WriteLine(" ");
-                Console.WriteLine("=== ZONA PUBLICA ===");
-                Console.WriteLine(" ");
-                Console.WriteLine("1. Pedir cita");
-                Console.WriteLine("2. Visualizar citas");
-                Console.WriteLine("3. Registro para personal médico");
-                Console.WriteLine("4. Zona privada para personal médico ");  
-                Console.WriteLine("e. Salir");
-                Console.WriteLine(" ");
+                AnsiConsole.WriteLine();
+                AnsiConsole.MarkupLine("[bold invert yellow1]BIENVENIDO A LA ZONA PÚBLICA DE CliniCare[/]");
+                AnsiConsole.WriteLine();
+                var table = new Table().BorderColor(Color.Purple);
+                table.AddColumn(new TableColumn("Opción").Centered().Width(20)); 
+                table.AddColumn(new TableColumn("Descripción").Centered().Width(40)); 
+
+                table.AddRow("1", "Pedir cita");
+                table.AddRow("2", "Visualizar citas");
+                table.AddRow("3", "Registro para personal médico");
+                table.AddRow("4", "Zona privada para personal médico");
+                table.AddRow("e", "Salir");
+
+                AnsiConsole.Write(table);
             }
       
             choice = Console.ReadLine();
@@ -220,7 +234,6 @@ class Menu
                         if (authenticated)
                         {
                             privateZone = true;
-                            Console.WriteLine("BIENVENIDO A LA ZONA PRIVADA DE CLINICARE");
                         }
                         else
                         {
@@ -234,7 +247,7 @@ class Menu
                 }
             }
             Console.WriteLine("");
-            Console.WriteLine(">>Presione enter para continuar");
+            AnsiConsole.MarkupLine("[green]>> Presione enter para continuar[/]");
             Console.ReadLine();
             
         } while(choice != "e");    
