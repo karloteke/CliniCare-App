@@ -7,13 +7,20 @@ namespace CliniCareApp.Data
     {
         private List<Appointment> _appointments = new List<Appointment>();
         private List<Patient> _patients = new List<Patient>();
-        private readonly string _filePath = "appointments.json";
+        private readonly string _filePath;
         private readonly IPatientRepository _patientRepository;
 
         public AppointmentRepository(IPatientRepository patientRepository)
         {
             _patientRepository = patientRepository;
+            _filePath = GetFilePath();
             LoadAppointments();
+        }
+
+        private string GetFilePath()
+        {
+            string basePath = Environment.GetEnvironmentVariable("IS_DOCKER") == "true" ? "SharedFolder" : "";
+            return Path.Combine(basePath, "appointments.json");
         }
 
         public void AddAppointment(Appointment appointment)

@@ -6,11 +6,18 @@ namespace CliniCareApp.Data
     public class PatientRepository : IPatientRepository
     {
         private List<Patient> _patients = new List<Patient>();
-        private readonly string _filePath = "patients.json";
+        private readonly string _filePath;
 
         public PatientRepository()
         {
+            _filePath = GetFilePath();
             LoadPatients();
+        }
+
+        private string GetFilePath()
+        {
+            string basePath = Environment.GetEnvironmentVariable("IS_DOCKER") == "true" ? "SharedFolder" : "";
+            return Path.Combine(basePath, "patients.json");
         }
 
         public void AddPatient(Patient patient)
