@@ -57,6 +57,12 @@ namespace CliniCareApp.Data
                 var medicalRecords = JsonSerializer.Deserialize<List<MedicalRecord>>(jsonString);
                 _medicalRecords = medicalRecords ?? new List<MedicalRecord>();
             }
+
+            if (_medicalRecords.Any())
+            {
+                int maxId = _medicalRecords.Max(m => m.Id);
+                MedicalRecord.UpdateNextMedicalRecordId(maxId + 1);
+            }
         }
     }
 }
