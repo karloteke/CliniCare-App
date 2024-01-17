@@ -2,7 +2,7 @@ namespace CliniCareApp.Models;
 public class MedicalRecord
 {
     public int Id { get; private set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; }
     public string? DoctorName { get; set; }
     public string? Treatment { get; set; } 
     public decimal? TreatmentCost { get; set; }
@@ -10,10 +10,11 @@ public class MedicalRecord
     public Patient? Patient { get; set; }
 
     private static int NextMedicalRecordId = 1;
-    public List <MedicalRecord> medicalRecords = new List<MedicalRecord>();
 
-     // Constructor sin parámetros para la deserialización
-    public MedicalRecord() { }
+    public MedicalRecord() 
+    {
+        Id = NextMedicalRecordId++;
+    }
 
     public MedicalRecord(DateTime createdAt, string doctorName, string treatment, decimal treatmentCost, string notes)
     {
@@ -23,6 +24,11 @@ public class MedicalRecord
         Treatment = treatment;
         TreatmentCost = treatmentCost;
         Notes = notes;
+    }
+
+    public static void UpdateNextMedicalRecordId(int nextId)
+    {
+        NextMedicalRecordId = nextId;
     }
 }
 

@@ -3,6 +3,7 @@ namespace CliniCareApp.Models;
 public class Appointment
 {
     public int? Id { get; private set; }
+    public DateTime CreatedAt { get; set; } 
     public string? Area { get; set; }
     public string? MedicalName { get; set; }
     public string? Date { get; set; } 
@@ -11,11 +12,11 @@ public class Appointment
     public Patient? Patient { get; set; }
 
     private static int NextAppointmentId = 1;
-    public List<Appointment> appointments = new List<Appointment>();
-
-    public Appointment ( string area, string medicalName, string date, string time, bool isUrgent)
+    
+    public Appointment (DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
     {
         Id =  NextAppointmentId++;
+        CreatedAt = createdAt;
         Area = area;
         MedicalName = medicalName;
         Date = date;
