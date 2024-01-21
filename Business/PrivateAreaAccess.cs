@@ -14,7 +14,7 @@ namespace CliniCareApp.Business
 
         public bool Authentication(string userName, string password)
         {
-            // Utiliza el servicio de usuarios para autenticar
+            // Utiliza el service de usuarios para autenticar
             return _userService.Authenticate(userName, password);
         }
     }

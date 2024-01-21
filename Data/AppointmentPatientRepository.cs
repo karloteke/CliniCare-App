@@ -7,11 +7,9 @@ namespace CliniCareApp.Data
     {
         private List<AppointmentPatient> _appointmentPatients = new List<AppointmentPatient>();
         private readonly string _filePath;
-        private readonly IPatientRepository _patientRepository;
 
         public AppointmentPatientRepository(IPatientRepository patientRepository)
         {
-            _patientRepository = patientRepository;
             _filePath = GetFilePath();
             LoadAppointments();
         }
@@ -25,6 +23,7 @@ namespace CliniCareApp.Data
         public void AddAppointmentPatient(AppointmentPatient appointmentPatient)
         {
             _appointmentPatients.Add(appointmentPatient);
+            SaveChanges();
         }
 
         public List<AppointmentPatient> GetAppointmentPatients()
@@ -34,7 +33,7 @@ namespace CliniCareApp.Data
         public List<AppointmentPatient> GetAppointmentPatientsByDNI(string dni)
         {
             return _appointmentPatients
-                .Where(ap => ap.Patient?.Dni == dni)
+                .Where(ap => ap.PatientDni == dni)
                 .ToList();
         }
 
