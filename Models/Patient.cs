@@ -2,7 +2,7 @@ namespace CliniCareApp.Models;
 
 public class Patient
 {
-    public int Id { get; private set; }
+    public int Id { get; set; }
     public string? Name { get; set; }
     public string? LastName { get; set; }
     public string? Address { get; set; }
@@ -10,6 +10,12 @@ public class Patient
     public string? Phone { get; set; }
 
     private static int NextPatientId = 1;
+
+    public Patient()
+    {
+        Id = NextPatientId++;
+    }
+
     public Patient(string? name, string? lastname, string? address, string? dni, string? phone)
     {
         Id = NextPatientId++;

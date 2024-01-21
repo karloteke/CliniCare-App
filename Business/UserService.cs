@@ -20,7 +20,7 @@ namespace CliniCareApp.Business
             _repository.SaveChanges();
         }
 
-        public User GetUserByUserName(string inputUserName)
+        public User? GetUserByUserName(string inputUserName)
         {
             return _repository.GetUserByUserName(inputUserName);
         }

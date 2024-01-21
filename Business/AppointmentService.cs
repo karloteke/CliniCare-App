@@ -19,10 +19,7 @@ namespace CliniCareApp.Business
 
             if(patient != null)
             {
-                var newAppointment = new Appointment(appointmentDate, area, medicalName, date, time, isUrgent)
-                {
-                    Patient = patient
-                };
+                var newAppointment = new Appointment(appointmentDate, area, medicalName, date, time, isUrgent, patient.Id);
 
                 _repository.AddAppointment(newAppointment);
                 _repository.SaveChanges();

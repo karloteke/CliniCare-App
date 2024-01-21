@@ -2,11 +2,11 @@ using CliniCareApp.Models;
 using CliniCareApp.Business;
 using CliniCareApp.Data;
 using Spectre.Console;
+using System.Text.RegularExpressions;
 
 class Menu
 {
-    private static string? choice = "";
-    
+    private static string? choice = "";  
     public static void Run(IPatientService patientService,
         IAppointmentService appointmentService,
         IMedicalRecordService medicalRecordService,
@@ -15,10 +15,12 @@ class Menu
         PrivateAreaAccess privateAreaAccess)
     {
         bool privateZone = false;
-        int patientId = 0;
+        int patientId;
         DateTime medicalRecordDate;
         DateTime appointmentDate;
-        
+        Patient? patient;
+    
+
         do
         {
             if(privateZone)
@@ -73,7 +75,6 @@ class Menu
                 break; 
             }
       
-
             if(privateZone){
 
                 switch (choice)
@@ -112,9 +113,19 @@ class Menu
                         AnsiConsole.MarkupLine("[purple]Número de DNI con letra[/]");
                         string? dni = Console.ReadLine();
                         Console.WriteLine("");
-                        if (dni?.Length != 9)
+
+                         if (dni is null)
                         {
-                            AnsiConsole.MarkupLine("[red]DNI inválido. Tiene que tener 9 caracteres[/]");
+                            AnsiConsole.MarkupLine("[red]DNI inválido. No puede estar vacio[/]");
+                            continue;
+                        }
+
+                        // Expresión que valida 8 dígitos seguidos de una letra (no sensible a mayúsculas/minúsculas)
+                        Regex dniRegex = new Regex(@"^\d{8}[a-zA-Z]$");
+
+                        if (!dniRegex.IsMatch(dni))
+                        {
+                            AnsiConsole.MarkupLine("[red]DNI inválido. Debe tener 8 dígitos seguidos de una letra[/]");
                             continue;
                         }
 
@@ -142,23 +153,30 @@ class Menu
 
                     case "1.1":
                         var patients = patientService.ViewPatients();
-                        foreach (var p in patients)
+                        if (patients.Any())
                         {
-                            AnsiConsole.MarkupLine("[bold invert yellow1]DATOS PACIENTE[/]");
-                            Console.WriteLine("");
-                            Console.WriteLine($"Id: {p.Id}");
-                            Console.WriteLine($"Nombre: {p.Name}");
-                            Console.WriteLine($"Apellido: {p.LastName}");
-                            Console.WriteLine($"Dirección: {p.Address}");
-                            Console.WriteLine($"Dni: {p.Dni}");
-                            Console.WriteLine($"Teléfono: {p.Phone}");
-                            Console.WriteLine("");
+                            foreach (var p in patients)
+                            {
+                                AnsiConsole.MarkupLine("[bold invert darkolivegreen1_1]DATOS PACIENTE[/]");
+                                Console.WriteLine("");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Id:[/] {p.Id}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Nombre:[/] {p.Name}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Apellido:[/] {p.LastName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Dirección:[/] {p.Address}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Dni:[/] {p.Dni}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Teléfono:[/] {p.Phone}");
+                                Console.WriteLine("");
+                            }
+                        }
+                        else
+                        {
+                            AnsiConsole.MarkupLine("[bold red]No existen pacientes[/]");
                         }
                         break;
 
                     case "2":
                         appointmentDate = DateTime.Now;
-                        AnsiConsole.MarkupLine($"[yellow1]Fecha y hora de creación: {appointmentDate}[/]");
+                        AnsiConsole.MarkupLine($"[purple]Fecha y hora de creación:[/] {appointmentDate}");
 
                         AnsiConsole.MarkupLine("[purple]Especialidad (Oftalmología/traumatología/ginecología/neurología)[/]");
                         string? area = Console.ReadLine();
@@ -241,41 +259,51 @@ class Menu
                             continue;
                         }
 
-                        var patient = patientService.GetPatientById(patientId);
+                        patient = patientService.GetPatientById(patientId);
+
                         if (patient != null)
                         {
                             appointmentService.CreateAppointment(patientId, appointmentDate,area, medicalName, date, time, isUrgent);
                             Console.WriteLine("");
-                           AnsiConsole.MarkupLine($"[green]CITA REGISTRADA CORRECTAMENTE PARA: {patient?.Name} {patient?.LastName}[/]");
+                            AnsiConsole.MarkupLine($"[green]Cita registrada correctamente para: {patient?.Name} {patient?.LastName}[/]");
                         }
                         else
                         {
-                        AnsiConsole.MarkupLine("[red]No se encontró un paciente con el ID proporcionado[/]");
+                            AnsiConsole.MarkupLine("[red]No se encontró un paciente con el ID proporcionado[/]");
                         }
                         break; 
 
                     case "2.1":
                         var appointments = appointmentService.GetAppointments();
 
-                        foreach (var appointment in appointments)
+                        if(appointments.Any())
                         {
-                            AnsiConsole.MarkupLine("[bold invert yellow1]DATOS CITA[/]");
-                            Console.WriteLine("");
-                            Console.WriteLine($"Fecha y hora de registro: {appointment.CreatedAt}"); 
-                            Console.WriteLine($"Id cita: {appointment.Id}");
-                            Console.WriteLine($"Paciente: {appointment.Patient?.Name} {appointment.Patient?.LastName}");
-                            Console.WriteLine($"Especialidad: {appointment.Area}");
-                            Console.WriteLine($"Nombre médico: {appointment.MedicalName}");
-                            Console.WriteLine($"Hora: {appointment.Time}");
-                            Console.WriteLine($"Día: {appointment.Date}");
-                            Console.WriteLine($"¿Es urgente?: {(appointment.IsUrgent ? "si" : "no")}");
-                            Console.WriteLine(""); 
+                            foreach (var appointment in appointments)
+                            {
+                                var patientObject = patientService.GetPatientById(appointment.PatientId);
+
+                                AnsiConsole.MarkupLine("[bold invert darkolivegreen1_1]DATOS CITA[/]");
+                                Console.WriteLine("");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Fecha y hora de registro:[/] {appointment.CreatedAt}"); 
+                                AnsiConsole.MarkupLine($"[darkslategray2]Id cita:[/] {appointment.Id}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Paciente:[/] {patientObject?.Name} {patientObject?.LastName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Especialidad:[/] {appointment.Area}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Nombre médico:[/]{appointment.MedicalName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Hora:[/] {appointment.Time}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Día:[/] {appointment.Date}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]¿Es urgente?:[/] {(appointment.IsUrgent ? "si" : "no")}");
+                                Console.WriteLine(""); 
+                            }
+                        }
+                        else
+                        {
+                            AnsiConsole.MarkupLine("[bold red]No existe ninguna cita[/]");
                         }    
                         break;
 
                     case "3":
                         medicalRecordDate = DateTime.Now;
-                        AnsiConsole.MarkupLine($"[yellow1]Fecha y hora de creación: {medicalRecordDate}[/]");
+                        AnsiConsole.MarkupLine($"[purple]Fecha y hora de creación:[/] {medicalRecordDate}");
 
                         AnsiConsole.MarkupLine("[purple]Nombre del médico:[/]");
                         string? doctorName = Console.ReadLine();
@@ -321,18 +349,25 @@ class Menu
                         AnsiConsole.MarkupLine("[purple]Introduce el ID del paciente al que quieres asignarle el informe médico[/]");
                         string? patientIdInputMedicalRecord = Console.ReadLine();
 
+                        if (string.IsNullOrEmpty(patientIdInputMedicalRecord))
+                        {
+                            AnsiConsole.MarkupLine("[red]Entrada inválida. Debes ingresar un ID de paciente[/]");
+                            continue;
+                        }
+
                         if (!int.TryParse(patientIdInputMedicalRecord, out patientId)) 
                         {
                             AnsiConsole.MarkupLine("[red]ID de paciente inválido. Debe ser un número entero[/]");
                             continue;
                         }
 
-                        var patientForMedicalRecord = patientService.GetPatientById(patientId);
+                        patient = patientService.GetPatientById(patientId);
 
-                        if (patientForMedicalRecord != null)
+                        if (patient != null)
                         {
                             medicalRecordService.CreateMedicalRecord(patientId, medicalRecordDate, doctorName, treatment, treatmentCost, notes);
-                            AnsiConsole.MarkupLine($"[green]Historial médico registrado correctamente para: {patientForMedicalRecord.Name} {patientForMedicalRecord.LastName}[/]");
+                            Console.WriteLine("");
+                            AnsiConsole.MarkupLine($"[green]Historial médico registrado correctamente para: {patient?.Name} {patient?.LastName}[/]");
                         }
                         else
                         {
@@ -343,18 +378,27 @@ class Menu
                     case "3.1":
                         var medicalRecords = medicalRecordService.GetMedicalRecords();
 
-                        foreach (var medicalRecord in medicalRecords)
+                        if(medicalRecords.Any())
                         {
-                            AnsiConsole.MarkupLine("[bold invert yellow1]DATOS HISTORIAL MÉDICO[/]");
-                            Console.WriteLine("");
-                            Console.WriteLine($"Fecha y hora de registro: {medicalRecord.CreatedAt}");
-                            Console.WriteLine($"Id historial médico: {medicalRecord.Id}");
-                            Console.WriteLine($"Paciente: {medicalRecord.Patient?.Name} {medicalRecord.Patient?.LastName}");
-                            Console.WriteLine($"Nombre médico: {medicalRecord.DoctorName}");
-                            Console.WriteLine($"Tratamiento: {medicalRecord.Treatment}");
-                            Console.WriteLine($"Coste del tratamiento: {medicalRecord.TreatmentCost}");
-                            Console.WriteLine($"Notas: {medicalRecord.Notes}");
-                            Console.WriteLine(""); 
+                            foreach (var medicalRecord in medicalRecords)
+                            {
+                                var objectPatient = patientService.GetPatientById(medicalRecord.PatientId);
+
+                                AnsiConsole.MarkupLine("[bold invert darkolivegreen1_1]DATOS HISTORIAL MÉDICO[/]");
+                                Console.WriteLine("");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Fecha y hora de registro:[/] {medicalRecord.CreatedAt}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Id historial médico:[/] {medicalRecord.Id}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Paciente:[/] {objectPatient?.Name} {objectPatient?.LastName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Nombre médico:[/] {medicalRecord.DoctorName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Tratamiento:[/] {medicalRecord.Treatment}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Coste del tratamiento:[/] {medicalRecord.TreatmentCost}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Notas:[/] {medicalRecord.Notes}");
+                                Console.WriteLine(""); 
+                            }
+                        }
+                        else
+                        {
+                            AnsiConsole.MarkupLine("[bold red]No existe ningún historial médico[/]");
                         }
                         break;
 
@@ -365,18 +409,19 @@ class Menu
 
                         if (!string.IsNullOrEmpty(dniToSearch))
                         {
-                            // Llamar al método de búsqueda del servicio
+                            // Llamar al método de búsqueda del service
                             Patient? foundPatient = patientService.SearchByDni(dniToSearch);
 
                             if (foundPatient != null)
                             {
-                                AnsiConsole.MarkupLine("[bold invert yellow1]DATOS DE PACIENTE ENCONTRADO[/]");
-                                Console.WriteLine($"Id: {foundPatient.Id}");
-                                Console.WriteLine($"Nombre: {foundPatient.Name}");
-                                Console.WriteLine($"Apellido: {foundPatient.LastName}");
-                                Console.WriteLine($"Dirección: {foundPatient.Address}");
-                                Console.WriteLine($"Dni: {foundPatient.Dni}");
-                                Console.WriteLine($"Teléfono: {foundPatient.Phone}");
+                                AnsiConsole.MarkupLine("[bold invert darkolivegreen1_1]DATOS DE PACIENTE ENCONTRADO[/]");
+                                Console.WriteLine("");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Id:[/] {foundPatient.Id}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Nombre:[/] {foundPatient.Name}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Apellido:[/] {foundPatient.LastName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Dirección:[/] {foundPatient.Address}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Dni:[/] {foundPatient.Dni}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Teléfono:[/] {foundPatient.Phone}");
                             }
                             else
                             {
@@ -437,9 +482,20 @@ class Menu
                         AnsiConsole.MarkupLine("[purple]Número de DNI con letra[/]");
                         string? dni = Console.ReadLine();
                         Console.WriteLine("");
-                        if (dni?.Length != 9)
+
+                                                
+                        if (dni is null)
                         {
-                            AnsiConsole.MarkupLine("[red]DNI inválido. Tiene que tener 9 caracteres[/]");
+                            AnsiConsole.MarkupLine("[red]DNI inválido. No puede estar vacio[/]");
+                            continue;
+                        }
+
+                        // Expresión que valida 8 dígitos seguidos de una letra (no sensible a mayúsculas/minúsculas)
+                        Regex dniRegex = new Regex(@"^\d{8}[a-zA-Z]$");
+
+                        if (!dniRegex.IsMatch(dni))
+                        {
+                            AnsiConsole.MarkupLine("[red]DNI inválido. Debe tener 8 dígitos seguidos de una letra[/]");
                             continue;
                         }
                        
@@ -523,31 +579,35 @@ class Menu
                         AnsiConsole.MarkupLine("[purple]Ingrese el DNI del paciente:[/]");
                         string? patientDni = Console.ReadLine();
 
-                        if (!string.IsNullOrEmpty(patientDni))
+                        if (string.IsNullOrEmpty(patientDni))
                         {
-                            var appointmentPatients = appointmentPatientService.GetAppointmentPatientsByDNI(patientDni);
+                            Console.WriteLine("");
+                            AnsiConsole.MarkupLine("[red]Entrada inválida. El DNI no puede estar vacio[/]");
+                            break;
+                        }
 
-                            if(appointmentPatients.Count == 0)
+                        var appointmentPatients = appointmentPatientService.GetAppointmentPatientsByDNI(patientDni);
+
+                        if(appointmentPatients.Count == 0)
+                        {
+                            Console.WriteLine("");
+                            AnsiConsole.MarkupLine($"[red]No se encontraron citas para el DNI {patientDni}[/]");
+                        }
+                        else
+                        {
+                            foreach (var appointmentPatient in appointmentPatients)
                             {
                                 Console.WriteLine("");
-                                AnsiConsole.MarkupLine($"[red]No se encontraron citas para el DNI {patientDni}[/]");
-                            }
-                            else
-                            {
-                                foreach (var appointmentPatient in appointmentPatients)
-                                {
-                                    Console.WriteLine("");
-                                    AnsiConsole.MarkupLine("[bold invert yellow1]DATOS CITA[/]");
-                                    Console.WriteLine("");
-                                    Console.WriteLine($"Fecha y hora de registro: {appointmentPatient.Date}");
-                                    Console.WriteLine($"Id cita: {appointmentPatient.Id}");
-                                    Console.WriteLine($"Paciente: {appointmentPatient.PatientName} {appointmentPatient.PatientLastName}");
-                                    Console.WriteLine($"Especialidad: {appointmentPatient.Area}");
-                                    Console.WriteLine($"Fecha de la cita: {appointmentPatient.Day}");
-                                    Console.WriteLine($"Hora de la cita: {appointmentPatient.Time}");
-                                    Console.WriteLine($"¿Es urgente?: {(appointmentPatient.IsUrgent ? "si" : "no")}");
-                                    Console.WriteLine(""); 
-                                }
+                                AnsiConsole.MarkupLine("[bold invert darkolivegreen1_1]DATOS CITA[/]");
+                                Console.WriteLine("");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Fecha y hora de registro: [/]{appointmentPatient.Date}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Id cita: [/]{appointmentPatient.Id}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Paciente: [/]{appointmentPatient.PatientName} {appointmentPatient.PatientLastName}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Especialidad: [/]{appointmentPatient.Area}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Fecha de la cita: [/]{appointmentPatient.Day}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]Hora de la cita: [/]{appointmentPatient.Time}");
+                                AnsiConsole.MarkupLine($"[darkslategray2]¿Es urgente?: [/]{(appointmentPatient.IsUrgent ? "si" : "no")}");
+                                Console.WriteLine(""); 
                             }
                         }
                         break;
@@ -560,6 +620,13 @@ class Menu
                         if(string.IsNullOrEmpty(inputUserName))
                         {
                             AnsiConsole.MarkupLine("[red]Entrada inválida. Nombre de usuario no puede estar vacío[/]");
+                            continue;
+                        }
+
+                        var existUser = userService.GetUserByUserName(inputUserName);
+                        if (existUser != null)
+                        {
+                            AnsiConsole.MarkupLine("[red]Ya existe ese nombre de usuario[/]");
                             continue;
                         }
                         
@@ -600,12 +667,6 @@ class Menu
                             }
                         }
 
-                        var existUser = userService.GetUserByUserName(inputUserName);
-                        if (existUser != null)
-                        {
-                            AnsiConsole.MarkupLine("[red]Ya existe ese nombre de usuario[/]");
-                            return;
-                        }
                         if (inputUserName != null && inputPassword != null && inputEmail != null && inputAccessKey != null)
                         {
                             userService.CreateUser(inputUserName, inputPassword, inputEmail, inputAccessKey);
@@ -616,7 +677,6 @@ class Menu
                         {
                             AnsiConsole.MarkupLine("[red]Uno o más de los valores de entrada son nulos. No se puede registrar el usuario[/]");
                         }
-
                         break;
 
                     case "4":
@@ -653,6 +713,7 @@ class Menu
                         break;
                 }
             }
+
             Console.WriteLine("");
             AnsiConsole.MarkupLine("[blue]>> Presione enter para continuar[/]");
             Console.ReadLine();
