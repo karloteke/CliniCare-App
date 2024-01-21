@@ -6,6 +6,7 @@ namespace CliniCareApp.Data
     public class MedicalRecordRepository : IMedicalRecordRepository
     {
         private List<MedicalRecord> _medicalRecords = new List<MedicalRecord>();
+        private List<Patient> _patients = new List<Patient>();
         private readonly string _filePath;
         private readonly IPatientRepository _patientRepository;
 
@@ -52,15 +53,15 @@ namespace CliniCareApp.Data
         private void LoadMedicalRecords()
         {
             if (File.Exists(_filePath))
-            {
-                string jsonString = File.ReadAllText(_filePath);
+            {         
+                string jsonString = File.ReadAllText(_filePath);  
                 var medicalRecords = JsonSerializer.Deserialize<List<MedicalRecord>>(jsonString);
                 _medicalRecords = medicalRecords ?? new List<MedicalRecord>();
             }
 
             if (_medicalRecords.Any())
             {
-                int maxId = _medicalRecords.Max(m => m.Id);
+                int maxId = _medicalRecords.Max(mr => mr.Id);
                 MedicalRecord.UpdateNextMedicalRecordId(maxId + 1);
             }
         }

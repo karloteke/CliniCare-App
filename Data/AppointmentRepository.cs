@@ -58,6 +58,12 @@ namespace CliniCareApp.Data
                 var appointments = JsonSerializer.Deserialize<List<Appointment>>(jsonString);
                 _appointments = appointments ?? new List<Appointment>();
             }
+
+            if (_appointments.Any())
+            {
+                int maxId = _appointments.Max(a => a.Id);
+                Appointment.UpdateNextAppointmentId(maxId + 1);
+            }
         }
     }
 }

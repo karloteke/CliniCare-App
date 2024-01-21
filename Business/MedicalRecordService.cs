@@ -16,15 +16,11 @@ namespace CliniCareApp.Business
 
         public void CreateMedicalRecord(int patientId,DateTime medicalRecordDate, string doctorName, string treatment, decimal treatmentCost, string notes)
         {
-
             var patient = _repository.GetPatientById(patientId);
 
             if (patient != null)
             {
-                var newMedicalRecord = new MedicalRecord(medicalRecordDate, doctorName, treatment, treatmentCost, notes)
-                {
-                    Patient = patient
-                };
+                var newMedicalRecord = new MedicalRecord(medicalRecordDate, doctorName, treatment, treatmentCost, notes, patient.Id);
 
                 _repository.AddMedicalRecord(newMedicalRecord);
                 _repository.SaveChanges();

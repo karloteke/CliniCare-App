@@ -18,6 +18,7 @@ namespace CliniCareApp
 
             // Instancia historial médico
             IMedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository(patientRepository); 
+
             IMedicalRecordService medicalRecordService = new MedicalRecordService(medicalRecordRepository);
 
             // Instancia citas creadas por pacientes
@@ -31,7 +32,7 @@ namespace CliniCareApp
             // Instancia acceso a la zona privada
             PrivateAreaAccess privateAreaAccess = new PrivateAreaAccess(userService);
 
-            //Llamo al metodo Run de menú y paso las instancias
+            //Llamo al método Run del menú y paso las instancias
             Menu.Run(
             patientService,
             appointmentService,

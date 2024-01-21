@@ -15,10 +15,7 @@ namespace CliniCareApp.Business
         public void CreatePatient(string name, string lastName, string address, string dni, string phone)
         {
             var newPatient = new Patient(name, lastName, address, dni, phone);
-     
-                _repository.AddPatient(newPatient);
-                _repository.UpdatePatient(newPatient);
-                _repository.SaveChanges();
+            _repository.AddPatient(newPatient);
         }    
 
         public List<Patient> ViewPatients()
