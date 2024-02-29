@@ -11,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Inyecto dependencia de Patient
+ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+ builder.Services.AddScoped<IPatientService, PatientService>();
 
 var app = builder.Build();
 

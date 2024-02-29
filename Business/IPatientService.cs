@@ -5,10 +5,13 @@ namespace CliniCareApp.Business
 {
     public interface IPatientService
     {
-        void CreatePatient(string name, string lastName, string address, string dni, string phone);
-        List<Patient> ViewPatients(); 
+        Patient? CreatePatient(PatientCreateDTO patientDto);
+        List<Patient> GetAllPatients(); 
         Patient? SearchByDni(string dni);
         Patient? GetPatientByDni(string dni);
         Patient? GetPatientById(int patientId);
+        public void UpdatePatientDetails(int patientId, PatientUpdateDTO PatientUpdate);
+        public void DeletePatient(int patientId);
+
     }
 }
