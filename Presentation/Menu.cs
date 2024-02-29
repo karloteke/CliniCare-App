@@ -146,13 +146,22 @@ class Menu
                             AnsiConsole.MarkupLine("[red]Entrada inválida. El teléfono es obligatorio y debe de tener al menos 9 caracteres[/]");
                             continue;
                         }
+
+                        PatientCreateDTO patientDto = new PatientCreateDTO
+                        {
+                            Name = name,
+                            LastName = lastName,
+                            Address = address,
+                            Dni = dni,
+                            Phone = phone
+                        };
                     
-                        patientService.CreatePatient(name, lastName, address, dni, phone);
+                        patientService.CreatePatient(patientDto);
                         AnsiConsole.MarkupLine("[green]PACIENTE REGISTRADO CORRECTAMENTE[/]");
                         break;
 
                     case "1.1":
-                        var patients = patientService.ViewPatients();
+                        var patients = patientService.GetAllPatients();
                         if (patients.Any())
                         {
                             foreach (var p in patients)

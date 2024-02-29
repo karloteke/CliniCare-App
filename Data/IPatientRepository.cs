@@ -9,6 +9,7 @@ namespace CliniCareApp.Data
         Patient? GetPatientByDni(string? dni);
         Patient? GetPatientById (int? id);
         void UpdatePatient(Patient patient);
+        void DeletePatient(int? id);
         void SaveChanges();
     }
 }

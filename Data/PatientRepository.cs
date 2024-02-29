@@ -50,6 +50,19 @@ namespace CliniCareApp.Data
             AddPatient(patient);
         }
 
+        public void DeletePatient(int? patientId)
+        {
+            if (patientId != null)
+            {
+                var patient = _patients.FirstOrDefault(p => p.Id == patientId);
+                if (patient != null)
+                {
+                    _patients.Remove(patient);
+                    SaveChanges();
+                }
+            }
+        }
+
         public void SaveChanges()
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
@@ -70,8 +83,7 @@ namespace CliniCareApp.Data
                     int maxId = _patients.Max(p => p.Id);
                     Patient.UpdateNextPatientId(maxId + 1); 
                 }  
-
-               
+              
             }           
     
         }
