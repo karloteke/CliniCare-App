@@ -9,6 +9,7 @@ public class Patient
     public string? Dni { get; set; }
     public string? Phone { get; set; }
 
+
     private static int NextPatientId = 1;
 
     public Patient()

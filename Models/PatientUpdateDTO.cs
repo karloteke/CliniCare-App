@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace CliniCareApp.Models; // CliniCare.DTO
 
 public class PatientUpdateDTO

@@ -34,9 +34,10 @@ namespace CliniCareApp.Business
         public Patient? GetPatientById(int patientId)
         {
             var patient = _repository.GetPatientById(patientId);
+
             if(patient == null)
             {
-                  throw new KeyNotFoundException($"El paciente con Id {patientId} no existe.");
+                throw new KeyNotFoundException($"El paciente con Id {patientId} no existe.");
             }
             return patient;
         }
@@ -67,7 +68,7 @@ namespace CliniCareApp.Business
             var patient = _repository.GetPatientById(patientId);
             if (patient == null)
             {
-                throw new KeyNotFoundException($"El paciente con id: {patientId} no se encuentra.");
+                throw new KeyNotFoundException($"El paciente con id: {patientId} no existe.");
             }
 
             patient.Name = patientUpdate.Name;
@@ -81,8 +82,12 @@ namespace CliniCareApp.Business
 
         public void DeletePatient(int patientId)
         {
-             _repository.DeletePatient(patientId);
-                
+            var patient = _repository.GetPatientById(patientId);
+            if (patient == null)
+            {
+                throw new KeyNotFoundException($"El paciente con Id: {patientId} no existe.");
+            }
+             _repository.DeletePatient(patientId);         
         }
 
     }
