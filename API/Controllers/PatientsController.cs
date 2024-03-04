@@ -55,7 +55,6 @@ public class PatientsController : ControllerBase
         catch (KeyNotFoundException)
         {
             return NotFound($"No existe el paciente con el Id {patientId}");
-
         }
     }
 
@@ -105,8 +104,9 @@ public class PatientsController : ControllerBase
             _patientService.DeletePatient(patientId);
             return NoContent();
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException ex)
         {
+            _logger.LogInformation(ex.Message);
             return NotFound();
         }
     }

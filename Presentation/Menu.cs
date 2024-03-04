@@ -283,7 +283,7 @@ class Menu
                         break; 
 
                     case "2.1":
-                        var appointments = appointmentService.GetAppointments();
+                        var appointments = appointmentService.GetAllAppointments();
 
                         if(appointments.Any())
                         {

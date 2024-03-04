@@ -2,14 +2,14 @@ namespace CliniCareApp.Models;
 
 public class Appointment
 {
-    public int Id { get; private set; }
+    public int Id { get; set; }
     public DateTime CreatedAt { get; set; } 
     public string? Area { get; set; }
     public string? MedicalName { get; set; }
     public string? Date { get; set; } 
     public string? Time { get; set; } 
     public bool IsUrgent { get; set; }  
-    public int PatientId { get; private set; }
+    public int PatientId { get; set; }
 
     private static int NextAppointmentId = 1;
     

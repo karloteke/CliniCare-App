@@ -15,6 +15,10 @@ builder.Services.AddSwaggerGen();
  builder.Services.AddScoped<IPatientRepository, PatientRepository>();
  builder.Services.AddScoped<IPatientService, PatientService>();
 
+ //Inyecto dependencia de Appointment
+ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline. 

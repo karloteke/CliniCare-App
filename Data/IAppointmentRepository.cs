@@ -6,8 +6,9 @@ namespace CliniCareApp.Data
     {
         void AddAppointment(Appointment appointment);
         List<Appointment> GetAppointments();
-        Patient? GetPatientById(int? patientId);
+        Appointment GetAppointmentById(int appointmentId);
         void UpdateAppointment(Appointment appointment);
+        void DeleteAppointment(int? id);
         void SaveChanges();
     }
 }
