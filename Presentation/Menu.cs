@@ -385,7 +385,7 @@ class Menu
                         break;
 
                     case "3.1":
-                        var medicalRecords = medicalRecordService.GetMedicalRecords();
+                        var medicalRecords = medicalRecordService.GetAllMedicalRecords();
 
                         if(medicalRecords.Any())
                         {

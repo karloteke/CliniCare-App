@@ -26,20 +26,30 @@ namespace CliniCareApp.Data
         public void AddAppointment(Appointment appointment)
         {
             //Verifico si existe la cita en la lista antes de agregarla
-            if(!_appointments.Any(a => a.Id == appointment.Id ) )
+            if(!_appointments.Any(a => a.Id == appointment.Id) )
             {
                 _appointments.Add(appointment);
                 SaveChanges();
             }
-          
         }
 
-        public List<Appointment> GetAppointments()
+        // public void AddAppointment(Appointment appointment)
+        // {
+        //     _appointments.Add(appointment);
+        //     SaveChanges();
+        // }
+
+        public List<Appointment> GetAllAppointments()
         {
             return _appointments;
         }
 
-         public Appointment GetAppointmentById(int appointmentId)
+        public Patient? GetPatientById(int? patientId)
+        {
+            return _patientRepository.GetPatientById(patientId);
+        }
+
+        public Appointment GetAppointmentById(int appointmentId)
         {
             return _appointments.FirstOrDefault(a => a.Id == appointmentId);
         }

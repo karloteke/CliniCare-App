@@ -15,7 +15,7 @@ namespace CliniCareApp.Business
 
         public void CreateAppointment(int patientId, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
         {
-            var patient = _repository. GetAppointmentById(patientId);
+            var patient = _repository. GetPatientById(patientId);
 
             if(patient != null)
             {
@@ -28,7 +28,7 @@ namespace CliniCareApp.Business
 
         public List<Appointment> GetAllAppointments()
         {
-            return _repository.GetAppointments();
+            return _repository.GetAllAppointments();
         }
 
         public Appointment GetAppointmentById(int appointmentId)
@@ -70,5 +70,6 @@ namespace CliniCareApp.Business
             }
              _repository.DeleteAppointment(appointmentId);         
         }
+
     }
 }

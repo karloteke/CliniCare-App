@@ -14,7 +14,7 @@ namespace CliniCareApp.Business
             _repository = repository;
         }
 
-        public void CreateMedicalRecord(int patientId,DateTime medicalRecordDate, string doctorName, string treatment, decimal treatmentCost, string notes)
+        public void CreateMedicalRecord(int patientId, DateTime medicalRecordDate, string doctorName, string treatment, decimal treatmentCost, string notes)
         {
             var patient = _repository.GetPatientById(patientId);
 
@@ -27,9 +27,48 @@ namespace CliniCareApp.Business
             }
         }
 
-        public List<MedicalRecord> GetMedicalRecords()
+        public List<MedicalRecord> GetAllMedicalRecords()
         {
-            return _repository.GetMedicalRecords();
+            return _repository.GetAllMedicalRecords();
+        }
+
+        public void UpdateMedicalRecordDetails(int medicalRecordId, MedicalRecordUpdateDTO medicalRecordUpdate)
+        {
+            var medicalRecord = _repository.GetMedicalRecordById( medicalRecordId);
+
+            if (medicalRecord == null)
+            {
+                throw new KeyNotFoundException($"La cita con id: { medicalRecordId} no existe.");
+            }
+
+            medicalRecord.DoctorName = medicalRecordUpdate.DoctorName;
+            medicalRecord.Treatment = medicalRecordUpdate.Treatment;
+            medicalRecord.TreatmentCost = medicalRecordUpdate.TreatmentCost;
+            medicalRecord.Notes = medicalRecordUpdate.Notes;
+            _repository.UpdateMedicalRecord(medicalRecord);
+            _repository.SaveChanges();
+        }
+
+        public MedicalRecord GetMedicalRecordById(int medicalRecordId)
+        {
+            var medicalRecord = _repository.GetMedicalRecordById(medicalRecordId);
+            
+            if(medicalRecord == null)
+            {
+                  throw new KeyNotFoundException($"El historial médico con Id: {medicalRecordId} no existe.");
+            }
+            return medicalRecord;
+        }
+
+        public void DeleteMedicalRecord(int medicalRecordId)
+        {
+            var medicalRecord = _repository.GetMedicalRecordById(medicalRecordId);
+
+            if (medicalRecord == null)
+            {
+                throw new KeyNotFoundException($"El historial médico con Id: {medicalRecordId} no existe.");
+            }
+             _repository.DeleteMedicalRecord(medicalRecordId);         
         }
     }
 }

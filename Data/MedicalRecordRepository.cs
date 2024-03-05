@@ -25,10 +25,15 @@ namespace CliniCareApp.Data
 
         public void AddMedicalRecord(MedicalRecord medicalRecord)
         {
-            _medicalRecords.Add(medicalRecord);
+            //Verifico si existe el historial médico en la lista antes de agregarlo
+            if(!_medicalRecords.Any(m => m.Id == medicalRecord.Id ) )
+            {
+                _medicalRecords.Add(medicalRecord);
+                SaveChanges();
+            }
         }
 
-        public List<MedicalRecord> GetMedicalRecords()
+        public List<MedicalRecord> GetAllMedicalRecords()
         {
             return _medicalRecords;
         }
@@ -36,6 +41,24 @@ namespace CliniCareApp.Data
         public Patient? GetPatientById(int? patientId)
         {
             return _patientRepository.GetPatientById(patientId);
+        }
+
+        public MedicalRecord GetMedicalRecordById(int medicalRecordId)
+        {
+            return _medicalRecords.FirstOrDefault(m => m.Id == medicalRecordId);
+        }
+
+        public void DeleteMedicalRecord(int? medicalRecordId)
+        {
+            if (medicalRecordId != null)
+            {
+                var medicalRecord = _medicalRecords.FirstOrDefault(m => m.Id == medicalRecordId);
+                if (medicalRecord != null)
+                {
+                    _medicalRecords.Remove(medicalRecord);
+                    SaveChanges();
+                }
+            }
         }
 
         public void UpdateMedicalRecord(MedicalRecord medicalRecord)
