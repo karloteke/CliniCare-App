@@ -23,6 +23,11 @@ builder.Services.AddSwaggerGen();
  builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
  builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 
+ //Inyecto dependencia de AppointmentPatient
+ builder.Services.AddScoped<IAppointmentPatientRepository, AppointmentPatientRepository>();
+ builder.Services.AddScoped<IAppointmentPatientService, AppointmentPatientService>();
+
+ 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline. 

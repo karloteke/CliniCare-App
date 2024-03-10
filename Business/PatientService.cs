@@ -13,9 +13,9 @@ namespace CliniCareApp.Business
             _repository = repository;
         }
 
-        public Patient CreatePatient(PatientCreateDTO patientDto)
+        public Patient CreatePatient(string name, string lastName, string address, string dni, string phone)
         {
-            var patient = new Patient(patientDto.Name, patientDto.LastName, patientDto.Address, patientDto.Dni, patientDto.Phone);
+            var patient = new Patient(name, lastName, address, dni, phone);
             _repository.AddPatient(patient);
             _repository.SaveChanges();
             return patient;

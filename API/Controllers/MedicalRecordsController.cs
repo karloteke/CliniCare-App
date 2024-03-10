@@ -42,7 +42,7 @@ public class MedicalRecordsController : ControllerBase
         }      
     }
 
-    // GET: /MedicalRecord/{id}
+    // GET: /MedicalRecords/{id}
     [HttpGet("{medicalRecordId}", Name = " GetMedicalRecordById")]
     public IActionResult  GetMedicalRecordById(int medicalRecordId)
     {
@@ -77,7 +77,7 @@ public class MedicalRecordsController : ControllerBase
         }
     }
 
-    //PUT: /MedicalRecord/{id}
+    //PUT: /MedicalRecords/{id}
     [HttpPut("{medicalRecordId}")]
     public IActionResult UpdateMedicalRecord(int medicalRecordId, [FromBody] MedicalRecordUpdateDTO medicalRecordDto)
     {
