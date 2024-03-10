@@ -6,10 +6,13 @@ namespace CliniCareApp.Data
     public class AppointmentPatientRepository : IAppointmentPatientRepository
     {
         private List<AppointmentPatient> _appointmentPatients = new List<AppointmentPatient>();
+        private List<Patient> _patients;
         private readonly string _filePath;
+         private readonly IPatientRepository _patientRepository;
 
         public AppointmentPatientRepository(IPatientRepository patientRepository)
         {
+            _patientRepository = patientRepository; 
             _filePath = GetFilePath();
             LoadAppointments();
         }
@@ -22,19 +25,48 @@ namespace CliniCareApp.Data
 
         public void AddAppointmentPatient(AppointmentPatient appointmentPatient)
         {
-            _appointmentPatients.Add(appointmentPatient);
-            SaveChanges();
+            //Verifico si existe la cita en la lista antes de agregarla
+            if(!_appointmentPatients.Any(ap => ap.Id == appointmentPatient.Id) )
+            {
+                _appointmentPatients.Add(appointmentPatient);
+                SaveChanges();
+            }
         }
 
-        public List<AppointmentPatient> GetAppointmentPatients()
-        {
-            return _appointmentPatients;
-        }
+        // public List<AppointmentPatient> GetAppointmentPatients()
+        // {
+        //     return _appointmentPatients;
+        // }
         public List<AppointmentPatient> GetAppointmentPatientsByDNI(string dni)
         {
             return _appointmentPatients
-                .Where(ap => ap.PatientDni == dni)
+                .Where(ap => ap.Patient?.Dni == dni)
                 .ToList();
+        }
+
+          public Patient? GetPatientByDni(string? dni)
+        {
+            return _patients.FirstOrDefault(p => p.Dni == dni);
+        }
+        
+        public List<Patient> GetPatients()
+        {
+            return _patients;
+        }
+
+        // public List<AppointmentPatient> GetAllAppointmentPatients()
+        // {
+        //     return _appointmentPatients;
+        // }
+
+        public Patient? GetPatientById(int? patientId)
+        {
+            return _patientRepository.GetPatientById(patientId);
+        }
+
+        public AppointmentPatient GetAppointmentPatientById(int appointmentPatientId)
+        {
+            return _appointmentPatients.FirstOrDefault(ap => ap.Id == appointmentPatientId);
         }
 
         public void UpdateAppointmentPatient(AppointmentPatient appointmentPatient)

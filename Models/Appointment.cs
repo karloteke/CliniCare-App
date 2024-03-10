@@ -9,11 +9,11 @@ public class Appointment
     public string? Date { get; set; } 
     public string? Time { get; set; } 
     public bool IsUrgent { get; set; }  
-    public int PatientId { get; set; }
+    public string PatientDni { get; set; }
 
     private static int NextAppointmentId = 1;
     
-    public Appointment (DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent, int patientId)
+    public Appointment (DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent, string patientDni)
     {
         Id =  NextAppointmentId++;
         CreatedAt = createdAt;
@@ -22,7 +22,7 @@ public class Appointment
         Date = date;
         Time = time;
         IsUrgent = isUrgent;
-        PatientId = patientId;
+        PatientDni = patientDni;
     }  
 
     public static void UpdateNextAppointmentId(int nextId)

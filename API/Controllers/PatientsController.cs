@@ -69,7 +69,7 @@ public class PatientsController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var patient = _patientService.CreatePatient(patientDto);
+            var patient = _patientService.CreatePatient(patientDto.Name, patientDto.LastName, patientDto.Address, patientDto.Dni, patientDto.Phone);
             return CreatedAtAction(nameof(GetPatient), new { patientId = patient.Id }, patient);
         }     
         catch (Exception ex)

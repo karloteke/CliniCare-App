@@ -12,15 +12,17 @@ public class AppointmentsController : ControllerBase
 {
     private readonly ILogger<AppointmentsController> _logger;
     private readonly IAppointmentService _appointmentService;
+    private readonly IPatientService _patientService;
 
-    public AppointmentsController(ILogger<AppointmentsController> logger, IAppointmentService appointmentService)
+    public AppointmentsController(ILogger<AppointmentsController> logger, IAppointmentService appointmentService, IPatientService patientService)
     {
         _logger = logger;
         _appointmentService = appointmentService;
+        _patientService = patientService;
     }
 
     // GET: /Appointments
-    [HttpGet(Name = "GetAllAppointments")] 
+    [HttpGet(Name ="GetAllAppointments")] 
     public ActionResult<IEnumerable<Appointment>> GetAppointments()
     {
         try 
@@ -42,7 +44,7 @@ public class AppointmentsController : ControllerBase
         }      
     }
 
-    // GET: /Appointment/{id}
+    // GET: /Appointments/{id}
     [HttpGet("{appointmentId}", Name = " GetAppointmentById")]
     public IActionResult  GetAppointmentById(int appointmentId)
     {
@@ -58,7 +60,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult NewAppointment([FromBody] AppointmentCreateDTO appointmentDto, [FromQuery] int patientId)
+    public IActionResult NewAppointment([FromBody] AppointmentCreateDTO appointmentDto, [FromQuery] string patientDni)
     {
         try 
         {
@@ -68,8 +70,14 @@ public class AppointmentsController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            _appointmentService.CreateAppointment(patientId, appointmentDto.CreatedAt, appointmentDto.Area, appointmentDto.MedicalName, appointmentDto.Date, appointmentDto.Time, appointmentDto.IsUrgent);
-            return Ok($"Se ha creado correctamente la cita para el paciente con Id: {patientId}");
+            var patient = _patientService.GetPatientByDni(patientDni);
+            if(patient == null)
+            {
+                return NotFound ("No existe ese DNI");
+            }
+
+            _appointmentService.CreateAppointment(patientDni, appointmentDto.CreatedAt, appointmentDto.Area, appointmentDto.MedicalName, appointmentDto.Date, appointmentDto.Time, appointmentDto.IsUrgent);
+            return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");
         }     
         catch (Exception ex)
         {
@@ -77,7 +85,7 @@ public class AppointmentsController : ControllerBase
         }
     }
 
-    //PUT: /Appointment/{id}
+    //PUT: /Appointments/{id}
     [HttpPut("{appointmentId}")]
     public IActionResult UpdateAppointment(int appointmentId, [FromBody] AppointmentUpdateDTO appointmentDto)
     {

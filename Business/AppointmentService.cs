@@ -13,15 +13,15 @@ namespace CliniCareApp.Business
             _repository = repository;
         }
 
-        public void CreateAppointment(int patientId, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
+        public void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
         {
-            var patient = _repository. GetPatientById(patientId);
+            var patient = _repository.GetPatientByDni(patientDni);
 
             if(patient != null)
             {
-                var newAppointment = new Appointment(createdAt, area, medicalName, date, time, isUrgent, patient.Id);
+                var appointment = new Appointment(createdAt, area, medicalName, date, time, isUrgent, patient.Dni);
 
-                _repository.AddAppointment(newAppointment);
+                _repository.AddAppointment(appointment);
                 _repository.SaveChanges();
             }
         }
@@ -40,6 +40,18 @@ namespace CliniCareApp.Business
                   throw new KeyNotFoundException($"El paciente con Id {appointmentId} no existe.");
             }
             return appointment;
+        }
+
+        public List<Appointment> GetAppointments(string patientDni)
+        {
+           // Obtener todas las citas asociadas a un paciente por su DNI
+            var appointments = _repository.GetAppointments(patientDni);
+
+            if (appointments == null || appointments.Count == 0)
+            {
+                throw new KeyNotFoundException($"No hay citas para el paciente con DNI: {patientDni}");
+            }
+            return appointments;
         }
 
         public void UpdateAppointmentDetails(int appointmentId, AppointmentUpdateDTO appointmentUpdate)
