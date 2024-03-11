@@ -6,7 +6,10 @@ namespace CliniCareApp.Data
     {
         void AddUser(User user);
         User? GetUserByUserName(string userName);
+        List<User> GetUsers();
+        User? GetUserByEmail(string Email);
         void UpdateUser(User user);
+        void DeleteUser(string? userEmail);
         void SaveChanges();
     }
 }

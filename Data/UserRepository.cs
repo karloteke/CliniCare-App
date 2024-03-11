@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using CliniCareApp.Models;
 
@@ -29,13 +30,36 @@ namespace CliniCareApp.Data
             }
         }
 
+        public List<User> GetUsers()
+        {
+            return _users;
+        }
+
         public User? GetUserByUserName(string userName)
         {
             return _users.FirstOrDefault(u => u.UserName == userName);
         }
+
+        public User? GetUserByEmail(string email)
+        {
+            return _users.FirstOrDefault(u => u.Email == email);
+        }
         public void UpdateUser(User user)
         {
             AddUser(user);
+        }
+
+        public void DeleteUser(string? userEmail)
+        {
+            if (userEmail != null)
+            {
+                var user = _users.FirstOrDefault(u => u.Email == userEmail);
+                if (user != null)
+                {
+                    _users.Remove(user);
+                    SaveChanges();
+                }
+            }
         }
 
         public void SaveChanges()
