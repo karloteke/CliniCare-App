@@ -5,10 +5,10 @@ namespace CliniCareApp.Models; // CliniCare.DTO
 public class PatientCreateDTO
 {
     [Required(ErrorMessage = "El nombre es obligatorio.")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [Required(ErrorMessage = "El apellido es obligatorio.")]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
     [Required(ErrorMessage = "La dirección es obligatoria.")]
     public string? Address { get; set; }

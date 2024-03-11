@@ -26,6 +26,14 @@ builder.Services.AddSwaggerGen();
  //Inyecto dependencia de AppointmentPatient
  builder.Services.AddScoped<IAppointmentPatientRepository, AppointmentPatientRepository>();
  builder.Services.AddScoped<IAppointmentPatientService, AppointmentPatientService>();
+ 
+ //Inyecto dependencia de User
+ builder.Services.AddScoped<IUserRepository, UserRepository>();
+ builder.Services.AddScoped<IUserService, UserService>();
+
+//Inyecto PrivateAreaAccess
+ builder.Services.AddScoped<PrivateAreaAccess>();
+
 
  
 var app = builder.Build();
