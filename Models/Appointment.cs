@@ -9,8 +9,8 @@ public class Appointment
     public string? Date { get; set; } 
     public string? Time { get; set; } 
     public bool IsUrgent { get; set; }  
-    public string PatientDni { get; set; }
-
+    public string? PatientDni { get; set; }
+    
     private static int NextAppointmentId = 1;
     
     public Appointment (DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent, string patientDni)

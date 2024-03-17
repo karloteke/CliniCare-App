@@ -48,6 +48,16 @@ namespace CliniCareApp.Data
             return _medicalRecords.FirstOrDefault(m => m.Id == medicalRecordId);
         }
 
+        public Patient? GetPatientByDni(string patientDni)
+        {
+            return _patientRepository.GetPatientByDni(patientDni);
+        }
+
+        public List<MedicalRecord> GetMedicalRecords(string patientDni)
+        {
+            // Implementación para obtener todas las citas asociadas a un paciente por su DNI
+            return _medicalRecords.Where(mr => mr.PatientDni == patientDni).ToList();
+        }
         public void DeleteMedicalRecord(int? medicalRecordId)
         {
             if (medicalRecordId != null)

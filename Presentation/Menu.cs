@@ -15,7 +15,7 @@ class Menu
         PrivateAreaAccess privateAreaAccess)
     {
         bool privateZone = false;
-        int patientId;
+        string patientDni;
         DateTime medicalRecordDate;
         DateTime appointmentDate;
         Patient? patient;
@@ -350,32 +350,27 @@ class Menu
                         }
 
                         Console.WriteLine("");
-                        AnsiConsole.MarkupLine("[purple]Introduce el ID del paciente al que quieres asignarle el informe médico[/]");
-                        string? patientIdInputMedicalRecord = Console.ReadLine();
+                        AnsiConsole.MarkupLine("[purple]Introduce el DNI del paciente al que quieres asignarle el informe médico[/]");
+                        string? patientDniMedicalRecord = Console.ReadLine();
 
-                        if (string.IsNullOrEmpty(patientIdInputMedicalRecord))
+                        if (string.IsNullOrEmpty(patientDniMedicalRecord))
                         {
-                            AnsiConsole.MarkupLine("[red]Entrada inválida. Debes ingresar un ID de paciente[/]");
+                            AnsiConsole.MarkupLine("[red]Entrada inválida. Debes ingresar un DNI de paciente[/]");
                             continue;
                         }
 
-                        if (!int.TryParse(patientIdInputMedicalRecord, out patientId)) 
-                        {
-                            AnsiConsole.MarkupLine("[red]ID de paciente inválido. Debe ser un número entero[/]");
-                            continue;
-                        }
+                        // Obtener el paciente por su DNI
+                        var patientFromService = patientService.GetPatientByDni(patientDniMedicalRecord);
 
-                        patient = patientService.GetPatientById(patientId);
-
-                        if (patient != null)
+                        if (patientFromService != null)
                         {
-                            medicalRecordService.CreateMedicalRecord(patientId, medicalRecordDate, doctorName, treatment, treatmentCost, notes);
+                            medicalRecordService.CreateMedicalRecord(patientDniMedicalRecord, medicalRecordDate, doctorName, treatment, treatmentCost, notes);
                             Console.WriteLine("");
-                            AnsiConsole.MarkupLine($"[green]Historial médico registrado correctamente para: {patient?.Name} {patient?.LastName}[/]");
+                            AnsiConsole.MarkupLine($"[green]Historial médico registrado correctamente para: {patientFromService.Name} {patientFromService.LastName}[/]");
                         }
                         else
                         {
-                            AnsiConsole.MarkupLine("[red]No se encontró un paciente con el ID proporcionado[/]");
+                            AnsiConsole.MarkupLine("[red]No se encontró un paciente con el DNI proporcionado[/]");
                         }
                         break;
 
@@ -386,7 +381,9 @@ class Menu
                         {
                             foreach (var medicalRecord in medicalRecords)
                             {
-                                var objectPatient = patientService.GetPatientById(medicalRecord.PatientId);
+                                // Obtener el DNI del paciente asociado al historial médico
+                                string? dniPatient = medicalRecord.PatientDni;
+                                var objectPatient = patientService.GetPatientByDni(dniPatient);
 
                                 AnsiConsole.MarkupLine("[bold invert darkolivegreen1_1]DATOS HISTORIAL MÉDICO[/]");
                                 Console.WriteLine("");
@@ -588,21 +585,21 @@ class Menu
                     
                     case "2":
                         AnsiConsole.MarkupLine("[purple]Ingrese el DNI del paciente:[/]");
-                        string? patientDni = Console.ReadLine();
+                        string? inputPatientDni = Console.ReadLine();
 
-                        if (string.IsNullOrEmpty(patientDni))
+                        if (string.IsNullOrEmpty(inputPatientDni))
                         {
                             Console.WriteLine("");
                             AnsiConsole.MarkupLine("[red]Entrada inválida. El DNI no puede estar vacio[/]");
                             break;
                         }
 
-                        var appointmentPatients = appointmentPatientService.GetAppointmentPatientsByDNI(patientDni);
+                        var appointmentPatients = appointmentPatientService.GetAppointmentPatientsByDNI(inputPatientDni);
 
                         if(appointmentPatients.Count == 0)
                         {
                             Console.WriteLine("");
-                            AnsiConsole.MarkupLine($"[red]No se encontraron citas para el DNI {patientDni}[/]");
+                            AnsiConsole.MarkupLine($"[red]No se encontraron citas para el DNI {inputPatientDni}[/]");
                         }
                         else
                         {

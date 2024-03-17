@@ -38,7 +38,6 @@ namespace CliniCareApp.Business
 
         public void NewUser(UserCreateDTO userCreate)
         {
-
             var newUser = new User
             (
                 userCreate.UserName,
@@ -51,12 +50,12 @@ namespace CliniCareApp.Business
             _repository.SaveChanges();
         }
 
-        public void UpdateUserDetails(string userEmail, UserUpdateDTO userUpdate)
+        public void UpdateUserDetails(string userUserName, UserUpdateDTO userUpdate)
         {
-            var user = _repository.GetUserByEmail(userEmail);
+            var user = _repository.GetUserByUserName(userUserName);
             if (user == null)
             {
-                throw new KeyNotFoundException($"El usuario cuyo Email es: {userEmail} no existe.");
+                throw new KeyNotFoundException($"El usuario: {userUserName} no existe.");
             }
 
             user.UserName = userUpdate.UserName;
@@ -67,14 +66,14 @@ namespace CliniCareApp.Business
             _repository.SaveChanges();
         }
 
-        public void DeleteUser(string userEmail)
+        public void DeleteUser(string userUserName)
         {
-            var user = _repository.GetUserByEmail(userEmail);
+            var user = _repository.GetUserByUserName(userUserName);
             if (user == null)
             {
-                throw new KeyNotFoundException($"El usuario con Email: {userEmail} no existe.");
+                throw new KeyNotFoundException($"El usuario: {userUserName} no existe.");
             }
-             _repository.DeleteUser(userEmail);         
+             _repository.DeleteUser(userUserName);         
         }
     
         public bool Authenticate(string userName, string password)

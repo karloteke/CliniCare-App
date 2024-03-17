@@ -49,11 +49,11 @@ namespace CliniCareApp.Data
             AddUser(user);
         }
 
-        public void DeleteUser(string? userEmail)
+        public void DeleteUser(string? userUserName)
         {
-            if (userEmail != null)
+            if (userUserName != null)
             {
-                var user = _users.FirstOrDefault(u => u.Email == userEmail);
+                var user = _users.FirstOrDefault(u => u.UserName == userUserName);
                 if (user != null)
                 {
                     _users.Remove(user);
