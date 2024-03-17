@@ -18,59 +18,32 @@ public class UsersController : ControllerBase
         _logger = logger;
         _userService = UserService;
     }
-
-    // GET: /Users
+        
     [HttpGet(Name = "GetAllUsers")] 
-    public ActionResult<IEnumerable<User>> GetUsers()
+    public ActionResult<IEnumerable<User>> SearchUsers(string? userName)
     {
-        try 
+        var query = _userService.GetAllUsers().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(userName))
         {
-            var users = _userService.GetAllUsers();
-
-            if(users.Any())
-            {
-            //Mapear cada usuario a un DTO de respuesta sin incluir la contraseña y la clave de acceso
-            var userDtos = users.Select(user => new UserGetDTO //Iterar sobre la lista de usuarios 
-            {
-                UserName = user.UserName,
-                Email = user.Email
-            });
-
-            return Ok(userDtos);
-            }
-            else
-            {
-                return NotFound("No existen usuarios para mostrar");
-            }
-        }     
-        catch (Exception ex)
-        {
-            return BadRequest(ex);
-        }      
-    }
-
-    // GET: /Users/{email}
-    [HttpGet("{userEmail}", Name = "GetUserByEmail")]
-    public IActionResult GetUserByEmail(string userEmail)
-    {
-        try
-        {
-            var user = _userService.GetUserByEmail(userEmail);
-
-             // Mapeo el usuario a un DTO de respuesta sin incluir la contraseña y la clave de acceso
-            var userDtoResponse = new UserGetDTO
-            {
-                UserName = user.UserName,
-                Email = user.Email
-            };
-
-            return Ok(userDtoResponse);
-            
+            query = query.Where(u => u.UserName.Contains(userName));
         }
-        catch (KeyNotFoundException)
+
+        var users = query.ToList();
+        
+        //Mapear cada usuario a un DTO de respuesta sin incluir la contraseña y la clave de acceso
+        var userDtos = users.Select(user => new UserGetDTO 
         {
-            return NotFound($"No existe usuario con este Email: {userEmail}");
+            UserName = user.UserName,
+            Email = user.Email
+        });
+
+        if (users.Count == 0)
+        {
+            return NotFound();
         }
+
+        return Ok(userDtos);
     }
 
     [HttpPost]
@@ -84,10 +57,10 @@ public class UsersController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var emailExist = _userService.GetUserByEmail(userDto.Email);
+            var emailExist = _userService.GetUserByUserName(userDto.UserName);
             if(emailExist != null)
             {
-                return BadRequest("El correo electrónico ya está registrado.");
+                return BadRequest("El usuario ya está registrado.");
             }
 
             if(userDto.AccessKey != "medico")
@@ -96,7 +69,7 @@ public class UsersController : ControllerBase
             }
 
             var user = _userService.CreateUser(userDto.UserName, userDto.Password, userDto.Email, userDto.AccessKey);
-            return CreatedAtAction(nameof(GetUsers), new { UserName = user.UserName }, userDto);
+            return CreatedAtAction(nameof(SearchUsers), new { UserName = user.UserName }, userDto);
         }     
         catch (Exception ex)
         {
@@ -104,9 +77,9 @@ public class UsersController : ControllerBase
         }
     }
 
-    //PUT: /Users/{email}
-    [HttpPut("{userEmail}")]
-    public IActionResult UpdateUser(string userEmail, [FromBody] UserUpdateDTO userDto)
+    //PUT: /Users/{userName}
+    [HttpPut("{userUserName}")]
+    public IActionResult UpdateUser(string userUserName, [FromBody] UserUpdateDTO userDto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
@@ -117,8 +90,8 @@ public class UsersController : ControllerBase
 
         try
         {
-            _userService.UpdateUserDetails(userEmail, userDto);
-            return Ok($"El usuario con Email: {userEmail} ha sido actualizado correctamente");
+            _userService.UpdateUserDetails(userUserName, userDto);
+            return Ok($"El usuario con usuario: {userUserName} ha sido actualizado correctamente");
         }
         catch (KeyNotFoundException)
         {
@@ -126,19 +99,19 @@ public class UsersController : ControllerBase
         }
     }
 
-    // DELETE: /User/{UserEmail}
-    [HttpDelete("{userEmail}")]
-    public IActionResult DeleteUser(string userEmail )
+    // DELETE: /User/{UserName}
+    [HttpDelete("{userUserName}")]
+    public IActionResult DeleteUser(string userUserName)
     {
         try
         {
-            _userService.DeleteUser(userEmail);
+            _userService.DeleteUser(userUserName);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
             _logger.LogInformation(ex.Message);
-            return NotFound($"El email: {userEmail} no coincide con ningun usuario regitrado");
+            return NotFound($"El usuario: {userUserName} no existe");
         }
     }
 }

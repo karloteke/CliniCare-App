@@ -3,60 +3,81 @@ using Microsoft.AspNetCore.Mvc;
 using CliniCareApp.Data;
 using CliniCareApp.Business;
 using CliniCareApp.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
+// [Authorize]
 public class PatientsController : ControllerBase
 {
     private readonly ILogger<PatientsController> _logger;
     private readonly IPatientService _patientService;
+    private readonly PrivateAreaAccess _privateAreaAccess;
 
-    public PatientsController(ILogger<PatientsController> logger, IPatientService PatientService)
+    public PatientsController(ILogger<PatientsController> logger, IPatientService PatientService, PrivateAreaAccess privateAreaAccess)
     {
         _logger = logger;
         _patientService = PatientService;
+        _privateAreaAccess = privateAreaAccess;
     }
-
-    // GET: /Patients
+    
+        
     [HttpGet(Name = "GetAllPatients")] 
-    public ActionResult<IEnumerable<Patient>> GetPatients()
+    public ActionResult<IEnumerable<Patient>> SearchPatients(string? dni,string? name, string? lastName, bool orderByNameAsc)
     {
-        try 
-        {
-            var patients = _patientService.GetAllPatients();
+        var query = _patientService.GetAllPatients().AsQueryable();
 
-            if(patients.Any())
-            {
-                return Ok(patients);
-            }
-            else
-            {
-                return NotFound("No existen pacientes para mostrar");
-            }
-        }     
-        catch (Exception ex)
+        if (!string.IsNullOrWhiteSpace(dni))
         {
-            return BadRequest(ex);
-        }      
+            query = query.Where(p => p.Dni.Contains(dni));
+        }
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(p => p.Name.Contains(name));
+        }
+
+        if (!string.IsNullOrWhiteSpace(lastName))
+        {
+            query = query.Where(p => p.LastName.Contains(lastName));
+        }
+
+        if (orderByNameAsc)
+        {
+            query = query.OrderBy(p => p.Name);
+        }
+        else
+        {
+            query = query.OrderByDescending(p => p.Name);
+        }
+
+        var patients = query.ToList();
+
+        if (patients.Count == 0)
+        {
+            return NotFound();
+        }
+
+        return patients;
     }
 
     // GET: /Patients/{id}
-    [HttpGet("{patientId}", Name = "GetPatientById")]
-    public IActionResult GetPatient(int patientId)
-    {
-        try
-        {
-            var patient = _patientService.GetPatientById(patientId);
-            return Ok(patient);
+    // [HttpGet("{patientId}", Name = "GetPatientById")]
+    // public IActionResult GetPatient(int patientId)
+    // {
+    //     try
+    //     {
+    //         var patient = _patientService.GetPatientById(patientId);
+    //         return Ok(patient);
            
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"No existe el paciente con el Id {patientId}");
-        }
-    }
+    //     }
+    //     catch (KeyNotFoundException)
+    //     {
+    //         return NotFound($"No existe el paciente con el Id {patientId}");
+    //     }
+    // }
 
     [HttpPost]
     public IActionResult NewPatient([FromBody] PatientCreateDTO patientDto)
@@ -70,7 +91,7 @@ public class PatientsController : ControllerBase
             }
 
             var patient = _patientService.CreatePatient(patientDto.Name, patientDto.LastName, patientDto.Address, patientDto.Dni, patientDto.Phone);
-            return CreatedAtAction(nameof(GetPatient), new { patientId = patient.Id }, patient);
+            return CreatedAtAction(nameof(SearchPatients), new { patientId = patient.Id }, patient);
         }     
         catch (Exception ex)
         {

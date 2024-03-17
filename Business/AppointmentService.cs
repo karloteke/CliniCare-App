@@ -82,6 +82,5 @@ namespace CliniCareApp.Business
             }
              _repository.DeleteAppointment(appointmentId);         
         }
-
     }
 }

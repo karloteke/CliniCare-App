@@ -23,21 +23,50 @@ public class AppointmentPatientsController : ControllerBase
         _appointmentService = appointmentService;
     }
 
-
-    // GET: /Appointments/{patientDni}
-    [HttpGet("{patientDni}", Name = "GetAppointmentPatientByDni")]
-    public IActionResult GetAppointmentPatientByDni(string patientDni)
+     [HttpGet(Name = "GetAppointmentsByFilters")] 
+    public ActionResult<IEnumerable<Appointment>> SearchAppointmentsByFilters(string patientDni, bool orderByDateAsc)
     {
-        try
+        var query = _appointmentService.GetAllAppointments().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(patientDni))
         {
-            var appointment = _appointmentService.GetAppointments(patientDni);
-            return Ok(appointment);     
+            query = query.Where(p => p.PatientDni.Contains(patientDni));
         }
-        catch (KeyNotFoundException)
+
+        if (orderByDateAsc)
         {
-            return NotFound($"No hay citas para el paciente con el DNI: {patientDni}");
+            query = query.OrderBy(a => a.Date);
         }
+        else
+        {
+            query = query.OrderByDescending(p => p.Date);
+        }
+
+        var appointments = query.ToList();
+
+        if (appointments.Count == 0)
+        {
+            return NotFound();
+        }
+
+        return appointments;
     }
+
+
+    // // GET: /Appointments/{patientDni}
+    // [HttpGet("{dni}", Name = "GetAppointmentPatientByDni")]
+    // public IActionResult GetAppointmentPatientByDni(string dni)
+    // {
+    //     try
+    //     {
+    //         var appointment = _appointmentService.GetAppointments(dni);
+    //         return Ok(appointment);     
+    //     }
+    //     catch (KeyNotFoundException)
+    //     {
+    //         return NotFound($"No hay citas para el paciente con el DNI: {dni}");
+    //     }
+    // }
 
 
     [HttpPost]
@@ -121,4 +150,5 @@ public class AppointmentPatientsController : ControllerBase
             return NotFound();
         }
     }
+
 }

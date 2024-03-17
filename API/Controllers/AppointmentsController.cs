@@ -21,43 +21,61 @@ public class AppointmentsController : ControllerBase
         _patientService = patientService;
     }
 
-    // GET: /Appointments
-    [HttpGet(Name ="GetAllAppointments")] 
-    public ActionResult<IEnumerable<Appointment>> GetAppointments()
-    {
-        try 
-        {
-            var appointments = _appointmentService.GetAllAppointments();
 
-            if(appointments.Any())
-            {
-                return Ok(appointments);
-            }
-            else
-            {
-                return NotFound("No existen citas para mostrar");
-            }
-        }     
-        catch (Exception ex)
+    [HttpGet(Name = "GetAllAppointments")] 
+    public ActionResult<IEnumerable<Appointment>> SearchAppointments(string? patientDni, string? area, string? medicalName, bool orderByUrgentAsc = false)
+    {
+        var query = _appointmentService.GetAllAppointments().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(patientDni))
         {
-            return BadRequest(ex);
-        }      
+            query = query.Where(a => a.PatientDni.Contains(patientDni));
+        }
+
+        if (!string.IsNullOrWhiteSpace(area))
+        {
+            query = query.Where(a => a.Area.Contains(area));
+        }
+
+        if (!string.IsNullOrWhiteSpace(medicalName))
+        {
+            query = query.Where(a => a.MedicalName.Contains(medicalName));
+        }
+
+        if (orderByUrgentAsc)
+        {
+            query = query.OrderByDescending(a => a.IsUrgent);
+        }
+        else
+        {
+            query = query.OrderBy(a => a.IsUrgent);
+        }
+
+        var appointments = query.ToList();
+
+        if (appointments.Count == 0)
+        {
+            return NotFound();
+        }
+
+        return appointments;
     }
 
-    // GET: /Appointments/{id}
-    [HttpGet("{appointmentId}", Name = " GetAppointmentById")]
-    public IActionResult  GetAppointmentById(int appointmentId)
-    {
-        try
-        {
-            var appointment = _appointmentService. GetAppointmentById(appointmentId);
-            return Ok(appointment);     
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"No existe la cita para el paciente con el Id {appointmentId}");
-        }
-    }
+
+    // // GET: /Appointments/{id}
+    // [HttpGet("{appointmentId}", Name = " GetAppointmentById")]
+    // public IActionResult  GetAppointmentById(int appointmentId)
+    // {
+    //     try
+    //     {
+    //         var appointment = _appointmentService. GetAppointmentById(appointmentId);
+    //         return Ok(appointment);     
+    //     }
+    //     catch (KeyNotFoundException)
+    //     {
+    //         return NotFound($"No existe la cita para el paciente con el Id {appointmentId}");
+    //     }
+    // }
 
     [HttpPost]
     public IActionResult NewAppointment([FromBody] AppointmentCreateDTO appointmentDto, [FromQuery] string patientDni)
@@ -116,5 +134,5 @@ public class AppointmentsController : ControllerBase
             _logger.LogInformation(ex.Message);
             return NotFound();
         }
-    }
+    }   
 }

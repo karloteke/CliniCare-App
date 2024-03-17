@@ -8,8 +8,7 @@ public class MedicalRecord
     public string? Treatment { get; set; } 
     public decimal? TreatmentCost { get; set; }
     public string? Notes { get; set; } 
-    public int PatientId { get; set; }
-
+    public string? PatientDni { get; set; }
     private static int NextMedicalRecordId = 1;
 
     public MedicalRecord() 
@@ -17,7 +16,7 @@ public class MedicalRecord
         // Constructor vacío para la deserialización
     }
 
-    public MedicalRecord(DateTime createdAt, string doctorName, string treatment, decimal treatmentCost, string notes, int patientId)
+    public MedicalRecord(DateTime createdAt, string doctorName, string treatment, decimal treatmentCost, string notes, string patientDni)
     {
         Id =  NextMedicalRecordId++;
         CreatedAt = createdAt;
@@ -25,7 +24,7 @@ public class MedicalRecord
         Treatment = treatment;
         TreatmentCost = treatmentCost;
         Notes = notes;
-        PatientId = patientId;
+        PatientDni = patientDni;
     }
     
     public static void UpdateNextMedicalRecordId(int nextId)

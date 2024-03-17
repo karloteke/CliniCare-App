@@ -7,7 +7,9 @@ namespace CliniCareApp.Data
         void AddMedicalRecord(MedicalRecord medicalRecord);
         List<MedicalRecord> GetAllMedicalRecords();
         Patient? GetPatientById(int? patientId);
+        Patient? GetPatientByDni(string? patientDni);
         MedicalRecord GetMedicalRecordById(int medicalRecordId);
+        List<MedicalRecord> GetMedicalRecords(string patientDni);
         void UpdateMedicalRecord(MedicalRecord medicalRecord);
         void DeleteMedicalRecord(int? id);
         void SaveChanges();

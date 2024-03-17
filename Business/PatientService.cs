@@ -15,6 +15,13 @@ namespace CliniCareApp.Business
 
         public Patient CreatePatient(string name, string lastName, string address, string dni, string phone)
         {
+            var existPatient = _repository.GetPatientByDni(dni);
+            if(existPatient != null)
+            {
+
+                throw new Exception("Ya existe un paciente con el mismo DNI.");
+            }
+
             var patient = new Patient(name, lastName, address, dni, phone);
             _repository.AddPatient(patient);
             _repository.SaveChanges();
