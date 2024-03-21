@@ -77,9 +77,9 @@ public class UsersController : ControllerBase
         }
     }
 
-    //PUT: /Users/{userName}
-    [HttpPut("{userUserName}")]
-    public IActionResult UpdateUser(string userUserName, [FromBody] UserUpdateDTO userDto)
+    //PUT: /Users/{id}
+    [HttpPut("{userId}")]
+    public IActionResult UpdateUser(int userId, [FromBody] UserUpdateDTO userDto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
@@ -90,8 +90,8 @@ public class UsersController : ControllerBase
 
         try
         {
-            _userService.UpdateUserDetails(userUserName, userDto);
-            return Ok($"El usuario con usuario: {userUserName} ha sido actualizado correctamente");
+            _userService.UpdateUserDetails(userId, userDto);
+            return Ok($"El usuario con usuario: {userId} ha sido actualizado correctamente");
         }
         catch (KeyNotFoundException)
         {
@@ -99,19 +99,19 @@ public class UsersController : ControllerBase
         }
     }
 
-    // DELETE: /User/{UserName}
-    [HttpDelete("{userUserName}")]
-    public IActionResult DeleteUser(string userUserName)
+    // DELETE: /User/{Userid}
+    [HttpDelete("{userId}")]
+    public IActionResult DeleteUser(int userId)
     {
         try
         {
-            _userService.DeleteUser(userUserName);
+            _userService.DeleteUser(userId);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
             _logger.LogInformation(ex.Message);
-            return NotFound($"El usuario: {userUserName} no existe");
+            return NotFound($"El usuario: {userId} no existe");
         }
     }
 }

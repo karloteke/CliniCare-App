@@ -37,23 +37,29 @@ namespace CliniCareApp.Data
 
         public User? GetUserByUserName(string userName)
         {
-            return _users.FirstOrDefault(u => u.UserName == userName);
+            return _users.FirstOrDefault(u => u.UserName == userName); 
         }
 
         public User? GetUserByEmail(string email)
         {
             return _users.FirstOrDefault(u => u.Email == email);
         }
+
+        public User? GetUserById(int? userId)
+        {
+            return _users.FirstOrDefault(u => u.Id == userId);
+        }
+
         public void UpdateUser(User user)
         {
             AddUser(user);
         }
 
-        public void DeleteUser(string? userUserName)
+        public void DeleteUser(int userId)
         {
-            if (userUserName != null)
+            if (userId != null)
             {
-                var user = _users.FirstOrDefault(u => u.UserName == userUserName);
+                var user = _users.FirstOrDefault(u => u.Id == userId);
                 if (user != null)
                 {
                     _users.Remove(user);
