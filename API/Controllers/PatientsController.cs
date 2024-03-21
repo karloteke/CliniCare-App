@@ -9,7 +9,7 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-// [Authorize]
+// [Authorize] // Aplica la autenticación a todos los métodos en este controlador
 public class PatientsController : ControllerBase
 {
     private readonly ILogger<PatientsController> _logger;

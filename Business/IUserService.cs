@@ -10,7 +10,8 @@ namespace CliniCareApp.Business
         List<User> GetAllUsers(); 
         User? GetUserByUserName(string userName);
         User? GetUserByEmail(string userEmail);
-        public void UpdateUserDetails(string userUserName, UserUpdateDTO UserUpdate);
-        public void DeleteUser(string userUserName);
+        User? GetUserById(int userId);
+        public void UpdateUserDetails(int userId, UserUpdateDTO UserUpdate);
+        public void DeleteUser(int userId);
     }
 }

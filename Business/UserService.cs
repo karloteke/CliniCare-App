@@ -36,6 +36,17 @@ namespace CliniCareApp.Business
             return _repository.GetUserByEmail(userEmail);
         }
 
+        public User? GetUserById(int id)
+        {
+            var user = _repository.GetUserById(id);
+
+            if( user == null)
+            {
+                throw new KeyNotFoundException($"El usuario con Id {id} no existe.");
+            }
+            return  user;
+        }
+
         public void NewUser(UserCreateDTO userCreate)
         {
             var newUser = new User
@@ -50,12 +61,12 @@ namespace CliniCareApp.Business
             _repository.SaveChanges();
         }
 
-        public void UpdateUserDetails(string userUserName, UserUpdateDTO userUpdate)
+        public void UpdateUserDetails(int userId, UserUpdateDTO userUpdate)
         {
-            var user = _repository.GetUserByUserName(userUserName);
+            var user = _repository.GetUserById(userId);
             if (user == null)
             {
-                throw new KeyNotFoundException($"El usuario: {userUserName} no existe.");
+                throw new KeyNotFoundException($"El usuario: {userId} no existe.");
             }
 
             user.UserName = userUpdate.UserName;
@@ -66,14 +77,14 @@ namespace CliniCareApp.Business
             _repository.SaveChanges();
         }
 
-        public void DeleteUser(string userUserName)
+        public void DeleteUser(int userId)
         {
-            var user = _repository.GetUserByUserName(userUserName);
+            var user = _repository.GetUserById(userId);
             if (user == null)
             {
-                throw new KeyNotFoundException($"El usuario: {userUserName} no existe.");
+                throw new KeyNotFoundException($"El usuario: {userId} no existe.");
             }
-             _repository.DeleteUser(userUserName);         
+             _repository.DeleteUser(userId);         
         }
     
         public bool Authenticate(string userName, string password)
