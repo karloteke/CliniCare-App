@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-
-using CliniCareApp.Data;
 using CliniCareApp.Business;
 using CliniCareApp.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
@@ -30,20 +30,13 @@ public class UsersController : ControllerBase
         }
 
         var users = query.ToList();
-        
-        //Mapear cada usuario a un DTO de respuesta sin incluir la contraseña y la clave de acceso
-        var userDtos = users.Select(user => new UserGetDTO 
-        {
-            UserName = user.UserName,
-            Email = user.Email
-        });
 
         if (users.Count == 0)
         {
             return NotFound();
         }
 
-        return Ok(userDtos);
+        return users;
     }
 
     [HttpPost]
@@ -58,18 +51,14 @@ public class UsersController : ControllerBase
             }
 
             var emailExist = _userService.GetUserByUserName(userDto.UserName);
+
             if(emailExist != null)
             {
                 return BadRequest("El usuario ya está registrado.");
             }
 
-            if(userDto.AccessKey != "medico")
-            {
-                return BadRequest("La clave de registro para registrarse como médico es incorrecta");
-            }
-
-            var user = _userService.CreateUser(userDto.UserName, userDto.Password, userDto.Email, userDto.AccessKey);
-            return CreatedAtAction(nameof(SearchUsers), new { UserName = user.UserName }, userDto);
+            var user = _userService.CreateUser(userDto.UserName, userDto.Password, userDto.Email);
+            return CreatedAtAction(nameof(SearchUsers), new { userId = user.Id }, userDto);
         }     
         catch (Exception ex)
         {
@@ -83,15 +72,10 @@ public class UsersController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        if(userDto.AccessKey != "medico")
-            {
-                return BadRequest("La clave de registro para registrarse como médico es incorrecta");
-            }
-
         try
         {
             _userService.UpdateUserDetails(userId, userDto);
-            return Ok($"El usuario con usuario: {userId} ha sido actualizado correctamente");
+            return Ok($"El usuario con Id: {userId} ha sido actualizado correctamente");
         }
         catch (KeyNotFoundException)
         {
@@ -111,7 +95,7 @@ public class UsersController : ControllerBase
         catch (KeyNotFoundException ex)
         {
             _logger.LogInformation(ex.Message);
-            return NotFound($"El usuario: {userId} no existe");
+            return NotFound($"El usuario con Id: {userId} no existe");
         }
     }
 }

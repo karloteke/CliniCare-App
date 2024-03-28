@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-
-using CliniCareApp.Data;
 using CliniCareApp.Business;
 using CliniCareApp.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
+[Authorize]
 public class MedicalRecordsController : ControllerBase
 {
     private readonly ILogger<MedicalRecordsController> _logger;

@@ -12,9 +12,9 @@ namespace CliniCareApp.Business
         {
             _repository = repository;
         }
-        public User CreateUser(string userName, string password, string email, string accessKey)
+        public User CreateUser(string userName, string password, string email)
         {
-            var user = new User(userName, password, email, accessKey);
+            var user = new User(userName, password, email);
         
             _repository.AddUser(user);
             _repository.SaveChanges();
@@ -47,32 +47,17 @@ namespace CliniCareApp.Business
             return  user;
         }
 
-        public void NewUser(UserCreateDTO userCreate)
-        {
-            var newUser = new User
-            (
-                userCreate.UserName,
-                userCreate.Password,
-                userCreate.Email,
-                userCreate.AccessKey
-            );
-
-            _repository.AddUser(newUser);
-            _repository.SaveChanges();
-        }
-
         public void UpdateUserDetails(int userId, UserUpdateDTO userUpdate)
         {
             var user = _repository.GetUserById(userId);
             if (user == null)
             {
-                throw new KeyNotFoundException($"El usuario: {userId} no existe.");
+                throw new KeyNotFoundException($"El usuario con Id: {userId} no existe.");
             }
 
             user.UserName = userUpdate.UserName;
             user.Password = userUpdate.Password;
             user.Email = userUpdate.Email;
-            user.AccessKey = userUpdate.AccessKey;
             _repository.UpdateUser(user);
             _repository.SaveChanges();
         }
@@ -82,17 +67,22 @@ namespace CliniCareApp.Business
             var user = _repository.GetUserById(userId);
             if (user == null)
             {
-                throw new KeyNotFoundException($"El usuario: {userId} no existe.");
+                throw new KeyNotFoundException($"El usuario con Id: {userId} no existe.");
             }
              _repository.DeleteUser(userId);         
         }
     
-        public bool Authenticate(string userName, string password)
+        public User Authenticate(string userName, string password)
         {
-            // Verifica las credenciales del usuario y devuelve true si son válidas, false en caso contrario
+           
             User? user = _repository.GetUserByUserName(userName);
-            return user != null && user.Password == password;
-        }
 
+           if (user != null &&  user.Password == password)
+            {
+                return user;
+            }
+
+            return null;
+        }
     }
 }
