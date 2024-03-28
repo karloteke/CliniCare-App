@@ -11,12 +11,29 @@ namespace CliniCareApp.Business
         {
             _userService = userService;
         }
-
-        public bool Authentication(string userName, string password)
+        
+        public User? Authentication(string userName, string password)
         {
+            // Verifica si las credenciales son nulas o vacías
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            {
+                return null; 
+            }
+
             // Utiliza el service de usuarios para autenticar
-            return _userService.Authenticate(userName, password);
+            User authenticatedUser = _userService.Authenticate(userName, password);
+
+            if (authenticatedUser != null)
+            {
+                // Si el usuario es autenticado correctamente, devuelve el objeto User
+                return authenticatedUser;
+            }
+            else
+            {
+                return null; 
+            }
         }
+
     }
 }
 

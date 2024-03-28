@@ -651,17 +651,17 @@ class Menu
                             }
                         }
                     
-                        AnsiConsole.MarkupLine("[purple]Introduce la clave de acceso para médicos:[/]");
-                        string? inputAccessKey = Console.ReadLine();
-                        Console.WriteLine("");
+                        // AnsiConsole.MarkupLine("[purple]Introduce la clave de acceso para médicos:[/]");
+                        // string? inputAccessKey = Console.ReadLine();
+                        // Console.WriteLine("");
 
-                        const string MedicalAccessKey = "medico";
+                        // const string MedicalAccessKey = "medico";
 
-                        if (string.IsNullOrEmpty(inputAccessKey) || inputAccessKey != MedicalAccessKey)
-                        {
-                            AnsiConsole.MarkupLine("[red]Clave de acceso incorrecta o vacía. Registro denegado[/]");
-                            continue;
-                        }
+                        // if (string.IsNullOrEmpty(inputAccessKey) || inputAccessKey != MedicalAccessKey)
+                        // {
+                        //     AnsiConsole.MarkupLine("[red]Clave de acceso incorrecta o vacía. Registro denegado[/]");
+                        //     continue;
+                        // }
 
                         AnsiConsole.MarkupLine("[purple]Introduce un email[/]");
                         string? inputEmail = Console.ReadLine();
@@ -675,9 +675,9 @@ class Menu
                             }
                         }
 
-                        if (inputUserName != null && inputPassword != null && inputEmail != null && inputAccessKey != null)
+                        if (inputUserName != null && inputPassword != null && inputEmail != null)
                         {
-                            userService.CreateUser(inputUserName, inputPassword, inputEmail, inputAccessKey);
+                            userService.CreateUser(inputUserName, inputPassword, inputEmail);
                             AnsiConsole.MarkupLine("[green]Usuario registrado correctamente[/]");
                             break;
                         }
@@ -704,9 +704,9 @@ class Menu
                             continue;  
                         }
 
-                        bool authenticated = privateAreaAccess.Authentication(userName, password);
+                        User authenticated = privateAreaAccess.Authentication(userName, password);
 
-                        if (authenticated)
+                        if (authenticated != null)
                         {
                             privateZone = true;
                         }

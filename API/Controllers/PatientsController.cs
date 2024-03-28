@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-
-using CliniCareApp.Data;
 using CliniCareApp.Business;
 using CliniCareApp.Models;
 using Microsoft.AspNetCore.Authorization; 
@@ -9,7 +7,7 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-// [Authorize] // Aplica la autenticación a todos los métodos en este controlador
+[Authorize]
 public class PatientsController : ControllerBase
 {
     private readonly ILogger<PatientsController> _logger;
@@ -22,8 +20,7 @@ public class PatientsController : ControllerBase
         _patientService = PatientService;
         _privateAreaAccess = privateAreaAccess;
     }
-    
-        
+      
     [HttpGet(Name = "GetAllPatients")] 
     public ActionResult<IEnumerable<Patient>> SearchPatients(string? dni,string? name, string? lastName, bool orderByNameAsc)
     {
