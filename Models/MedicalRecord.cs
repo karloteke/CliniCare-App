@@ -1,14 +1,25 @@
 namespace CliniCareApp.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class MedicalRecord
 {
+    // [Key]
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? DoctorName { get; set; }
     public string? Treatment { get; set; } 
     public decimal? TreatmentCost { get; set; }
     public string? Notes { get; set; } 
+
+    // [ForeignKey("Patient")]
     public string? PatientDni { get; set; }
+
+    // Propiedad de navegación
+    // public Patient Patient { get; set; }
+
+  
+   
     private static int NextMedicalRecordId = 1;
 
     public MedicalRecord() 

@@ -7,7 +7,7 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-[Authorize]
+// [Authorize]
 public class PatientsController : ControllerBase
 {
     private readonly ILogger<PatientsController> _logger;
@@ -20,45 +20,29 @@ public class PatientsController : ControllerBase
         _patientService = PatientService;
         _privateAreaAccess = privateAreaAccess;
     }
-      
+
+
     [HttpGet(Name = "GetAllPatients")] 
-    public ActionResult<IEnumerable<Patient>> SearchPatients(string? dni,string? name, string? lastName, bool orderByNameAsc)
+    public ActionResult<IEnumerable<Patient>> GetAllPatients([FromQuery] PatientQueryParameters patientQueryParameters, bool orderByNameAsc)
     {
-        var query = _patientService.GetAllPatients().AsQueryable();
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        if (!string.IsNullOrWhiteSpace(dni))
+        try 
         {
-            query = query.Where(p => p.Dni.Contains(dni));
-        }
-
-        if (!string.IsNullOrWhiteSpace(name))
+            var patients = _patientService.GetAllPatients(patientQueryParameters, orderByNameAsc);
+            
+                if (patients == null || !patients.Any())
+                    {
+                        return NotFound("No hay pacientes disponibles.");
+                    }
+            return Ok(patients);
+        }     
+        catch (Exception ex)
         {
-            query = query.Where(p => p.Name.Contains(name));
+            return BadRequest(ex);
         }
-
-        if (!string.IsNullOrWhiteSpace(lastName))
-        {
-            query = query.Where(p => p.LastName.Contains(lastName));
-        }
-
-        if (orderByNameAsc)
-        {
-            query = query.OrderBy(p => p.Name);
-        }
-        else
-        {
-            query = query.OrderByDescending(p => p.Name);
-        }
-
-        var patients = query.ToList();
-
-        if (patients.Count == 0)
-        {
-            return NotFound();
-        }
-
-        return patients;
     }
+      
 
     // GET: /Patients/{id}
     // [HttpGet("{patientId}", Name = "GetPatientById")]
@@ -79,16 +63,13 @@ public class PatientsController : ControllerBase
     [HttpPost]
     public IActionResult NewPatient([FromBody] PatientCreateDTO patientDto)
     {
+        // Verificar si el modelo recibido es válido
+        if (!ModelState.IsValid){ return BadRequest(ModelState);}
+
         try 
         {
-            // Verificar si el modelo recibido es válido
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var patient = _patientService.CreatePatient(patientDto.Name, patientDto.LastName, patientDto.Address, patientDto.Dni, patientDto.Phone);
-            return CreatedAtAction(nameof(SearchPatients), new { patientId = patient.Id }, patient);
+            return CreatedAtAction(nameof(GetAllPatients), new { patientId = patient.Id }, patient);
         }     
         catch (Exception ex)
         {

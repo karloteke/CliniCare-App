@@ -7,7 +7,7 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-[Authorize]
+// [Authorize]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;

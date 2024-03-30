@@ -1,7 +1,10 @@
 namespace CliniCareApp.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Appointment
 {
+    // [Key]
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; } 
     public string? Area { get; set; }
@@ -9,7 +12,12 @@ public class Appointment
     public string? Date { get; set; } 
     public string? Time { get; set; } 
     public bool IsUrgent { get; set; }  
+
+    // [ForeignKey("Patient")]
     public string? PatientDni { get; set; }
+
+    // Propiedad de navegación
+    // public Patient Patient { get; set; }
     
     private static int NextAppointmentId = 1;
     

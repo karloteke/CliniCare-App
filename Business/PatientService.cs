@@ -32,6 +32,12 @@ namespace CliniCareApp.Business
         {
             return _repository.GetPatients();
         }  
+
+        public IEnumerable<Patient> GetAllPatients(PatientQueryParameters? patientQueryParameters, bool orderByNameAsc)
+        {
+            return _repository.GetAllPatients(patientQueryParameters, orderByNameAsc);
+        }
+
     
         public Patient? SearchByDni(string dni)
         {

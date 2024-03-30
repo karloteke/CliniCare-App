@@ -7,6 +7,7 @@ namespace CliniCareApp.Business
     {
         Patient? CreatePatient(string name, string lastName, string address, string dni, string phone);
         List<Patient> GetAllPatients(); 
+        public IEnumerable<Patient> GetAllPatients(PatientQueryParameters? patientQueryParameters, bool orderByNameAsc);
         Patient? SearchByDni(string dni);
         Patient? GetPatientByDni(string dni);
         Patient? GetPatientById(int patientId);
