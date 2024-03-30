@@ -22,13 +22,38 @@ namespace CliniCareApp.Data
 
         public void AddPatient(Patient patient)
         {
-            // Verifica si ya existe el paciente en la lista antes de agregarlo
-            if (!_patients.Any(p => p.Id == patient.Id))
-            {
+            //Verifica si ya existe el paciente en la lista antes de agregarlo
+            // if (!_patients.Any(p => p.Id == patient.Id))
+            // {
                 _patients.Add(patient);
                 SaveChanges();
-            }
+            // }
         }
+
+       public IEnumerable<Patient> GetAllPatients(PatientQueryParameters? patientQueryParameters, bool orderByNameAsc) {
+        var query = _patients.AsQueryable();
+
+        
+        if (!string.IsNullOrWhiteSpace(patientQueryParameters.Dni)) {
+            query = query.Where(p => p.Dni.Contains(patientQueryParameters.Dni));
+        }
+
+        if (!string.IsNullOrWhiteSpace(patientQueryParameters.Name)) {
+            query = query.Where(p => p.Name.Contains(patientQueryParameters.Name));
+        }
+
+        if (!string.IsNullOrWhiteSpace(patientQueryParameters.LastName)) {
+            query = query.Where(p => p.LastName.Contains(patientQueryParameters.LastName));
+        }
+
+        if (orderByNameAsc) {
+            query = query.OrderBy(p => p.Name);
+        }
+
+        var result = query.ToList();
+        return result;
+    }
+
 
         public List<Patient> GetPatients()
         {
@@ -80,8 +105,8 @@ namespace CliniCareApp.Data
 
                 if (_patients.Any()) 
                 {
-                    int maxId = _patients.Max(p => p.Id);
-                    Patient.UpdateNextPatientId(maxId + 1); 
+                    // int maxId = _patients.Max(p => p.Id);
+                    // Patient.UpdateNextPatientId(maxId + 1); 
                 }  
               
             }           

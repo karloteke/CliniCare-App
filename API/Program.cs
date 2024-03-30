@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,6 +78,19 @@ builder.Services.AddSwaggerGen(c =>
 
 //Inyecto PrivateAreaAccess
  builder.Services.AddScoped<PrivateAreaAccess>();
+
+ //Inyecto PatientEF
+ builder.Services.AddScoped<IPatientRepository, PatientEFRepository>();
+
+
+
+// Obteniendo la cadena de conexión desde appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+
+builder.Services.AddDbContext<CliniCareContext>(options =>
+    options.UseSqlServer(connectionString)
+);
+
 
  
 var app = builder.Build();
