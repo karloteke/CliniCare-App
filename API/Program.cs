@@ -82,6 +82,9 @@ builder.Services.AddSwaggerGen(c =>
  //Inyecto PatientEF
  builder.Services.AddScoped<IPatientRepository, PatientEFRepository>();
 
+  //Inyecto AppointmentEF
+ builder.Services.AddScoped<IAppointmentRepository, AppointmentEFRepository>();
+
 
 
 // Obteniendo la cadena de conexión desde appsettings.json
@@ -97,13 +100,14 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 var env = app.Environment;
+
+
 if (env.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CliniCare v1"));
 }
-
 
 app.UseHttpsRedirection();
 app.UseRouting();

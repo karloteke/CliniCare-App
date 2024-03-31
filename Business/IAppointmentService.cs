@@ -7,6 +7,7 @@ namespace CliniCareApp.Business
     {
         void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent);  
         List<Appointment> GetAllAppointments();
+        public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc);
         Appointment GetAppointmentById(int appointmentId);
         List<Appointment> GetAppointments(string patientDni);
         public void UpdateAppointmentDetails(int appointmentId, AppointmentUpdateDTO appointmentUpdateDTO);

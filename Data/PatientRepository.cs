@@ -34,19 +34,23 @@ namespace CliniCareApp.Data
         var query = _patients.AsQueryable();
 
         
-        if (!string.IsNullOrWhiteSpace(patientQueryParameters.Dni)) {
+        if (!string.IsNullOrWhiteSpace(patientQueryParameters.Dni)) 
+        {
             query = query.Where(p => p.Dni.Contains(patientQueryParameters.Dni));
         }
 
-        if (!string.IsNullOrWhiteSpace(patientQueryParameters.Name)) {
+        if (!string.IsNullOrWhiteSpace(patientQueryParameters.Name)) 
+        {
             query = query.Where(p => p.Name.Contains(patientQueryParameters.Name));
         }
 
-        if (!string.IsNullOrWhiteSpace(patientQueryParameters.LastName)) {
+        if (!string.IsNullOrWhiteSpace(patientQueryParameters.LastName)) 
+        {
             query = query.Where(p => p.LastName.Contains(patientQueryParameters.LastName));
         }
 
-        if (orderByNameAsc) {
+        if (orderByNameAsc) 
+        {
             query = query.OrderBy(p => p.Name);
         }
 

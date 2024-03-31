@@ -26,11 +26,36 @@ namespace CliniCareApp.Data
         public void AddAppointment(Appointment appointment)
         {
             //Verifico si existe la cita en la lista antes de agregarla
-            if(!_appointments.Any(a => a.Id == appointment.Id) )
-            {
+            // if(!_appointments.Any(a => a.Id == appointment.Id) )
+            // {
                 _appointments.Add(appointment);
                 SaveChanges();
+            // }
+        }
+
+        
+        public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc)
+        {
+            var query = _appointments.AsQueryable();
+
+
+            if (!string.IsNullOrWhiteSpace(appointmentQueryParameters.Area)) 
+            {
+            query = query.Where(a => a.Area.Contains(appointmentQueryParameters.Area));
             }
+
+            if (!string.IsNullOrWhiteSpace(appointmentQueryParameters.MedicalName)) 
+            {
+            query = query.Where(a => a.MedicalName.Contains(appointmentQueryParameters.MedicalName));
+            }
+
+            if (orderByUrgentAsc) 
+            {
+                query = query.OrderByDescending(a => a.IsUrgent);
+            }
+
+            var result = query.ToList();
+            return result;
         }
 
         public List<Appointment> GetAllAppointments()
@@ -53,7 +78,6 @@ namespace CliniCareApp.Data
             return _appointments.FirstOrDefault(a => a.Id == appointmentId);
         }
 
-    
         public List<Appointment> GetAppointments(string patientDni)
         {
             // Implementación para obtener todas las citas asociadas a un paciente por su DNI
@@ -96,8 +120,8 @@ namespace CliniCareApp.Data
 
             if (_appointments.Any())
             {
-                int maxId = _appointments.Max(a => a.Id);
-                Appointment.UpdateNextAppointmentId(maxId + 1);
+                // int maxId = _appointments.Max(a => a.Id);
+                // Appointment.UpdateNextAppointmentId(maxId + 1);
             }
         }
     }

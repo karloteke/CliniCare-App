@@ -1,6 +1,5 @@
 using CliniCareApp.Models;
 using CliniCareApp.Data;
-using System;
 
 namespace CliniCareApp.Business
 {
@@ -8,9 +7,14 @@ namespace CliniCareApp.Business
     {
         private readonly IAppointmentRepository _repository;
 
-         public AppointmentService(IAppointmentRepository repository)
+        public AppointmentService(IAppointmentRepository repository)
         {
             _repository = repository;
+        }
+
+        public DateTime GetLocalTime()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
         }
 
         public void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
@@ -19,7 +23,8 @@ namespace CliniCareApp.Business
 
             if(patient != null)
             {
-                var appointment = new Appointment(createdAt, area, medicalName, date, time, isUrgent, patient.Dni);
+                 var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
+                var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patient.Dni);
 
                 _repository.AddAppointment(appointment);
                 _repository.SaveChanges();
@@ -29,6 +34,11 @@ namespace CliniCareApp.Business
         public List<Appointment> GetAllAppointments()
         {
             return _repository.GetAllAppointments();
+        }
+
+        public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc)
+        {
+            return _repository.GetAllAppointments(appointmentQueryParameters, orderByUrgentAsc);
         }
 
         public Appointment GetAppointmentById(int appointmentId)

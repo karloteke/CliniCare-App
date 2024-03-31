@@ -7,7 +7,7 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-[Authorize]
+// [Authorize]
 public class AppointmentsController : ControllerBase
 {
     private readonly ILogger<AppointmentsController> _logger;
@@ -21,44 +21,26 @@ public class AppointmentsController : ControllerBase
         _patientService = patientService;
     }
 
-
     [HttpGet(Name = "GetAllAppointments")] 
-    public ActionResult<IEnumerable<Appointment>> SearchAppointments(string? patientDni, string? area, string? medicalName, bool orderByUrgentAsc = false)
+    public ActionResult<IEnumerable<Patient>> GetAllAppointments([FromQuery] AppointmentQueryParameters appointmentQueryParameters, bool orderByUrgentAsc)
     {
-        var query = _appointmentService.GetAllAppointments().AsQueryable();
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        if (!string.IsNullOrWhiteSpace(patientDni))
+        try 
         {
-            query = query.Where(a => a.PatientDni.Contains(patientDni));
-        }
-
-        if (!string.IsNullOrWhiteSpace(area))
+            var appointments = _appointmentService.GetAllAppointments(appointmentQueryParameters, orderByUrgentAsc);
+            
+                if (appointments == null || !appointments.Any())
+                    {
+                        return NotFound("No hay citas disponibles.");
+                    }
+                    
+            return Ok(appointments);
+        }     
+        catch (Exception ex)
         {
-            query = query.Where(a => a.Area.Contains(area));
+            return BadRequest(ex);
         }
-
-        if (!string.IsNullOrWhiteSpace(medicalName))
-        {
-            query = query.Where(a => a.MedicalName.Contains(medicalName));
-        }
-
-        if (orderByUrgentAsc)
-        {
-            query = query.OrderByDescending(a => a.IsUrgent);
-        }
-        else
-        {
-            query = query.OrderBy(a => a.IsUrgent);
-        }
-
-        var appointments = query.ToList();
-
-        if (appointments.Count == 0)
-        {
-            return NotFound();
-        }
-
-        return appointments;
     }
 
 

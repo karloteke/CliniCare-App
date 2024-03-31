@@ -5,7 +5,7 @@ namespace CliniCareApp.Models; // CliniCare.DTO
 public class AppointmentCreateDTO
 {
     [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }  = DateTime.Now;
 
     [Required(ErrorMessage = "El area es obligatoria.")]
     public string? Area { get; set; }
