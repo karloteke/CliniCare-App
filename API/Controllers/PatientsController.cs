@@ -35,6 +35,7 @@ public class PatientsController : ControllerBase
                     {
                         return NotFound("No hay pacientes disponibles.");
                     }
+                    
             return Ok(patients);
         }     
         catch (Exception ex)
