@@ -13,6 +13,7 @@ public class MedicalRecordsController : ControllerBase
     private readonly ILogger<MedicalRecordsController> _logger;
     private readonly IMedicalRecordService _medicalRecordService;
     private readonly IPatientService _patientService;
+    private readonly IAppointmentService _appointmentService;
 
     public MedicalRecordsController(ILogger<MedicalRecordsController> logger, IMedicalRecordService medicalRecordService, IPatientService patientService)
     {
@@ -22,28 +23,25 @@ public class MedicalRecordsController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllMedicalRecords")] 
-    public ActionResult<IEnumerable<MedicalRecord>> SearchMedicalRecords(string? patientDni, string? doctorName)
+    public ActionResult<IEnumerable<MedicalRecord>> GetAllMedicalRecords([FromQuery] MedicalRecordQueryParameters medicalRecordQueryParameters)
     {
-        var query = _medicalRecordService.GetAllMedicalRecords().AsQueryable();
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        if (!string.IsNullOrWhiteSpace(patientDni))
+        try 
         {
-            query = query.Where(a => a.PatientDni.Contains(patientDni));
-        }
-
-        if (!string.IsNullOrWhiteSpace(doctorName))
+            var medicalRecords = _medicalRecordService.GetAllMedicalRecords(medicalRecordQueryParameters);
+            
+                if (medicalRecords == null || !medicalRecords.Any())
+                    {
+                        return NotFound("No hay citas disponibles.");
+                    }
+                    
+            return Ok(medicalRecords);
+        }     
+        catch (Exception ex)
         {
-            query = query.Where(mr => mr.DoctorName.Contains(doctorName));
+            return BadRequest(ex);
         }
-
-        var appointments = query.ToList();
-
-        if (appointments.Count == 0)
-        {
-            return NotFound();
-        }
-
-        return appointments;
     }
 
 
@@ -79,6 +77,7 @@ public class MedicalRecordsController : ControllerBase
             {
                 return NotFound ("No existe ese DNI");
             }
+
 
             _medicalRecordService.CreateMedicalRecord(patientDni, medicalRecordDto.CreatedAt, medicalRecordDto.DoctorName, medicalRecordDto.Treatment, medicalRecordDto.TreatmentCost,  medicalRecordDto.Notes);
             return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");

@@ -4,21 +4,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class MedicalRecord
 {
-    // [Key]
+    [Key]
     public int Id { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }  = DateTime.Now;
+
+    [Required]
     public string? DoctorName { get; set; }
+
+    [Required]
     public string? Treatment { get; set; } 
+
     public decimal? TreatmentCost { get; set; }
+
     public string? Notes { get; set; } 
 
-    // [ForeignKey("Patient")]
+    [ForeignKey("Patient")]
     public string? PatientDni { get; set; }
 
-    // Propiedad de navegación
-    // public Patient Patient { get; set; }
-
-  
    
     private static int NextMedicalRecordId = 1;
 
@@ -29,7 +31,7 @@ public class MedicalRecord
 
     public MedicalRecord(DateTime createdAt, string doctorName, string treatment, decimal treatmentCost, string notes, string patientDni)
     {
-        Id =  NextMedicalRecordId++;
+        // Id =  NextMedicalRecordId++;
         CreatedAt = createdAt;
         DoctorName = doctorName;
         Treatment = treatment;
@@ -40,7 +42,7 @@ public class MedicalRecord
     
     public static void UpdateNextMedicalRecordId(int nextId)
     { 
-        NextMedicalRecordId = nextId;
+        // NextMedicalRecordId = nextId;
     }
 }
 

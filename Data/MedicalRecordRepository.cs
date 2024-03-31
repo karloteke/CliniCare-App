@@ -33,6 +33,27 @@ namespace CliniCareApp.Data
             }
         }
 
+                
+        public IEnumerable<MedicalRecord> GetAllMedicalRecords(MedicalRecordQueryParameters? medicalRecordQueryParameters)
+        {
+            var query = _medicalRecords.AsQueryable();
+
+
+            if (!string.IsNullOrWhiteSpace(medicalRecordQueryParameters.DoctorName)) 
+            {
+                query = query.Where(m => m.DoctorName.Contains(medicalRecordQueryParameters.DoctorName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(medicalRecordQueryParameters.PatientDni)) 
+            {
+                query = query.Where(m => m.PatientDni.Contains(medicalRecordQueryParameters.PatientDni));
+            }
+
+            var result = query.ToList();
+            return result;
+        }
+
+
         public List<MedicalRecord> GetAllMedicalRecords()
         {
             return _medicalRecords;

@@ -23,7 +23,7 @@ namespace CliniCareApp.Business
 
             if(patient != null)
             {
-                 var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
+                var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
                 var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patient.Dni);
 
                 _repository.AddAppointment(appointment);
