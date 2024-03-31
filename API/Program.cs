@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using CliniCareApp.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +85,9 @@ builder.Services.AddSwaggerGen(c =>
 
   //Inyecto AppointmentEF
  builder.Services.AddScoped<IAppointmentRepository, AppointmentEFRepository>();
+
+//Inyecto MedicalRecordEF
+ builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordEFRepository>();
 
 
 

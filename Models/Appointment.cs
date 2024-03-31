@@ -28,7 +28,6 @@ public class Appointment
     [ForeignKey("Patient")]
     public string? PatientDni { get; set; }
 
-
     public Appointment()
     {
 

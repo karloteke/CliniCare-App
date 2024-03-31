@@ -14,13 +14,20 @@ namespace CliniCareApp.Business
             _repository = repository;
         }
 
+        public DateTime GetLocalTime()
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+        }
+
+
         public void CreateMedicalRecord(string patientDni, DateTime medicalRecordDate, string doctorName, string treatment, decimal treatmentCost, string notes)
         {
             var patient = _repository.GetPatientByDni(patientDni);
 
             if (patient != null)
             {
-                var newMedicalRecord = new MedicalRecord(medicalRecordDate, doctorName, treatment, treatmentCost, notes, patient.Dni);
+                var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
+                var newMedicalRecord = new MedicalRecord(createdAtLocal, doctorName, treatment, treatmentCost, notes, patient.Dni);
 
                 _repository.AddMedicalRecord(newMedicalRecord);
                 _repository.SaveChanges();
@@ -32,6 +39,12 @@ namespace CliniCareApp.Business
         {
             return _repository.GetAllMedicalRecords();
         }
+
+        public IEnumerable<MedicalRecord> GetAllMedicalRecords(MedicalRecordQueryParameters? medicalRecordQueryParameters)
+        {
+            return _repository.GetAllMedicalRecords(medicalRecordQueryParameters);
+        }
+
         
         public MedicalRecord GetMedicalRecordById(int medicalRecordId)
         {

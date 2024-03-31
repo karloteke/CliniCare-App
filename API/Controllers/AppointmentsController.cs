@@ -22,7 +22,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllAppointments")] 
-    public ActionResult<IEnumerable<Patient>> GetAllAppointments([FromQuery] AppointmentQueryParameters appointmentQueryParameters, bool orderByUrgentAsc)
+    public ActionResult<IEnumerable<Appointment>> GetAllAppointments([FromQuery] AppointmentQueryParameters appointmentQueryParameters, bool orderByUrgentAsc)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 

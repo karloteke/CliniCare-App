@@ -67,11 +67,6 @@ namespace CliniCareApp.Data
 
         public void UpdateAppointment(Appointment appointment)
         {
-            // _context.Patients.Update(patient);
-            // _context.SaveChanges();
-              // En EF Core, si el objeto ya está siendo rastreado, actualizar sus propiedades
-            // y llamar a SaveChanges() es suficiente para actualizarlo en la base de datos.
-            // Asegúrate de que el estado del objeto sea 'Modified' si es necesario.
             _context.Entry(appointment).State = EntityState.Modified;
         }
 
