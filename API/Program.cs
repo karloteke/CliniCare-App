@@ -89,6 +89,9 @@ builder.Services.AddSwaggerGen(c =>
 //Inyecto MedicalRecordEF
  builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordEFRepository>();
 
+ //Inyecto UserEF
+ builder.Services.AddScoped<IUserRepository, UserEFRepository>();
+
 
 
 // Obteniendo la cadena de conexión desde appsettings.json

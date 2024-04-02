@@ -8,6 +8,7 @@ namespace CliniCareApp.Business
         User CreateUser(string userName, string password, string email);
         User Authenticate(string userName, string password);
         List<User> GetAllUsers(); 
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters);
         User? GetUserByUserName(string userName);
         User? GetUserByEmail(string userEmail);
         User? GetUserById(int userId);

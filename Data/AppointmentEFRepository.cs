@@ -38,6 +38,7 @@ namespace CliniCareApp.Data
             var result = query.ToList();
             return result;
         }
+
         
         public List<Appointment> GetAllAppointments()
         {

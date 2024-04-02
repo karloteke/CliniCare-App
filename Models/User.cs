@@ -7,19 +7,20 @@ namespace CliniCareApp.Models
         public string? Password { get; set; }
         public string? Email { get; set; }
 
+
         private static int NextUserId = 1;
 
         // Constructor sin parámetros requerido para la deserialización
         public User() 
         { 
-             Id = NextUserId++;
+            //  Id = NextUserId++;
         }
 
 
     
         public User(string? userName, string? password, string? email)
         { 
-            Id = NextUserId++;
+            // Id = NextUserId++;
             UserName = userName;
             Password = password;
             Email = email;
@@ -27,7 +28,7 @@ namespace CliniCareApp.Models
 
          public static void UpdateNextUserId(int nextId)
         {
-            NextUserId = nextId;
+            // NextUserId = nextId;
         }
     }
 }

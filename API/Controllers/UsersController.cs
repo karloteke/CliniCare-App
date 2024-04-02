@@ -19,25 +19,50 @@ public class UsersController : ControllerBase
         _userService = UserService;
     }
         
+    // [HttpGet(Name = "GetAllUsers")] 
+    // public ActionResult<IEnumerable<User>> SearchUsers(string? userName)
+    // {
+    //     var query = _userService.GetAllUsers().AsQueryable();
+
+    //     if (!string.IsNullOrWhiteSpace(userName))
+    //     {
+    //         query = query.Where(u => u.UserName.Contains(userName));
+    //     }
+
+    //     var users = query.ToList();
+
+    //     if (users.Count == 0)
+    //     {
+    //         return NotFound();
+    //     }
+
+    //     return users;
+    // }
+
     [HttpGet(Name = "GetAllUsers")] 
-    public ActionResult<IEnumerable<User>> SearchUsers(string? userName)
+    public ActionResult<IEnumerable<User>> GetAllUsers([FromQuery] UserQueryParameters userQueryParameters)
     {
-        var query = _userService.GetAllUsers().AsQueryable();
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        if (!string.IsNullOrWhiteSpace(userName))
+        try 
         {
-            query = query.Where(u => u.UserName.Contains(userName));
-        }
-
-        var users = query.ToList();
-
-        if (users.Count == 0)
+            var patients = _userService.GetAllUsers(userQueryParameters);
+            
+                if (patients == null || !patients.Any())
+                    {
+                        return NotFound("No hay pacientes disponibles.");
+                    }
+                    
+            return Ok(patients);
+        }     
+        catch (Exception ex)
         {
-            return NotFound();
+            return BadRequest(ex);
         }
-
-        return users;
     }
+
+
+
 
     [HttpPost]
     public IActionResult NewUser([FromBody] UserCreateDTO userDto)
@@ -58,7 +83,7 @@ public class UsersController : ControllerBase
             }
 
             var user = _userService.CreateUser(userDto.UserName, userDto.Password, userDto.Email);
-            return CreatedAtAction(nameof(SearchUsers), new { userId = user.Id }, userDto);
+            return CreatedAtAction(nameof(GetAllUsers), new { userId = user.Id }, userDto);
         }     
         catch (Exception ex)
         {

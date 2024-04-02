@@ -33,6 +33,7 @@ namespace CliniCareApp.Data
             }
         }
 
+
         // public List<AppointmentPatient> GetAppointmentPatients()
         // {
         //     return _appointmentPatients;
