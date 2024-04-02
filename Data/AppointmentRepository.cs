@@ -51,12 +51,13 @@ namespace CliniCareApp.Data
 
             if (orderByUrgentAsc) 
             {
-                query = query.OrderByDescending(a => a.IsUrgent);
+                query = query.OrderBy(a => a.IsUrgent);
             }
 
             var result = query.ToList();
             return result;
         }
+
 
         public List<Appointment> GetAllAppointments()
         {

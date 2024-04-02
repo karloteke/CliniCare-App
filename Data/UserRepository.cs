@@ -35,6 +35,19 @@ namespace CliniCareApp.Data
             return _users;
         }
 
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters) {
+        var query = _users.AsQueryable();
+
+        
+        if (!string.IsNullOrWhiteSpace(userQueryParameters.UserName)) 
+        {
+            query = query.Where(u => u.UserName.Contains(userQueryParameters.UserName));
+        }
+
+        var result = query.ToList();
+        return result;
+    }
+
         public User? GetUserByUserName(string userName)
         {
             return _users.FirstOrDefault(u => u.UserName == userName); 

@@ -26,6 +26,12 @@ namespace CliniCareApp.Business
             return _repository.GetUsers();
         }  
 
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters)
+        {
+            return _repository.GetAllUsers(userQueryParameters);
+        }
+
+
         public User? GetUserByUserName(string userName)
         {
             return _repository.GetUserByUserName(userName);

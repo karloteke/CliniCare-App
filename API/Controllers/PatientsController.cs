@@ -7,7 +7,7 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-// [Authorize]
+
 public class PatientsController : ControllerBase
 {
     private readonly ILogger<PatientsController> _logger;
@@ -21,7 +21,7 @@ public class PatientsController : ControllerBase
         _privateAreaAccess = privateAreaAccess;
     }
 
-
+    [Authorize]
     [HttpGet(Name = "GetAllPatients")] 
     public ActionResult<IEnumerable<Patient>> GetAllPatients([FromQuery] PatientQueryParameters patientQueryParameters, bool orderByNameAsc)
     {
@@ -78,6 +78,8 @@ public class PatientsController : ControllerBase
         }
     }
 
+
+    [Authorize]
     //PUT: /Patients/{id}
     [HttpPut("{patientId}")]
     public IActionResult UpdatePatient(int patientId, [FromBody] PatientUpdateDTO patientDto)
@@ -95,6 +97,7 @@ public class PatientsController : ControllerBase
         }
     }
 
+    [Authorize]
     // DELETE: /Patient/{PatientId}
     [HttpDelete("{patientId}")]
     public IActionResult DeletePatient(int patientId)

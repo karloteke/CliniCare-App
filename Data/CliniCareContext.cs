@@ -33,7 +33,7 @@ namespace CliniCareApp.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
         // public DbSet<AppointmentPatient> AppointmentPatients { get; set; }
-        // public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }
        
     }
 }

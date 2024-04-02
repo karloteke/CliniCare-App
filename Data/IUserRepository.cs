@@ -7,6 +7,7 @@ namespace CliniCareApp.Data
         void AddUser(User user);
         User? GetUserByUserName(string userName);
         List<User> GetUsers();
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters);
         User? GetUserByEmail(string Email);
         User? GetUserById (int? UserId);
         void UpdateUser(User user);
