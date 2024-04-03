@@ -1,3 +1,4 @@
+using System.Globalization;
 using CliniCareApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,8 +34,24 @@ namespace CliniCareApp.Data
             {
                 query = query.OrderByDescending(a => a.IsUrgent);
             }
-                
 
+            var result = query.ToList();
+            return result;
+        }
+
+         public IEnumerable<Appointment> GetAppointmentsForPatient(AppointmentPatientQueryParameters? appointmentPatientQueryParameters, bool orderByDateAsc) {
+            var query = _context.Appointments.AsQueryable();
+
+        
+            if (!string.IsNullOrWhiteSpace(appointmentPatientQueryParameters.PatientDni)) {
+                query = query.Where(p => p.PatientDni.Contains(appointmentPatientQueryParameters.PatientDni));
+            }
+
+            if (orderByDateAsc)
+            {
+                 query = query.OrderBy(a => a.Date);
+            }
+  
             var result = query.ToList();
             return result;
         }

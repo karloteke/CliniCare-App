@@ -21,7 +21,9 @@ public class AppointmentsController : ControllerBase
         _patientService = patientService;
     }
 
-    [HttpGet(Name = "GetAllAppointments")] 
+    // [Authorize]
+    //Zona privada donde la Clínica puede ver todas las citas y filtrar por varios campos.
+    [HttpGet("PrivateZone", Name = "GetAllAppointments")] 
     public ActionResult<IEnumerable<Appointment>> GetAllAppointments([FromQuery] AppointmentQueryParameters appointmentQueryParameters, bool orderByUrgentAsc)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
@@ -29,6 +31,30 @@ public class AppointmentsController : ControllerBase
         try 
         {
             var appointments = _appointmentService.GetAllAppointments(appointmentQueryParameters, orderByUrgentAsc);
+            
+                if (appointments == null || !appointments.Any())
+                    {
+                        return NotFound("No hay citas disponibles.");
+                    }
+                    
+            return Ok(appointments);
+        }     
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+    }
+
+
+    // Zona pública donde los pacientes pueden ver con el DNI sus citas 
+    [HttpGet("PublicZone", Name = "GetAppointmentsForPatient")] 
+    public ActionResult<IEnumerable<Appointment>> GetAppointmentsForPatient([FromQuery] AppointmentPatientQueryParameters appointmentPatientQueryParameters, bool orderByDateAsc)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try 
+        {
+            var appointments = _appointmentService.GetAppointmentsForPatient(appointmentPatientQueryParameters, orderByDateAsc);
             
                 if (appointments == null || !appointments.Any())
                     {
@@ -59,7 +85,9 @@ public class AppointmentsController : ControllerBase
     //     }
     // }
 
-    [HttpPost]
+
+
+    [HttpPost("PublicZone")]
     public IActionResult NewAppointment([FromBody] AppointmentCreateDTO appointmentDto, [FromQuery] string patientDni)
     {
         try 
@@ -85,6 +113,7 @@ public class AppointmentsController : ControllerBase
         }
     }
 
+    [Authorize]
     //PUT: /Appointments/{id}
     [HttpPut("{appointmentId}")]
     public IActionResult UpdateAppointment(int appointmentId, [FromBody] AppointmentUpdateDTO appointmentDto)
@@ -102,6 +131,7 @@ public class AppointmentsController : ControllerBase
         }
     }
 
+    [Authorize]
     // DELETE: /Appointment/{AppointmentId}
     [HttpDelete("{appointmentId}")]
     public IActionResult DeleteAppointment(int appointmentId)

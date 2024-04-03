@@ -7,6 +7,7 @@ namespace CliniCareApp.Data
         void AddAppointment(Appointment appointment);
         List<Appointment> GetAllAppointments();
         public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc);
+         public IEnumerable<Appointment> GetAppointmentsForPatient(AppointmentPatientQueryParameters? appointmentPatientQueryParameters, bool orderByUrgentAsc);
         Patient? GetPatientById(int? patientId);
         Patient? GetPatientByDni(string? patientDni);
         Appointment GetAppointmentById(int appointmentId);
