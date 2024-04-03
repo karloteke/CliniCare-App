@@ -41,6 +41,23 @@ namespace CliniCareApp.Business
             return _repository.GetAllAppointments(appointmentQueryParameters, orderByUrgentAsc);
         }
 
+        public IEnumerable<Appointment> GetAppointmentsForPatient(AppointmentPatientQueryParameters? appointmentPatientQueryParameters, bool orderByDateAsc)
+        {
+            return _repository.GetAppointmentsForPatient(appointmentPatientQueryParameters, orderByDateAsc);
+        }
+
+        public Patient? GetPatientByDni(string patientDni)
+        {
+            var patient = _repository.GetPatientByDni(patientDni);
+
+            if(patient == null)
+            {
+                throw new KeyNotFoundException($"El paciente con Id {patientDni} no existe.");
+            }
+            return patient;
+        }
+
+
         public Appointment GetAppointmentById(int appointmentId)
         {
             var appointment = _repository.GetAppointmentById(appointmentId);
