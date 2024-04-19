@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using CliniCareApp.Business;
 using CliniCareApp.Models;
-using Microsoft.AspNetCore.Authorization; 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace CliniCareApp.API.Controllers;
 
@@ -21,7 +22,7 @@ public class PatientsController : ControllerBase
         _privateAreaAccess = privateAreaAccess;
     }
 
-    [Authorize]
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet(Name = "GetAllPatients")] 
     public ActionResult<IEnumerable<Patient>> GetAllPatients([FromQuery] PatientQueryParameters patientQueryParameters, bool orderByNameAsc)
     {
@@ -45,27 +46,36 @@ public class PatientsController : ControllerBase
     }
       
 
-    // GET: /Patients/{id}
-    // [HttpGet("{patientId}", Name = "GetPatientById")]
-    // public IActionResult GetPatient(int patientId)
-    // {
-    //     try
-    //     {
-    //         var patient = _patientService.GetPatientById(patientId);
-    //         return Ok(patient);
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet("{patientId}", Name = "GetPatientById")]
+    public IActionResult GetPatient(int patientId)
+    {
+        try
+        {
+            var patient = _patientService.GetPatientById(patientId);
+            return Ok(patient);
            
-    //     }
-    //     catch (KeyNotFoundException)
-    //     {
-    //         return NotFound($"No existe el paciente con el Id {patientId}");
-    //     }
-    // }
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"No existe el paciente con el Id {patientId}");
+        }
+    }
 
+    [Authorize]
     [HttpPost]
     public IActionResult NewPatient([FromBody] PatientCreateDTO patientDto)
     {
         // Verificar si el modelo recibido es válido
         if (!ModelState.IsValid){ return BadRequest(ModelState);}
+
+        if (string.IsNullOrEmpty(patientDto.Name) || string.IsNullOrEmpty(patientDto.LastName) ||
+        string.IsNullOrEmpty(patientDto.Address) || string.IsNullOrEmpty(patientDto.Dni) ||
+        string.IsNullOrEmpty(patientDto.Phone))
+
+        {
+            return BadRequest("Los campos no pueden estar vacíos.");
+        }
 
         try 
         {
@@ -79,8 +89,7 @@ public class PatientsController : ControllerBase
     }
 
 
-    [Authorize]
-    //PUT: /Patients/{id}
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{patientId}")]
     public IActionResult UpdatePatient(int patientId, [FromBody] PatientUpdateDTO patientDto)
     {
@@ -97,8 +106,8 @@ public class PatientsController : ControllerBase
         }
     }
 
-    [Authorize]
-    // DELETE: /Patient/{PatientId}
+    
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{patientId}")]
     public IActionResult DeletePatient(int patientId)
     {

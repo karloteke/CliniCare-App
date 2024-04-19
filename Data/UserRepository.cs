@@ -70,7 +70,7 @@ namespace CliniCareApp.Data
 
         public void DeleteUser(int userId)
         {
-            if (userId != null)
+            if (userId != 0)
             {
                 var user = _users.FirstOrDefault(u => u.Id == userId);
                 if (user != null)
@@ -103,5 +103,6 @@ namespace CliniCareApp.Data
                 }  
             }
         }
+
     }
 }

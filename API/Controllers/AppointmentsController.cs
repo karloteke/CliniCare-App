@@ -21,9 +21,8 @@ public class AppointmentsController : ControllerBase
         _patientService = patientService;
     }
 
-    // [Authorize]
-    //Zona privada donde la Clínica puede ver todas las citas y filtrar por varios campos.
-    [HttpGet("PrivateZone", Name = "GetAllAppointments")] 
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet(Name = "GetAllAppointments")] 
     public ActionResult<IEnumerable<Appointment>> GetAllAppointments([FromQuery] AppointmentQueryParameters appointmentQueryParameters, bool orderByUrgentAsc)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
@@ -46,7 +45,7 @@ public class AppointmentsController : ControllerBase
     }
 
 
-    // Zona pública donde los pacientes pueden ver con el DNI sus citas 
+    [Authorize]
     [HttpGet("PublicZone", Name = "GetAppointmentsForPatient")] 
     public ActionResult<IEnumerable<Appointment>> GetAppointmentsForPatient([FromQuery] AppointmentPatientQueryParameters appointmentPatientQueryParameters, bool orderByDateAsc)
     {
@@ -70,24 +69,24 @@ public class AppointmentsController : ControllerBase
     }
 
 
-    // // GET: /Appointments/{id}
-    // [HttpGet("{appointmentId}", Name = " GetAppointmentById")]
-    // public IActionResult  GetAppointmentById(int appointmentId)
-    // {
-    //     try
-    //     {
-    //         var appointment = _appointmentService. GetAppointmentById(appointmentId);
-    //         return Ok(appointment);     
-    //     }
-    //     catch (KeyNotFoundException)
-    //     {
-    //         return NotFound($"No existe la cita para el paciente con el Id {appointmentId}");
-    //     }
-    // }
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet("{appointmentId}", Name = " GetAppointmentById")]
+    public IActionResult  GetAppointmentById(int appointmentId)
+    {
+        try
+        {
+            var appointment = _appointmentService. GetAppointmentById(appointmentId);
+            return Ok(appointment);     
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"No existe la cita para el paciente con el Id {appointmentId}");
+        }
+    }
 
 
-
-    [HttpPost("PublicZone")]
+    [Authorize]
+    [HttpPost]
     public IActionResult NewAppointment([FromBody] AppointmentCreateDTO appointmentDto, [FromQuery] string patientDni)
     {
         try 
@@ -113,8 +112,7 @@ public class AppointmentsController : ControllerBase
         }
     }
 
-    [Authorize]
-    //PUT: /Appointments/{id}
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{appointmentId}")]
     public IActionResult UpdateAppointment(int appointmentId, [FromBody] AppointmentUpdateDTO appointmentDto)
     {
@@ -131,8 +129,7 @@ public class AppointmentsController : ControllerBase
         }
     }
 
-    [Authorize]
-    // DELETE: /Appointment/{AppointmentId}
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{appointmentId}")]
     public IActionResult DeleteAppointment(int appointmentId)
     {

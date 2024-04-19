@@ -60,41 +60,6 @@ namespace CliniCareApp.Data.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("CliniCareApp.Models.AppointmentPatient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("AppointmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Area")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Day")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsUrgent")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppointmentId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("AppointmentPatients");
-                });
-
             modelBuilder.Entity("CliniCareApp.Models.MedicalRecord", b =>
                 {
                     b.Property<int>("Id")
@@ -159,6 +124,26 @@ namespace CliniCareApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "C/Dato,23",
+                            Dni = "73000461W",
+                            LastName = "Cetina",
+                            Name = "Carlota",
+                            Phone = "654465114"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "C/Olvido,33",
+                            Dni = "12345678J",
+                            LastName = "Gimenez",
+                            Name = "Jesus",
+                            Phone = "654465113"
+                        });
                 });
 
             modelBuilder.Entity("CliniCareApp.Models.User", b =>
@@ -175,27 +160,50 @@ namespace CliniCareApp.Data.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
 
-            modelBuilder.Entity("CliniCareApp.Models.AppointmentPatient", b =>
-                {
-                    b.HasOne("CliniCareApp.Models.Appointment", "Appointment")
-                        .WithMany()
-                        .HasForeignKey("AppointmentId");
-
-                    b.HasOne("CliniCareApp.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId");
-
-                    b.Navigation("Appointment");
-
-                    b.Navigation("Patient");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "carlota@clinicare.com",
+                            Password = "Carlota36",
+                            Role = "admin",
+                            UserName = "Carlota"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "jesus@clinicare.com",
+                            Password = "Jesus30",
+                            Role = "admin",
+                            UserName = "Jesus"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "paola@gmail.com",
+                            Password = "Paola30",
+                            Role = "user",
+                            UserName = "Paola"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "nerea@gmail.com",
+                            Password = "Nerea30",
+                            Role = "user",
+                            UserName = "Nerea"
+                        });
                 });
 #pragma warning restore 612, 618
         }

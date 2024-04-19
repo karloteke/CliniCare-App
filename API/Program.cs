@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using CliniCareApp.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -94,28 +93,33 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-// Obteniendo la cadena de conexión desde appsettings.json
+// Cadena de conexión BBDD
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+// var connectionString = builder.Configuration.GetConnectionString("ServerDB");
 
 builder.Services.AddDbContext<CliniCareContext>(options =>
     options.UseSqlServer(connectionString)
 );
 
+// Configuración de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowedOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
  
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-var env = app.Environment;
-
-
-if (env.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CliniCare v1"));
-}
-
+app.UseDeveloperExceptionPage();
+app.UseCors("MyAllowedOrigins");
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
