@@ -22,6 +22,7 @@ public class MedicalRecordsController : ControllerBase
         _patientService = patientService;
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet(Name = "GetAllMedicalRecords")] 
     public ActionResult<IEnumerable<MedicalRecord>> GetAllMedicalRecords([FromQuery] MedicalRecordQueryParameters medicalRecordQueryParameters)
     {
@@ -45,22 +46,22 @@ public class MedicalRecordsController : ControllerBase
     }
 
 
-    // GET: /MedicalRecords/{id}
-    // [HttpGet("{medicalRecordId}", Name = " GetMedicalRecordById")]
-    // public IActionResult  GetMedicalRecordById(int medicalRecordId)
-    // {
-    //     try
-    //     {
-    //         var medicalRecord = _medicalRecordService. GetMedicalRecordById(medicalRecordId);
-    //         return Ok(medicalRecord);     
-    //     }
-    //     catch (KeyNotFoundException)
-    //     {
-    //         return NotFound($"No existe historial médico para el paciente con el Id: {medicalRecordId}");
-    //     }
-    // }
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet("{medicalRecordId}", Name = " GetMedicalRecordById")]
+    public IActionResult  GetMedicalRecordById(int medicalRecordId)
+    {
+        try
+        {
+            var medicalRecord = _medicalRecordService. GetMedicalRecordById(medicalRecordId);
+            return Ok(medicalRecord);     
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"No existe historial médico para el paciente con el Id: {medicalRecordId}");
+        }
+    }
 
-
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public IActionResult  NewMedicalRecord([FromBody] MedicalRecordCreateDTO medicalRecordDto, [FromQuery] string patientDni)
     {
@@ -72,12 +73,18 @@ public class MedicalRecordsController : ControllerBase
                 return BadRequest(ModelState);
             }
 
+            if (string.IsNullOrEmpty(medicalRecordDto.DoctorName) || string.IsNullOrEmpty(medicalRecordDto.Treatment)||
+            string.IsNullOrEmpty(medicalRecordDto.Notes))
+
+            {
+                return BadRequest("Los campos no pueden estar vacíos.");
+            }
+
             var patient = _patientService.GetPatientByDni(patientDni);
             if(patient == null)
             {
                 return NotFound ("No existe ese DNI");
             }
-
 
             _medicalRecordService.CreateMedicalRecord(patientDni, medicalRecordDto.CreatedAt, medicalRecordDto.DoctorName, medicalRecordDto.Treatment, medicalRecordDto.TreatmentCost,  medicalRecordDto.Notes);
             return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");
@@ -89,7 +96,7 @@ public class MedicalRecordsController : ControllerBase
     }
 
 
-    //PUT: /MedicalRecords/{id}
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{medicalRecordId}")]
     public IActionResult UpdateMedicalRecord(int medicalRecordId, [FromBody] MedicalRecordUpdateDTO medicalRecordDto)
     {
@@ -106,7 +113,7 @@ public class MedicalRecordsController : ControllerBase
         }
     }
 
-    // DELETE: /MedicalRecord/{MedicalRecordId}
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{medicalRecordId}")]
     public IActionResult DeleteMedicalRecord(int medicalRecordId)
     {

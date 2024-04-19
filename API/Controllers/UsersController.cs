@@ -38,7 +38,7 @@ public class UsersController : ControllerBase
 
     //     return users;
     // }
-
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet(Name = "GetAllUsers")] 
     public ActionResult<IEnumerable<User>> GetAllUsers([FromQuery] UserQueryParameters userQueryParameters)
     {
@@ -62,8 +62,6 @@ public class UsersController : ControllerBase
     }
 
 
-
-
     [HttpPost]
     public IActionResult NewUser([FromBody] UserCreateDTO userDto)
     {
@@ -75,23 +73,32 @@ public class UsersController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var emailExist = _userService.GetUserByUserName(userDto.UserName);
+            if (string.IsNullOrEmpty(userDto.UserName) || string.IsNullOrEmpty(userDto.Password) || string.IsNullOrEmpty(userDto.Email))
+            {
+                return BadRequest("Los campos no pueden estar vacíos.");
+            }
 
-            if(emailExist != null)
+            var userExist = _userService.GetUserByUserName(userDto.UserName);
+            if (userExist != null)
             {
                 return BadRequest("El usuario ya está registrado.");
             }
 
             var user = _userService.CreateUser(userDto.UserName, userDto.Password, userDto.Email);
+
+            // Retornar la acción exitosa junto con el nuevo usuario creado
             return CreatedAtAction(nameof(GetAllUsers), new { userId = user.Id }, userDto);
         }     
         catch (Exception ex)
         {
+            // Si ocurre un error, retornar un BadRequest con el mensaje de error
             return BadRequest(ex.Message);
         }
     }
 
+    
     //PUT: /Users/{id}
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{userId}")]
     public IActionResult UpdateUser(int userId, [FromBody] UserUpdateDTO userDto)
     {
@@ -109,6 +116,7 @@ public class UsersController : ControllerBase
     }
 
     // DELETE: /User/{Userid}
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{userId}")]
     public IActionResult DeleteUser(int userId)
     {
