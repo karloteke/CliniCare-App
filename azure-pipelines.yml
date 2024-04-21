@@ -21,7 +21,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--configuraton ${BuildConfiguration} --out ${Build.ArtifactStagingDirectory}'
+    arguments: '--configuraton ${buildConfiguration} --out ${Build.ArtifactStagingDirectory}'
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '${Build.ArtifactStagingDirectory}'
