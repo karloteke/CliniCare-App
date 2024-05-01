@@ -56,7 +56,7 @@ namespace CliniCareApp.API.Controllers
                     new Claim(ClaimTypes.Role, user.Role)
                  
                 }),
-                Expires = DateTime.UtcNow.AddDays(1), // Token expira in 1 día
+                Expires = DateTime.UtcNow.AddDays(30), // Token expira en 30 días
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
