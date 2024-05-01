@@ -62,7 +62,7 @@ public class PatientsController : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "admin, user")]
     [HttpPost]
     public IActionResult NewPatient([FromBody] PatientCreateDTO patientDto)
     {

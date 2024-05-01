@@ -53,13 +53,10 @@ namespace CliniCareApp.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    // new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, user.Role)
-                    // new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                    // new Claim(ClaimTypes.Role, user.Role)
+                 
                 }),
                 Expires = DateTime.UtcNow.AddDays(1), // Token expira in 1 día
-                // Audience = _configuration["JwtSettings:ValidAudiences"], 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

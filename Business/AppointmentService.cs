@@ -17,19 +17,44 @@ namespace CliniCareApp.Business
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
         }
 
+        // public void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
+        // {
+        //     var patient = _repository.GetPatientByDni(patientDni);
+
+        //     if(patient != null)
+        //     {
+        //         var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
+        //         var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patient.Dni);
+
+        //         _repository.AddAppointment(appointment);
+        //         _repository.SaveChanges();
+        //     }
+        // }
+
         public void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
         {
+            if (string.IsNullOrEmpty(patientDni))
+            {
+                throw new ArgumentNullException(nameof(patientDni), "El número de DNI del paciente no puede ser nulo o vacío.");
+            }
+
             var patient = _repository.GetPatientByDni(patientDni);
 
-            if(patient != null)
+            if (patient != null)
             {
                 var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
-                var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patient.Dni);
+                var patientDniNonNull = patient.Dni ?? throw new InvalidOperationException("El número de DNI del paciente no puede ser nulo.");
+                var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patientDniNonNull);
 
                 _repository.AddAppointment(appointment);
                 _repository.SaveChanges();
             }
+            else
+            {
+                throw new InvalidOperationException("No se pudo encontrar un paciente con el DNI proporcionado.");
+            }
         }
+
 
         public List<Appointment> GetAllAppointments()
         {

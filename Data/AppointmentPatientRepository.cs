@@ -34,10 +34,6 @@ namespace CliniCareApp.Data
         }
 
 
-        // public List<AppointmentPatient> GetAppointmentPatients()
-        // {
-        //     return _appointmentPatients;
-        // }
         public List<AppointmentPatient> GetAppointmentPatientsByDNI(string dni)
         {
             return _appointmentPatients
@@ -45,7 +41,7 @@ namespace CliniCareApp.Data
                 .ToList();
         }
 
-          public Patient? GetPatientByDni(string? dni)
+        public Patient? GetPatientByDni(string? dni)
         {
             return _patients.FirstOrDefault(p => p.Dni == dni);
         }
@@ -55,10 +51,6 @@ namespace CliniCareApp.Data
             return _patients;
         }
 
-        // public List<AppointmentPatient> GetAllAppointmentPatients()
-        // {
-        //     return _appointmentPatients;
-        // }
 
         public Patient? GetPatientById(int? patientId)
         {

@@ -45,7 +45,7 @@ public class AppointmentsController : ControllerBase
     }
 
 
-    [Authorize]
+    [Authorize(Roles = "admin, user")]
     [HttpGet("PublicZone", Name = "GetAppointmentsForPatient")] 
     public ActionResult<IEnumerable<Appointment>> GetAppointmentsForPatient([FromQuery] AppointmentPatientQueryParameters appointmentPatientQueryParameters, bool orderByDateAsc)
     {
@@ -85,7 +85,7 @@ public class AppointmentsController : ControllerBase
     }
 
 
-    [Authorize]
+    [Authorize(Roles = "admin, user")]
     [HttpPost]
     public IActionResult NewAppointment([FromBody] AppointmentCreateDTO appointmentDto, [FromQuery] string patientDni)
     {
@@ -104,7 +104,8 @@ public class AppointmentsController : ControllerBase
             }
 
             _appointmentService.CreateAppointment(patientDni, appointmentDto.CreatedAt, appointmentDto.Area, appointmentDto.MedicalName, appointmentDto.Date, appointmentDto.Time, appointmentDto.IsUrgent);
-            return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");
+            return Ok(new { message = $"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}" });
+            // return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");
         }     
         catch (Exception ex)
         {

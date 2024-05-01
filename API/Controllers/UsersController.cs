@@ -7,7 +7,6 @@ namespace CliniCareApp.API.Controllers;
 
 [ApiController]
 [Route("[controller]")] 
-// [Authorize]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
@@ -19,25 +18,6 @@ public class UsersController : ControllerBase
         _userService = UserService;
     }
         
-    // [HttpGet(Name = "GetAllUsers")] 
-    // public ActionResult<IEnumerable<User>> SearchUsers(string? userName)
-    // {
-    //     var query = _userService.GetAllUsers().AsQueryable();
-
-    //     if (!string.IsNullOrWhiteSpace(userName))
-    //     {
-    //         query = query.Where(u => u.UserName.Contains(userName));
-    //     }
-
-    //     var users = query.ToList();
-
-    //     if (users.Count == 0)
-    //     {
-    //         return NotFound();
-    //     }
-
-    //     return users;
-    // }
     [Authorize(Roles = Roles.Admin)]
     [HttpGet(Name = "GetAllUsers")] 
     public ActionResult<IEnumerable<User>> GetAllUsers([FromQuery] UserQueryParameters userQueryParameters)
@@ -61,7 +41,7 @@ public class UsersController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public IActionResult NewUser([FromBody] UserCreateDTO userDto)
     {

@@ -94,8 +94,8 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // Cadena de conexión BBDD
-// var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
-var connectionString = builder.Configuration.GetConnectionString("ServerDB");
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+// var connectionString = builder.Configuration.GetConnectionString("ServerDB");
 
 builder.Services.AddDbContext<CliniCareContext>(options =>
     options.UseSqlServer(connectionString)
@@ -117,12 +117,12 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 //Añade migraciones automáticamente
-using (var scope = app.Services.CreateScope())
-{
-  var services = scope.ServiceProvider;
-  var context = services.GetRequiredService<CliniCareContext>();
-  context.Database.Migrate();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//   var services = scope.ServiceProvider;
+//   var context = services.GetRequiredService<CliniCareContext>();
+//   context.Database.Migrate();
+// }
 
 app.UseDeveloperExceptionPage();
 app.UseCors("MyAllowedOrigins");
