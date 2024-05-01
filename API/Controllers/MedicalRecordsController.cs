@@ -87,7 +87,7 @@ public class MedicalRecordsController : ControllerBase
             }
 
             _medicalRecordService.CreateMedicalRecord(patientDni, medicalRecordDto.CreatedAt, medicalRecordDto.DoctorName, medicalRecordDto.Treatment, medicalRecordDto.TreatmentCost,  medicalRecordDto.Notes);
-            return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");
+            return Ok($"Se ha creado correctamente el historial médico para el paciente con DNI: {patientDni}");
         }     
         catch (Exception ex)
         {
@@ -120,7 +120,7 @@ public class MedicalRecordsController : ControllerBase
         try
         {
             _medicalRecordService.DeleteMedicalRecord(medicalRecordId);
-            return NoContent();
+            return Ok($"El historial médico con Id: {medicalRecordId} ha sido borrado correctamente");
         }
         catch (KeyNotFoundException ex)
         {

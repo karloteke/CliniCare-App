@@ -114,7 +114,7 @@ public class PatientsController : ControllerBase
         try
         {
             _patientService.DeletePatient(patientId);
-            return NoContent();
+            return Ok($"El paciente con Id: {patientId} ha sido borrado correctamente");
         }
         catch (KeyNotFoundException ex)
         {

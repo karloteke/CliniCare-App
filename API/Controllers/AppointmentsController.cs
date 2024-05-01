@@ -105,7 +105,6 @@ public class AppointmentsController : ControllerBase
 
             _appointmentService.CreateAppointment(patientDni, appointmentDto.CreatedAt, appointmentDto.Area, appointmentDto.MedicalName, appointmentDto.Date, appointmentDto.Time, appointmentDto.IsUrgent);
             return Ok(new { message = $"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}" });
-            // return Ok($"Se ha creado correctamente la cita para el paciente con DNI: {patientDni}");
         }     
         catch (Exception ex)
         {
@@ -137,7 +136,7 @@ public class AppointmentsController : ControllerBase
         try
         {
             _appointmentService.DeleteAppointment(appointmentId);
-            return NoContent();
+             return Ok($"La cita con Id: {appointmentId} ha sido borrada correctamente");
         }
         catch (KeyNotFoundException ex)
         {
