@@ -41,7 +41,7 @@ public class UsersController : ControllerBase
         }
     }
 
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = "admin, user")]
     [HttpPost]
     public IActionResult NewUser([FromBody] UserCreateDTO userDto)
     {
