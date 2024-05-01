@@ -82,7 +82,7 @@ builder.Services.AddSwaggerGen(c =>
  //Inyecto PatientEF
  builder.Services.AddScoped<IPatientRepository, PatientEFRepository>();
 
-  //Inyecto AppointmentEF
+//Inyecto AppointmentEF
  builder.Services.AddScoped<IAppointmentRepository, AppointmentEFRepository>();
 
 //Inyecto MedicalRecordEF
@@ -94,7 +94,8 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // Cadena de conexión BBDD
-var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+// var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+var connectionString = builder.Configuration.GetConnectionString("ServerAzure");
 // var connectionString = builder.Configuration.GetConnectionString("ServerDB");
 
 builder.Services.AddDbContext<CliniCareContext>(options =>
