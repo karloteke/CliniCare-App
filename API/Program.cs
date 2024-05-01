@@ -118,12 +118,12 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 //Añade migraciones automáticamente
-// using (var scope = app.Services.CreateScope())
-// {
-//   var services = scope.ServiceProvider;
-//   var context = services.GetRequiredService<CliniCareContext>();
-//   context.Database.Migrate();
-// }
+using (var scope = app.Services.CreateScope())
+{
+  var services = scope.ServiceProvider;
+  var context = services.GetRequiredService<CliniCareContext>();
+  context.Database.Migrate();
+}
 
 app.UseDeveloperExceptionPage();
 app.UseCors("MyAllowedOrigins");
