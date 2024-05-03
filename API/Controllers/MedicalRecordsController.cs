@@ -87,7 +87,7 @@ public class MedicalRecordsController : ControllerBase
             }
 
             _medicalRecordService.CreateMedicalRecord(patientDni, medicalRecordDto.CreatedAt, medicalRecordDto.DoctorName, medicalRecordDto.Treatment, medicalRecordDto.TreatmentCost,  medicalRecordDto.Notes);
-            return Ok($"Se ha creado correctamente el historial médico para el paciente con DNI: {patientDni}");
+             return Ok(new { message = $"Se ha creado correctamente el historial médico para el paciente con DNI: {patientDni}" });
         }     
         catch (Exception ex)
         {
