@@ -63,7 +63,6 @@ namespace CliniCareApp.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
     }
 }
 
