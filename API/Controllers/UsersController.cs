@@ -30,7 +30,7 @@ public class UsersController : ControllerBase
             
                 if (patients == null || !patients.Any())
                     {
-                        return NotFound("No hay pacientes disponibles.");
+                        return NotFound("No hay usuarios disponibles.");
                     }
                     
             return Ok(patients);

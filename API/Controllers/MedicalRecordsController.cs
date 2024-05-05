@@ -34,7 +34,7 @@ public class MedicalRecordsController : ControllerBase
             
                 if (medicalRecords == null || !medicalRecords.Any())
                     {
-                        return NotFound("No hay citas disponibles.");
+                        return NotFound("No hay ningun historial médico disponible.");
                     }
                     
             return Ok(medicalRecords);
