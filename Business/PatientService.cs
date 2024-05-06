@@ -12,16 +12,32 @@ namespace CliniCareApp.Business
         {
             _repository = repository;
         }
-        public void CreatePatient(string name, string lastName, string address, string dni, string phone)
-        {
-            var newPatient = new Patient(name, lastName, address, dni, phone);
-            _repository.AddPatient(newPatient);
-        }    
 
-        public List<Patient> ViewPatients()
+        public Patient CreatePatient(string name, string lastName, string address, string dni, string phone)
+        {
+            var existPatient = _repository.GetPatientByDni(dni);
+            if(existPatient != null)
+            {
+
+                throw new Exception("Ya existe un paciente con el mismo DNI.");
+            }
+
+            var patient = new Patient(name, lastName, address, dni, phone);
+            _repository.AddPatient(patient);
+            _repository.SaveChanges();
+            return patient;
+        }
+
+        public List<Patient> GetAllPatients()
         {
             return _repository.GetPatients();
         }  
+
+        public IEnumerable<Patient> GetAllPatients(PatientQueryParameters? patientQueryParameters, bool orderByNameAsc)
+        {
+            return _repository.GetAllPatients(patientQueryParameters, orderByNameAsc);
+        }
+
     
         public Patient? SearchByDni(string dni)
         {
@@ -30,12 +46,62 @@ namespace CliniCareApp.Business
 
         public Patient? GetPatientById(int patientId)
         {
-            return _repository.GetPatientById(patientId);
+            var patient = _repository.GetPatientById(patientId);
+
+            if(patient == null)
+            {
+                throw new KeyNotFoundException($"El paciente con Id {patientId} no existe.");
+            }
+            return patient;
         }
 
-          public Patient? GetPatientByDni(string dni)
+        public Patient? GetPatientByDni(string dni)
         {
             return _repository.GetPatientByDni(dni);
         }
+
+        public void NewPatient(PatientCreateDTO patientCreate)
+        {
+            // Crear un nuevo paciente utilizando los datos del objeto PatientCreateDTO
+            var newPatient = new Patient
+            {
+                Name = patientCreate.Name,
+                LastName = patientCreate.LastName,
+                Address = patientCreate.Address,
+                Dni = patientCreate.Dni,
+                Phone = patientCreate.Phone
+            };
+
+            _repository.AddPatient(newPatient);
+            _repository.SaveChanges();
+        }
+
+        public void UpdatePatientDetails(int patientId, PatientUpdateDTO patientUpdate)
+        {
+            var patient = _repository.GetPatientById(patientId);
+            if (patient == null)
+            {
+                throw new KeyNotFoundException($"El paciente con id: {patientId} no existe.");
+            }
+
+            patient.Name = patientUpdate.Name;
+            patient.LastName = patientUpdate.LastName;
+            patient.Address = patientUpdate.Address;
+            patient.Dni = patientUpdate.Dni;
+            patient.Phone = patientUpdate.Phone;
+            _repository.UpdatePatient(patient);
+            _repository.SaveChanges();
+        }
+
+        public void DeletePatient(int patientId)
+        {
+            var patient = _repository.GetPatientById(patientId);
+            if (patient == null)
+            {
+                throw new KeyNotFoundException($"El paciente con Id: {patientId} no existe.");
+            }
+             _repository.DeletePatient(patientId);         
+        }
+
     }
 }

@@ -1,6 +1,5 @@
 using CliniCareApp.Models;
 using CliniCareApp.Data;
-using System;
 
 namespace CliniCareApp.Business
 {
@@ -8,27 +7,132 @@ namespace CliniCareApp.Business
     {
         private readonly IAppointmentRepository _repository;
 
-         public AppointmentService(IAppointmentRepository repository)
+        public AppointmentService(IAppointmentRepository repository)
         {
             _repository = repository;
         }
 
-        public void CreateAppointment(int patientId, DateTime appointmentDate, string area, string medicalName, string date, string time, bool isUrgent)
+        public DateTime GetLocalTime()
         {
-            var patient = _repository.GetPatientById(patientId);
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+        }
 
-            if(patient != null)
+        // public void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
+        // {
+        //     var patient = _repository.GetPatientByDni(patientDni);
+
+        //     if(patient != null)
+        //     {
+        //         var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
+        //         var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patient.Dni);
+
+        //         _repository.AddAppointment(appointment);
+        //         _repository.SaveChanges();
+        //     }
+        // }
+
+        public void CreateAppointment(string patientDni, DateTime createdAt, string area, string medicalName, string date, string time, bool isUrgent)
+        {
+            if (string.IsNullOrEmpty(patientDni))
             {
-                var newAppointment = new Appointment(appointmentDate, area, medicalName, date, time, isUrgent, patient.Id);
+                throw new ArgumentNullException(nameof(patientDni), "El número de DNI del paciente no puede ser nulo o vacío.");
+            }
 
-                _repository.AddAppointment(newAppointment);
+            var patient = _repository.GetPatientByDni(patientDni);
+
+            if (patient != null)
+            {
+                var createdAtLocal = GetLocalTime(); // Obtener la hora local actual
+                var patientDniNonNull = patient.Dni ?? throw new InvalidOperationException("El número de DNI del paciente no puede ser nulo.");
+                var appointment = new Appointment(createdAtLocal, area, medicalName, date, time, isUrgent, patientDniNonNull);
+
+                _repository.AddAppointment(appointment);
                 _repository.SaveChanges();
+            }
+            else
+            {
+                throw new InvalidOperationException("No se pudo encontrar un paciente con el DNI proporcionado.");
             }
         }
 
-        public List<Appointment> GetAppointments()
+
+        public List<Appointment> GetAllAppointments()
         {
-            return _repository.GetAppointments();
+            return _repository.GetAllAppointments();
+        }
+
+        public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc)
+        {
+            return _repository.GetAllAppointments(appointmentQueryParameters, orderByUrgentAsc);
+        }
+
+        public IEnumerable<Appointment> GetAppointmentsForPatient(AppointmentPatientQueryParameters? appointmentPatientQueryParameters, bool orderByDateAsc)
+        {
+            return _repository.GetAppointmentsForPatient(appointmentPatientQueryParameters, orderByDateAsc);
+        }
+
+        public Patient? GetPatientByDni(string patientDni)
+        {
+            var patient = _repository.GetPatientByDni(patientDni);
+
+            if(patient == null)
+            {
+                throw new KeyNotFoundException($"El paciente con Id {patientDni} no existe.");
+            }
+            return patient;
+        }
+
+
+        public Appointment GetAppointmentById(int appointmentId)
+        {
+            var appointment = _repository.GetAppointmentById(appointmentId);
+            
+            if(appointment == null)
+            {
+                  throw new KeyNotFoundException($"El paciente con Id {appointmentId} no existe.");
+            }
+            return appointment;
+        }
+
+        public List<Appointment> GetAppointments(string patientDni)
+        {
+           // Obtener todas las citas asociadas a un paciente por su DNI
+            var appointments = _repository.GetAppointments(patientDni);
+
+            if (appointments == null || appointments.Count == 0)
+            {
+                throw new KeyNotFoundException($"No hay citas para el paciente con DNI: {patientDni}");
+            }
+            return appointments;
+        }
+
+        public void UpdateAppointmentDetails(int appointmentId, AppointmentUpdateDTO appointmentUpdate)
+        {
+            var appointment = _repository.GetAppointmentById(appointmentId);
+
+            if (appointment == null)
+            {
+                throw new KeyNotFoundException($"La cita con id: {appointmentId} no existe.");
+            }
+
+            appointment.Area = appointmentUpdate.Area;
+            appointment.MedicalName = appointmentUpdate.MedicalName;
+            appointment.Date = appointmentUpdate.Date;
+            appointment.Time = appointmentUpdate.Time;
+            appointment.IsUrgent = appointmentUpdate.IsUrgent;
+            _repository.UpdateAppointment(appointment);
+            _repository.SaveChanges();
+        }
+
+        public void DeleteAppointment(int appointmentId)
+        {
+            var patient = _repository.GetAppointmentById(appointmentId);
+
+            if (patient == null)
+            {
+                throw new KeyNotFoundException($"La cita con Id: {appointmentId} no existe.");
+            }
+             _repository.DeleteAppointment(appointmentId);         
         }
     }
 }

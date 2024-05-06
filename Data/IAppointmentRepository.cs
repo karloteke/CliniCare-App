@@ -5,9 +5,15 @@ namespace CliniCareApp.Data
     public interface IAppointmentRepository
     {
         void AddAppointment(Appointment appointment);
-        List<Appointment> GetAppointments();
+        List<Appointment> GetAllAppointments();
+        public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc);
+         public IEnumerable<Appointment> GetAppointmentsForPatient(AppointmentPatientQueryParameters? appointmentPatientQueryParameters, bool orderByUrgentAsc);
         Patient? GetPatientById(int? patientId);
+        Patient? GetPatientByDni(string? patientDni);
+        Appointment GetAppointmentById(int appointmentId);
+        List<Appointment> GetAppointments(string patientDni);
         void UpdateAppointment(Appointment appointment);
+        void DeleteAppointment(int? id);
         void SaveChanges();
     }
 }

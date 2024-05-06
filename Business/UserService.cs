@@ -12,25 +12,83 @@ namespace CliniCareApp.Business
         {
             _repository = repository;
         }
-        public void CreateUser(string inputUserName, string inputPassword, string inputEmail, string inputAccessKey)
+        public User CreateUser(string userName, string password, string email)
         {
-            var newUser = new User(inputUserName, inputPassword, inputEmail, inputAccessKey);
+            var user = new User(userName, password, email);
         
-            _repository.AddUser(newUser);
+            _repository.AddUser(user);
+            _repository.SaveChanges();
+            return user;
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return _repository.GetUsers();
+        }  
+
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters)
+        {
+            return _repository.GetAllUsers(userQueryParameters);
+        }
+
+
+        public User? GetUserByUserName(string userName)
+        {
+            return _repository.GetUserByUserName(userName);
+        }
+
+        public User? GetUserByEmail(string userEmail)
+        {
+            return _repository.GetUserByEmail(userEmail);
+        }
+
+        public User? GetUserById(int id)
+        {
+            var user = _repository.GetUserById(id);
+
+            if( user == null)
+            {
+                throw new KeyNotFoundException($"El usuario con Id {id} no existe.");
+            }
+            return  user;
+        }
+
+        public void UpdateUserDetails(int userId, UserUpdateDTO userUpdate)
+        {
+            var user = _repository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"El usuario con Id: {userId} no existe.");
+            }
+
+            user.UserName = userUpdate.UserName;
+            user.Password = userUpdate.Password;
+            user.Email = userUpdate.Email;
+            _repository.UpdateUser(user);
             _repository.SaveChanges();
         }
 
-        public User? GetUserByUserName(string inputUserName)
+        public void DeleteUser(int userId)
         {
-            return _repository.GetUserByUserName(inputUserName);
+            var user = _repository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"El usuario con Id: {userId} no existe.");
+            }
+             _repository.DeleteUser(userId);         
         }
     
-        public bool Authenticate(string userName, string password)
+        public User Authenticate(string userName, string password)
         {
-            // Verifica las credenciales del usuario y devuelve true si son válidas, false en caso contrario
+           
             User? user = _repository.GetUserByUserName(userName);
-            return user != null && user.Password == password;
-        }
 
+           if (user != null &&  user.Password == password)
+            {
+                return user;
+            }
+
+            return null;
+        }
     }
 }

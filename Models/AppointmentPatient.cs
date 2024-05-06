@@ -2,23 +2,21 @@ namespace CliniCareApp.Models
 {
     public class AppointmentPatient
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public DateTime Date { get; }
         public string? Area { get; set; }
         public string? Day { get; set; }
         public string? Time { get; set; }
         public bool IsUrgent { get; set; }
+        public Patient? Patient { get; set; }
 
-        // Información del paciente directamente en la cita
-        public string? PatientName { get; set; }
-        public string? PatientLastName { get; set; }
-        public string? PatientAddress { get; set; }
-        public string? PatientDni { get; set; }
-        public string? PatientPhone { get; set; }
+
+        // public AppointmentPatient() { }
+
 
         private static int NextId = 1;    
 
-        public AppointmentPatient(DateTime date, string area, string day, string time, bool isUrgent, string patientName, string patientLastName, string patientDni, string patientAddress, string patientPhone)
+        public AppointmentPatient(DateTime date, string area, string day, string time, bool isUrgent, Patient patient)
         {
             Id = NextId++;
             Date = date;
@@ -26,11 +24,7 @@ namespace CliniCareApp.Models
             Day = day;
             Time = time;
             IsUrgent = isUrgent;
-            PatientName = patientName;
-            PatientLastName = patientLastName;
-            PatientAddress = patientAddress;
-            PatientDni = patientDni;
-            PatientPhone = patientPhone;
+            Patient = patient;
         }
     }
 }

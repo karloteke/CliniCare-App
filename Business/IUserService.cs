@@ -5,8 +5,14 @@ namespace CliniCareApp.Business
 {
     public interface IUserService
     {
-        void CreateUser(string inputUserName, string inputPassword, string inputEmail, string inputAccessKey);
-        bool Authenticate(string userName, string password);
-        User? GetUserByUserName(string inputUserName);
+        User CreateUser(string userName, string password, string email);
+        User Authenticate(string userName, string password);
+        List<User> GetAllUsers(); 
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters);
+        User? GetUserByUserName(string userName);
+        User? GetUserByEmail(string userEmail);
+        User? GetUserById(int userId);
+        public void UpdateUserDetails(int userId, UserUpdateDTO UserUpdate);
+        public void DeleteUser(int userId);
     }
 }

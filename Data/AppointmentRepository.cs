@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using CliniCareApp.Models;
 
@@ -25,10 +26,62 @@ namespace CliniCareApp.Data
 
         public void AddAppointment(Appointment appointment)
         {
-            _appointments.Add(appointment);
+            //Verifico si existe la cita en la lista antes de agregarla
+            // if(!_appointments.Any(a => a.Id == appointment.Id) )
+            // {
+                _appointments.Add(appointment);
+                SaveChanges();
+            // }
         }
 
-        public List<Appointment> GetAppointments()
+        
+        public IEnumerable<Appointment> GetAllAppointments(AppointmentQueryParameters? appointmentQueryParameters, bool orderByUrgentAsc)
+        {
+            var query = _appointments.AsQueryable();
+
+
+            if (!string.IsNullOrWhiteSpace(appointmentQueryParameters.Area)) 
+            {
+            query = query.Where(a => a.Area.Contains(appointmentQueryParameters.Area));
+            }
+
+            if (!string.IsNullOrWhiteSpace(appointmentQueryParameters.MedicalName)) 
+            {
+            query = query.Where(a => a.MedicalName.Contains(appointmentQueryParameters.MedicalName));
+            }
+
+            if (orderByUrgentAsc) 
+            {
+                query = query.OrderByDescending(a => a.IsUrgent);
+            }
+            
+
+            var result = query.ToList();
+            return result;
+        }
+
+        public IEnumerable<Appointment> GetAppointmentsForPatient(AppointmentPatientQueryParameters? appointmentPatientQueryParameters, bool orderByDateAsc)
+        {
+            var query = _appointments.AsQueryable();
+
+
+            if (!string.IsNullOrWhiteSpace(appointmentPatientQueryParameters.PatientDni)) 
+            {
+            query = query.Where(p => p.PatientDni.Contains(appointmentPatientQueryParameters.PatientDni));
+            }
+
+            if (orderByDateAsc)
+            {
+                 query = query.OrderBy(a => a.Date);
+            }
+         
+            var result = query.ToList();
+            return result;
+        }
+
+
+
+        public List<Appointment> GetAllAppointments()
         {
             return _appointments;
         }
@@ -36,6 +89,35 @@ namespace CliniCareApp.Data
         public Patient? GetPatientById(int? patientId)
         {
             return _patientRepository.GetPatientById(patientId);
+        }
+
+        public Patient? GetPatientByDni(string? patientDni)
+        {
+            return _patientRepository.GetPatientByDni(patientDni);
+        }
+
+        public Appointment GetAppointmentById(int appointmentId)
+        {
+            return _appointments.FirstOrDefault(a => a.Id == appointmentId);
+        }
+
+        public List<Appointment> GetAppointments(string patientDni)
+        {
+            // Implementación para obtener todas las citas asociadas a un paciente por su DNI
+            return _appointments.Where(ap => ap.PatientDni == patientDni).ToList();
+        }
+
+        public void DeleteAppointment(int? appointmentId)
+        {
+            if (appointmentId != null)
+            {
+                var appointment = _appointments.FirstOrDefault(a => a.Id == appointmentId);
+                if (appointment != null)
+                {
+                    _appointments.Remove(appointment);
+                    SaveChanges();
+                }
+            }
         }
 
         public void UpdateAppointment(Appointment appointment)
@@ -61,8 +143,8 @@ namespace CliniCareApp.Data
 
             if (_appointments.Any())
             {
-                int maxId = _appointments.Max(a => a.Id);
-                Appointment.UpdateNextAppointmentId(maxId + 1);
+                // int maxId = _appointments.Max(a => a.Id);
+                // Appointment.UpdateNextAppointmentId(maxId + 1);
             }
         }
     }

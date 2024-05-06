@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using CliniCareApp.Models;
 
@@ -29,13 +30,55 @@ namespace CliniCareApp.Data
             }
         }
 
+        public List<User> GetUsers()
+        {
+            return _users;
+        }
+
+        public IEnumerable<User> GetAllUsers(UserQueryParameters? userQueryParameters) {
+        var query = _users.AsQueryable();
+
+        
+        if (!string.IsNullOrWhiteSpace(userQueryParameters.UserName)) 
+        {
+            query = query.Where(u => u.UserName.Contains(userQueryParameters.UserName));
+        }
+
+        var result = query.ToList();
+        return result;
+    }
+
         public User? GetUserByUserName(string userName)
         {
-            return _users.FirstOrDefault(u => u.UserName == userName);
+            return _users.FirstOrDefault(u => u.UserName == userName); 
         }
+
+        public User? GetUserByEmail(string email)
+        {
+            return _users.FirstOrDefault(u => u.Email == email);
+        }
+
+        public User? GetUserById(int? userId)
+        {
+            return _users.FirstOrDefault(u => u.Id == userId);
+        }
+
         public void UpdateUser(User user)
         {
             AddUser(user);
+        }
+
+        public void DeleteUser(int userId)
+        {
+            if (userId != 0)
+            {
+                var user = _users.FirstOrDefault(u => u.Id == userId);
+                if (user != null)
+                {
+                    _users.Remove(user);
+                    SaveChanges();
+                }
+            }
         }
 
         public void SaveChanges()
@@ -52,7 +95,14 @@ namespace CliniCareApp.Data
                 string jsonString = File.ReadAllText(_filePath);
                 var users = JsonSerializer.Deserialize<List<User>>(jsonString);
                 _users = users ?? new List<User>();
+
+                   if (_users.Any()) 
+                {
+                    int maxId = _users.Max(u => u.Id);
+                    User.UpdateNextUserId(maxId + 1); 
+                }  
             }
         }
+
     }
 }

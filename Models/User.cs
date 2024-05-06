@@ -2,24 +2,32 @@ namespace CliniCareApp.Models
 {
     public class User
     {
+        public int Id { get; set; }
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
-        public string? AccessKey { get; set; } 
+        public string Role { get; set; }  = Roles.User;
 
-        private  static List<User> Users = new  List<User>();
 
-        public static User? GetUserByUserName(string userUserName)
-        {
-            return Users.FirstOrDefault(user => user.UserName == userUserName);
+        private static int NextUserId = 1;
+
+        // Constructor sin parámetros requerido para la deserialización
+        public User() 
+        { 
+            //  Id = NextUserId++;
         }
-    
-        public User(string? userName, string? password, string? email, string? accesskey)
-        {
+
+        public User(string? userName, string? password, string? email)
+        { 
+            // Id = NextUserId++;
             UserName = userName;
             Password = password;
             Email = email;
-            AccessKey = accesskey;
+        }
+
+         public static void UpdateNextUserId(int nextId)
+        {
+            // NextUserId = nextId;
         }
     }
 }
