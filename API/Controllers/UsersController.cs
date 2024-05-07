@@ -41,6 +41,23 @@ public class UsersController : ControllerBase
         }
     }
 
+    
+    [Authorize(Roles = Roles.Admin)]
+    [HttpGet("{userId}", Name = "GetUserById")]
+    public IActionResult GetUser(int userId)
+    {
+        try
+        {
+            var user = _userService.GetUserById(userId);
+            return Ok(user);
+           
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"No existe el usuario con el Id {userId}");
+        }
+    }
+
     [HttpPost]
     public IActionResult NewUser([FromBody] UserCreateDTO userDto)
     {

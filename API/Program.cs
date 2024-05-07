@@ -94,8 +94,8 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // Cadena de conexión BBDD
-// var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
-var connectionString = builder.Configuration.GetConnectionString("ServerAzure");
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+// var connectionString = builder.Configuration.GetConnectionString("ServerAzure");
 // var connectionString = builder.Configuration.GetConnectionString("ServerDB");
 
 builder.Services.AddDbContext<CliniCareContext>(options =>
