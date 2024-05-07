@@ -46,7 +46,7 @@ public class AppointmentsController : ControllerBase
 
 
     [Authorize(Roles = "admin, user")]
-    [HttpGet("PublicZone", Name = "GetAppointmentsForPatient")] 
+    [HttpGet("SearchByDni", Name = "GetAppointmentsForPatient")] 
     public ActionResult<IEnumerable<Appointment>> GetAppointmentsForPatient([FromQuery] AppointmentPatientQueryParameters appointmentPatientQueryParameters, bool orderByDateAsc)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
