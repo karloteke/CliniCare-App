@@ -43,13 +43,24 @@ namespace CliniCareApp.Data
             var query = _context.Appointments.AsQueryable();
 
         
-            if (!string.IsNullOrWhiteSpace(appointmentPatientQueryParameters.PatientDni)) {
+            if (!string.IsNullOrWhiteSpace(appointmentPatientQueryParameters.PatientDni)) 
+            {
                 query = query.Where(p => p.PatientDni.Contains(appointmentPatientQueryParameters.PatientDni));
             }
 
-            if (orderByDateAsc)
-            {
-                 query = query.OrderBy(a => a.Date);
+            if (orderByDateAsc) {
+                var appointments = query.ToList(); // Obtener todas las citas de la base de datos
+                query = appointments.OrderBy(a => {
+                    // Convertir la fecha 
+                    if (DateTime.TryParseExact(a.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate)) 
+                    {
+                        return parsedDate;
+                    } 
+                    else 
+                    {        
+                        return DateTime.MinValue;  // En caso de que la fecha no pueda ser convertida, devuelve un valor mínimo
+                    }
+                }).AsQueryable(); // Convertir la lista ordenada de nuevo a IQueryable
             }
   
             var result = query.ToList();
