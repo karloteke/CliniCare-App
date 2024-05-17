@@ -9,13 +9,13 @@ namespace CliniCareApp.API.Controllers;
 [ApiController]
 [Route("[controller]")] 
 
-public class PatientsController : ControllerBase
+public class PatientController : ControllerBase
 {
-    private readonly ILogger<PatientsController> _logger;
+    private readonly ILogger<PatientController> _logger;
     private readonly IPatientService _patientService;
     private readonly PrivateAreaAccess _privateAreaAccess;
 
-    public PatientsController(ILogger<PatientsController> logger, IPatientService PatientService, PrivateAreaAccess privateAreaAccess)
+    public PatientController(ILogger<PatientController> logger, IPatientService PatientService, PrivateAreaAccess privateAreaAccess)
     {
         _logger = logger;
         _patientService = PatientService;
